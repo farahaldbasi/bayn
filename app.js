@@ -122,7 +122,7 @@ async function callAPI(systemPrompt, userPrompt) {
     try {
         console.log('🔄 إرسال طلب للـ Backend...');
 
-        const response = await fetch('http://localhost:3000/api/chat', {
+        const response = await fetch('https://bayn-production.up.railway.app/api/chat', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
