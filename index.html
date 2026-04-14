@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بَيْن - منصة الأنظمة القانونية</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background Pattern -->
+    <div class="background-pattern"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo-container">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                    <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                </svg>
+                <h1 class="logo-text">بَيْن</h1>
+            </div>
+            <p class="tagline">مساعدك القانوني الذكي لفهم نظام العمل السعودي</p>
+            <div class="badge">
+                <div class="badge-line"></div>
+                <span class="badge-text">منصة حكومية موثوقة</span>
+                <div class="badge-line"></div>
+            </div>
+        </header>
+
+        <!-- Main Card -->
+        <main class="main-card">
+            <!-- Tabs -->
+            <div class="tabs-container">
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="showTab('search')">
+                        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                        <span>البحث في النظام</span>
+                    </button>
+                    <button class="tab-btn" onclick="showTab('letter')">
+                        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                        </svg>
+                        <span>كتابة خطاب رسمي</span>
+                    </button>
+                    <button class="tab-btn" onclick="showTab('article')">
+                        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                        </svg>
+                        <span>شرح مادة</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="content">
+                <!-- Search Tab -->
+                <div id="search-tab" class="tab-content active">
+                    <div class="search-section">
+                        <label class="section-label">ابحث عن موضوع أو كلمة مفتاحية</label>
+                        <div class="search-box">
+                            <input 
+                                type="text" 
+                                id="searchInput" 
+                                placeholder="مثال: ساعات العمل، الإجازات، الفصل التعسفي..."
+                                class="search-input"
+                            />
+                            <button onclick="searchLaw()" class="search-btn">
+                                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <path d="m21 21-4.35-4.35"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="searchLoading" class="loading" style="display: none;">
+                        <div class="spinner"></div>
+                        <p>جاري البحث...</p>
+                    </div>
+
+                    <div id="searchResult" class="result-box"></div>
+                </div>
+
+                <!-- Letter Tab -->
+                <div id="letter-tab" class="tab-content">
+                    <div class="info-banner">
+                        <h3>نموذج خطاب رسمي</h3>
+                        <p>أدخل البيانات المطلوبة وسيتم إنشاء خطاب رسمي متوافق مع نظام العمل السعودي</p>
+                    </div>
+
+                    <div class="letter-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>نوع الخطاب</label>
+                                <select id="letterType" class="form-input">
+                                    <option value="">اختر نوع الخطاب</option>
+                                    <option value="شكوى">شكوى</option>
+                                    <option value="طلب">طلب</option>
+                                    <option value="استفسار">استفسار</option>
+                                    <option value="اعتراض">اعتراض</option>
+                                    <option value="إشعار">إشعار</option>
+                                    <option value="استقالة">استقالة</option>
+                                    <option value="تظلم">تظلم</option>
+                                    <option value="أخرى">أخرى</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>نوع المستلم</label>
+                                <select id="recipientType" class="form-input" onchange="updateFormalityField()">
+                                    <option value="">اختر نوع المستلم</option>
+                                    <option value="شخص">شخص (فرد)</option>
+                                    <option value="شركة">شركة</option>
+                                    <option value="جهة حكومية">جهة حكومية</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row" id="formalityRow" style="display: none;">
+                            <div class="form-group" style="grid-column: 1 / -1;">
+                                <label>درجة الرسمية</label>
+                                <select id="formalityLevel" class="form-input">
+                                    <option value="">اختر درجة الرسمية</option>
+                                    <option value="رسمي جداً">رسمي جداً</option>
+                                    <option value="رسمي">رسمي</option>
+                                    <option value="شبه رسمي">شبه رسمي</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>الاسم</label>
+                                <input type="text" id="applicantName" placeholder="الاسم الكامل" class="form-input">
+                            </div>
+
+                            <div class="form-group">
+                                <label>رقم الجوال</label>
+                                <input type="tel" id="phoneNumber" placeholder="05xxxxxxxx" class="form-input">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>الجهة أو الشخص المعني</label>
+                            <input type="text" id="concernedParty" placeholder="مثال: شركة أرامكو، مستشفى الملك فهد، المهندس أحمد" class="form-input">
+                        </div>
+
+                        <div class="form-group">
+                            <label>موضوع الخطاب</label>
+                            <input type="text" id="letterSubject" placeholder="عنوان موجز للموضوع" class="form-input">
+                        </div>
+
+                        <div class="form-group">
+                            <label>التفاصيل</label>
+                            <textarea id="letterDetails" rows="5" placeholder="اكتب تفاصيل الموضوع بشكل واضح..." class="form-input"></textarea>
+                        </div>
+
+                        <button onclick="generateLetter()" class="btn-primary">إنشاء الخطاب</button>
+                    </div>
+
+                    <div id="letterLoading" class="loading" style="display: none;">
+                        <div class="spinner"></div>
+                        <p>جاري كتابة الخطاب...</p>
+                    </div>
+
+                    <div id="letterResult" class="result-box"></div>
+
+                    <div id="downloadSection" style="display: none; margin-top: 20px;">
+                        <button onclick="downloadWord()" class="btn-download">
+                            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                            <span>تحميل (Word)</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Article Tab -->
+                <div id="article-tab" class="tab-content">
+                    <div class="info-banner">
+                        <h3>شرح مبسط للمواد القانونية</h3>
+                        <p>اختر طريقة البحث المناسبة للحصول على شرح مبسط بلغة واضحة ومفهومة</p>
+                    </div>
+
+                    <div class="method-selector">
+                        <label class="section-label">طريقة البحث</label>
+                        <div class="method-options">
+                            <div class="method-option active" onclick="selectMethod('description')">
+                                <div class="radio-btn">
+                                    <div class="radio-dot"></div>
+                                </div>
+                                <span class="method-emoji">🔍</span>
+                                <div class="method-text">
+                                    <span class="method-title">ابحث بالوصف</span>
+                                    <span class="method-desc">ذكي - اكتب وصف الحالة</span>
+                                </div>
+                            </div>
+
+                            <div class="method-option" onclick="selectMethod('number')">
+                                <div class="radio-btn">
+                                    <div class="radio-dot"></div>
+                                </div>
+                                <span class="method-emoji">🔢</span>
+                                <div class="method-text">
+                                    <span class="method-title">ابحث برقم المادة</span>
+                                    <span class="method-desc">مباشر - إذا كنت تعرف الرقم</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Description Method -->
+                    <div id="descriptionMethod" class="explain-method active">
+                        <div class="form-group">
+                            <label>اكتب وصف الحالة</label>
+                            <textarea id="contextInput" rows="5" placeholder="مثال: موظف يتأخر كل يوم عن العمل وصاحب العمل يريد فصله..." class="form-input"></textarea>
+                        </div>
+
+                        <div class="examples-box">
+                            <p class="examples-title">أمثلة للمساعدة:</p>
+                            <ul class="examples-list">
+                                <li>موظف يريد إجازة سنوية ولكن صاحب العمل يرفض</li>
+                                <li>عامل يعمل ساعات إضافية ولا يحصل على أجر إضافي</li>
+                                <li>موظف تم فصله بدون سبب واضح</li>
+                            </ul>
+                        </div>
+
+                        <button onclick="explainByContext()" class="btn-primary">حدد المادة واشرحها</button>
+                    </div>
+
+                    <!-- Number Method -->
+                    <div id="numberMethod" class="explain-method">
+                        <div class="form-group">
+                            <label>رقم المادة (1-245)</label>
+                            <input type="number" id="articleNumber" min="1" max="245" placeholder="98" class="form-input article-number-input">
+                        </div>
+
+                        <button onclick="explainArticle()" class="btn-primary">اشرح المادة</button>
+                    </div>
+
+                    <div id="explainLoading" class="loading" style="display: none;">
+                        <div class="spinner"></div>
+                        <p>جاري الشرح...</p>
+                    </div>
+
+                    <div id="explainResult" class="result-box"></div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-icon">
+                <div class="footer-line"></div>
+                <svg class="footer-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                    <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                </svg>
+                <div class="footer-line"></div>
+            </div>
+            <p>منصة بَيْن - مبادرة حكومية لتبسيط الأنظمة القانونية</p>
+            <p>© 2026 المملكة العربية السعودية - جميع الحقوق محفوظة</p>
+        </footer>
+    </div>
+
+    <!-- Floating Updates Widget -->
+    <div class="updates-widget">
+        <button class="updates-btn" onclick="toggleUpdates()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <span class="updates-badge">4</span>
+        </button>
+
+        <div class="updates-panel" id="updatesPanel">
+            <div class="updates-panel-header">
+                <h3>📰 آخر التحديثات الرسمية</h3>
+                <button class="updates-close" onclick="toggleUpdates()">×</button>
+            </div>
+            <div class="updates-panel-body">
+                <div class="mini-update">
+                    <span class="mini-badge new">جديد</span>
+                    <h4>(المادة 2) - تعريفات الاستقالة والاستثناء</h4>
+                    <p>إضافة تعريفات جديدة: "الاستقالة" و"الاستثناء" لتنظيم إجراءات إنهاء العمل</p>
+                    <span class="mini-date">2 شعبان 1446هـ (فبراير 2025)</span>
+                </div>
+                <div class="mini-update">
+                    <span class="mini-badge new">جديد</span>
+                    <h4>(المادة 7) - العمالة الأجنبية المؤقتة</h4>
+                    <p>تحديد شرط "مهمة محددة" للعمالة القادمة لمدة لا تزيد عن شهرين</p>
+                    <span class="mini-date">2 شعبان 1446هـ (فبراير 2025)</span>
+                </div>
+                <div class="mini-update">
+                    <span class="mini-badge">محدث</span>
+                    <h4>(المادة 2) - تعريف العامل</h4>
+                    <p>توسيع التعريف ليشمل العمل عن بُعد "ولو كان بعيداً عن نظارته"</p>
+                    <span class="mini-date">27 ذو القعدة 1440هـ (يوليو 2019)</span>
+                </div>
+                <div class="mini-update">
+                    <span class="mini-badge">محدث</span>
+                    <h4>(المادة 3) - منع التمييز في العمل</h4>
+                    <p>إضافة بند صريح: "دون أي تمييز على أساس الجنس أو الإعاقة أو السن"</p>
+                    <span class="mini-date">27 ذو القعدة 1440هـ (يوليو 2019)</span>
+                </div>
+            </div>
+            <div class="updates-panel-footer">
+                <p style="font-size: 0.7rem; color: var(--text-light); text-align: center; padding: 0.75rem; margin: 0; border-top: 1px solid var(--border);">
+                    المصدر: هيئة الخبراء بمجلس الوزراء - laws.boe.gov.sa
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Article Modal -->
+    <div id="articleModal" class="modal" onclick="closeArticleModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <svg class="modal-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                    </svg>
+                    <h2 id="modalArticleNumber"></h2>
+                </div>
+                <button onclick="closeArticleModal()" class="modal-close">×</button>
+            </div>
+            <div class="modal-body" id="modalArticleContent"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
