@@ -204,7 +204,8 @@ ${JSON.stringify(relevantArticles, null, 2)}
 
         const answer = await callAPI(systemPrompt, userPrompt);
         resultDiv.innerHTML = convertArticleReferencesToLinks(answer);
-        showFollowUp('search', resultDiv);
+        sessionContext.search.previousContent = answer;
+        showFollowUp('search', resultDiv, answer);
 
     } catch (error) {
         resultDiv.innerHTML = '❌ عذراً، حدث خطأ. الرجاء المحاولة مرة أخرى.';
@@ -373,7 +374,8 @@ ${JSON.stringify(relevantArticles, null, 2)}
         const letter = await callAPI(systemPrompt, userPrompt);
         resultDiv.innerHTML = convertArticleReferencesToLinks(letter);
         downloadSection.style.display = 'block';
-        showFollowUp('letter', resultDiv);
+        sessionContext.letter.previousContent = letter;
+        showFollowUp('letter', resultDiv, letter);
 
     } catch (error) {
         resultDiv.innerHTML = '❌ عذراً، حدث خطأ. الرجاء المحاولة مرة أخرى.';
@@ -488,7 +490,8 @@ ${JSON.stringify(relevantArticles, null, 2)}
                 ${convertArticleReferencesToLinks(explanation)}
             </div>
         `;
-        showFollowUp('explain', resultDiv);
+        sessionContext.explain.previousContent = `المادة ${article.id}: ${article.text}\n\n${explanation}`;
+        showFollowUp('explain', resultDiv, sessionContext.explain.previousContent);
 
         console.log('✅ تم الشرح بنجاح');
 
@@ -549,7 +552,8 @@ async function explainArticle() {
                 ${convertArticleReferencesToLinks(explanation)}
             </div>
         `;
-        showFollowUp('explain', resultDiv);
+        sessionContext.explain.previousContent = `المادة ${article.id}: ${article.text}\n\n${explanation}`;
+        showFollowUp('explain', resultDiv, sessionContext.explain.previousContent);
 
     } catch (error) {
         resultDiv.innerHTML = '❌ عذراً، حدث خطأ. الرجاء المحاولة مرة أخرى.';
@@ -642,22 +646,106 @@ console.log('✅ تم تحميل البرنامج بنجاح');
 // ========================================
 
 function convertArticleReferencesToLinks(text) {
-    // التعرف على (المادة 56) أو (المادة ٥٦) أو المادة السادسة والخمسون
-    const patterns = [
-        // (المادة 56) أو المادة 56
-        /\(?\s*المادة\s+(\d+)\s*\)?/g,
-        // (المادة ٥٦) - أرقام عربية
-        /\(?\s*المادة\s+([٠-٩]+)\s*\)?/g,
-    ];
+    // خريطة الأرقام المكتوبة بالعربية
+    const writtenNumbers = {
+        'الأولى': 1, 'الأول': 1, 'الثانية': 2, 'الثاني': 2,
+        'الثالثة': 3, 'الثالث': 3, 'الرابعة': 4, 'الرابع': 4,
+        'الخامسة': 5, 'الخامس': 5, 'السادسة': 6, 'السادس': 6,
+        'السابعة': 7, 'السابع': 7, 'الثامنة': 8, 'الثامن': 8,
+        'التاسعة': 9, 'التاسع': 9, 'العاشرة': 10, 'العاشر': 10,
+        'الحادية عشرة': 11, 'الحادي عشر': 11, 'الثانية عشرة': 12, 'الثاني عشر': 12,
+        'الثالثة عشرة': 13, 'الثالث عشر': 13, 'الرابعة عشرة': 14, 'الرابع عشر': 14,
+        'الخامسة عشرة': 15, 'الخامس عشر': 15, 'السادسة عشرة': 16, 'السادس عشر': 16,
+        'السابعة عشرة': 17, 'السابع عشر': 17, 'الثامنة عشرة': 18, 'الثامن عشر': 18,
+        'التاسعة عشرة': 19, 'التاسع عشر': 19, 'العشرون': 20, 'العشرين': 20,
+        'الحادية والعشرون': 21, 'الحادي والعشرون': 21,
+        'الثانية والعشرون': 22, 'الثاني والعشرون': 22,
+        'الثلاثون': 30, 'الثلاثين': 30, 'الأربعون': 40, 'الأربعين': 40,
+        'الخمسون': 50, 'الخمسين': 50, 'الستون': 60, 'الستين': 60,
+        'السبعون': 70, 'السبعين': 70, 'الثمانون': 80, 'الثمانين': 80,
+        'التسعون': 90, 'التسعين': 90, 'المئة': 100, 'مئة': 100,
+        'الخامسة والسبعون': 75, 'الخامس والسبعون': 75,
+        'الرابعة والسبعون': 74, 'الرابع والسبعون': 74,
+        'الثالثة والسبعون': 73, 'الثالث والسبعون': 73,
+        'الثانية والسبعون': 72, 'الثاني والسبعون': 72,
+        'الحادية والسبعون': 71, 'الحادي والسبعون': 71,
+        'التاسعة والستون': 69, 'التاسع والستون': 69,
+        'الثامنة والستون': 68, 'الثامن والستون': 68,
+        'السابعة والستون': 67, 'السابع والستون': 67,
+        'السادسة والستون': 66, 'السادس والستون': 66,
+        'الخامسة والستون': 65, 'الخامس والستون': 65,
+        'الرابعة والستون': 64, 'الرابع والستون': 64,
+        'الثالثة والستون': 63, 'الثالث والستون': 63,
+        'الثانية والستون': 62, 'الثاني والستون': 62,
+        'الحادية والستون': 61, 'الحادي والستون': 61,
+        'التاسعة والخمسون': 59, 'التاسع والخمسون': 59,
+        'الثامنة والخمسون': 58, 'الثامن والخمسون': 58,
+        'السابعة والخمسون': 57, 'السابع والخمسون': 57,
+        'السادسة والخمسون': 56, 'السادس والخمسون': 56,
+        'الخامسة والخمسون': 55, 'الخامس والخمسون': 55,
+        'الرابعة والخمسون': 54, 'الرابع والخمسون': 54,
+        'الثالثة والخمسون': 53, 'الثالث والخمسون': 53,
+        'الثانية والخمسون': 52, 'الثاني والخمسون': 52,
+        'الحادية والخمسون': 51, 'الحادي والخمسون': 51,
+        'التاسعة والأربعون': 49, 'التاسع والأربعون': 49,
+        'الثامنة والأربعون': 48, 'الثامن والأربعون': 48,
+        'السابعة والأربعون': 47, 'السابع والأربعون': 47,
+        'السادسة والأربعون': 46, 'السادس والأربعون': 46,
+        'الخامسة والأربعون': 45, 'الخامس والأربعون': 45,
+        'الرابعة والأربعون': 44, 'الرابع والأربعون': 44,
+        'الثالثة والأربعون': 43, 'الثالث والأربعون': 43,
+        'الثانية والأربعون': 42, 'الثاني والأربعون': 42,
+        'الحادية والأربعون': 41, 'الحادي والأربعون': 41,
+        'التاسعة والثلاثون': 39, 'التاسع والثلاثون': 39,
+        'الثامنة والثلاثون': 38, 'الثامن والثلاثون': 38,
+        'السابعة والثلاثون': 37, 'السابع والثلاثون': 37,
+        'السادسة والثلاثون': 36, 'السادس والثلاثون': 36,
+        'الخامسة والثلاثون': 35, 'الخامس والثلاثون': 35,
+        'الرابعة والثلاثون': 34, 'الرابع والثلاثون': 34,
+        'الثالثة والثلاثون': 33, 'الثالث والثلاثون': 33,
+        'الثانية والثلاثون': 32, 'الثاني والثلاثون': 32,
+        'الحادية والثلاثون': 31, 'الحادي والثلاثون': 31,
+        'التاسعة والعشرون': 29, 'التاسع والعشرون': 29,
+        'الثامنة والعشرون': 28, 'الثامن والعشرون': 28,
+        'السابعة والعشرون': 27, 'السابع والعشرون': 27,
+        'السادسة والعشرون': 26, 'السادس والعشرون': 26,
+        'الخامسة والعشرون': 25, 'الخامس والعشرون': 25,
+        'الرابعة والعشرون': 24, 'الرابع والعشرون': 24,
+        'الثالثة والعشرون': 23, 'الثالث والعشرون': 23,
+        'الحادية والعشرون': 21, 'الحادي والعشرون': 21,
+        'التاسعة والتسعون': 99, 'التاسع والتسعون': 99,
+        'الثامنة والتسعون': 98, 'الثامن والتسعون': 98,
+        'السابعة والتسعون': 97, 'السابع والتسعون': 97,
+        'السادسة والتسعون': 96, 'السادس والتسعون': 96,
+        'الخامسة والتسعون': 95, 'الخامس والتسعون': 95,
+        'الرابعة والتسعون': 94, 'الرابع والتسعون': 94,
+        'الثالثة والتسعون': 93, 'الثالث والتسعون': 93,
+        'الثانية والتسعون': 92, 'الثاني والتسعون': 92,
+        'الحادية والتسعون': 91, 'الحادي والتسعون': 91,
+        'التاسعة والثمانون': 89, 'التاسع والثمانون': 89,
+        'الثامنة والثمانون': 88, 'الثامن والثمانون': 88,
+        'السابعة والثمانون': 87, 'السابع والثمانون': 87,
+        'السادسة والثمانون': 86, 'السادس والثمانون': 86,
+        'الخامسة والثمانون': 85, 'الخامس والثمانون': 85,
+        'الرابعة والثمانون': 84, 'الرابع والثمانون': 84,
+        'الثالثة والثمانون': 83, 'الثالث والثمانون': 83,
+        'الثانية والثمانون': 82, 'الثاني والثمانون': 82,
+        'الحادية والثمانون': 81, 'الحادي والثمانون': 81,
+        'التاسعة والسبعون': 79, 'التاسع والسبعون': 79,
+        'الثامنة والسبعون': 78, 'الثامن والسبعون': 78,
+        'السابعة والسبعون': 77, 'السابع والسبعون': 77,
+        'السادسة والسبعون': 76, 'السادس والسبعون': 76,
+        'مائة وسبعة': 107, 'مائة وثمانية': 108, 'مائة وتسعة': 109,
+        'مائة وعشرة': 110, 'مائة وأحد عشر': 111, 'مائة واثني عشر': 112
+    };
 
-    // تحويل الأرقام العربية للإنجليزية
     function arabicToEnglish(str) {
         return str.replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
     }
 
     let result = text;
 
-    // النمط 1: أرقام إنجليزية
+    // النمط 1: أرقام إنجليزية مع أو بدون أقواس
     result = result.replace(/\(?\s*المادة\s+(\d+)\s*\)?/g, (match, num) => {
         const articleNum = parseInt(num);
         if (articleNum >= 1 && articleNum <= 245) {
@@ -674,6 +762,16 @@ function convertArticleReferencesToLinks(text) {
         }
         return match;
     });
+
+    // النمط 3: أرقام مكتوبة بالحروف — ابحث عن الأطول أولاً
+    const sortedKeys = Object.keys(writtenNumbers).sort((a, b) => b.length - a.length);
+    for (const written of sortedKeys) {
+        const num = writtenNumbers[written];
+        const regex = new RegExp(`المادة\\s+${written}`, 'g');
+        result = result.replace(regex, () => {
+            return `<span class="article-link" onclick="showArticleModal(${num})">(المادة ${num})</span>`;
+        });
+    }
 
     return result;
 }
@@ -710,12 +808,34 @@ function closeArticleModal() {
 // 6. أزرار المتابعة بعد كل نتيجة
 // ========================================
 
-function showFollowUp(type, resultDiv) {
+// يحفظ السياق السابق لكل تبويب
+const sessionContext = {
+    search: { previousContent: '', conversationHistory: [] },
+    letter: { previousContent: '', conversationHistory: [] },
+    explain: { previousContent: '', conversationHistory: [] }
+};
+
+function showFollowUp(type, resultDiv, currentContent) {
+    // احفظ السياق الحالي
+    if (currentContent) {
+        sessionContext[type].previousContent = currentContent;
+    }
+
     const messages = {
         search: 'هل تريد مساعدة إضافية؟',
         letter: 'هل تريد تعديل الخطاب؟',
         explain: 'هل تريد مساعدة إضافية؟'
     };
+
+    const placeholders = {
+        search: 'مثال: وضّح لي أكثر، أو اسألني عن تفصيل معين...',
+        letter: 'مثال: اجعل الأسلوب أقوى، أو أضف فقرة عن...',
+        explain: 'مثال: وضّح لي أكثر، أو ماذا يحدث إذا...'
+    };
+
+    // احذف أي followup سابق
+    const old = resultDiv.querySelector('.followup-container');
+    if (old) old.remove();
 
     const followUpDiv = document.createElement('div');
     followUpDiv.className = 'followup-container';
@@ -723,12 +843,12 @@ function showFollowUp(type, resultDiv) {
         <div class="followup-question">
             <span>${messages[type]}</span>
             <div class="followup-buttons">
-                <button class="followup-btn yes" onclick="handleFollowUp(this, '${type}')">نعم</button>
+                <button class="followup-btn yes" onclick="handleFollowUp(this)">نعم</button>
                 <button class="followup-btn no" onclick="this.closest('.followup-container').remove()">لا</button>
             </div>
         </div>
         <div class="followup-input" style="display:none;">
-            <textarea class="form-input followup-textarea" rows="3" placeholder="اكتب طلبك هنا..."></textarea>
+            <textarea class="form-input followup-textarea" rows="3" placeholder="${placeholders[type]}"></textarea>
             <button class="btn-primary followup-send" onclick="sendFollowUp(this, '${type}')">إرسال</button>
         </div>
         <div class="followup-result"></div>
@@ -736,10 +856,11 @@ function showFollowUp(type, resultDiv) {
     resultDiv.appendChild(followUpDiv);
 }
 
-function handleFollowUp(btn, type) {
+function handleFollowUp(btn) {
     const container = btn.closest('.followup-container');
     container.querySelector('.followup-question').style.display = 'none';
     container.querySelector('.followup-input').style.display = 'block';
+    container.querySelector('.followup-textarea').focus();
 }
 
 async function sendFollowUp(btn, type) {
@@ -758,26 +879,66 @@ async function sendFollowUp(btn, type) {
     resultDiv.innerHTML = '<div class="loading"><div class="spinner"></div><p>جاري المعالجة...</p></div>';
 
     try {
-        const relevantArticles = retrieveRelevantArticles(userInput);
-        const systemPrompt = `أنت مساعد قانوني متخصص في نظام العمل السعودي.
-قواعد الرد:
-1. ابدأ مباشرة بالإجابة بدون تحيات
-2. لا تستخدم رموز تنسيق: * ** # ##
-3. اذكر المواد بصيغة: (المادة X)
-4. رد موجز ومباشر`;
+        const context = sessionContext[type];
+        const relevantArticles = retrieveRelevantArticles(userInput + ' ' + context.previousContent.substring(0, 200));
 
-        const userPrompt = `المواد ذات الصلة:
+        let systemPrompt = '';
+        let userPrompt = '';
+
+        if (type === 'letter') {
+            // تعديل الخطاب — يرسل النص الكامل ويطلب التعديل
+            systemPrompt = `أنت متخصص في تعديل الخطابات الرسمية السعودية.
+قواعد التعديل:
+1. عدّل الخطاب بناءً على طلب المستخدم فقط
+2. أعد كتابة الخطاب كاملاً بعد التعديل
+3. لا تستخدم رموز تنسيق: * ** # ##
+4. حافظ على نفس الهيكل والتاريخ والبيانات
+5. اذكر المواد بصيغة: (المادة X)`;
+
+            userPrompt = `الخطاب الحالي:
+"${context.previousContent}"
+
+طلب التعديل: ${userInput}
+
+أعد كتابة الخطاب كاملاً مع تطبيق التعديل المطلوب فقط.`;
+
+        } else {
+            // بحث أو شرح — يتذكر السياق السابق
+            systemPrompt = `أنت مساعد قانوني متخصص في نظام العمل السعودي.
+قواعد الرد:
+1. أنت تعرف السياق السابق للمحادثة، لا تطلب من المستخدم إعادة الشرح
+2. ابدأ مباشرة بالإجابة
+3. لا تستخدم رموز تنسيق: * ** # ##
+4. اذكر المواد بصيغة: (المادة X)
+5. رد موجز ومباشر مبني على السياق السابق`;
+
+            userPrompt = `السياق السابق للمحادثة:
+"${context.previousContent.substring(0, 500)}"
+
+المواد القانونية ذات الصلة:
 ${JSON.stringify(relevantArticles, null, 2)}
 
-السؤال: ${userInput}`;
+السؤال الجديد: ${userInput}`;
+        }
 
         const answer = await callAPI(systemPrompt, userPrompt);
-        resultDiv.innerHTML = `
-            <div style="background: #f0f7ff; padding: 15px; border-radius: 8px; margin-top: 15px; border-right: 4px solid #006C35;">
+
+        // حدّث السياق
+        sessionContext[type].previousContent = answer;
+
+        const displayHTML = type === 'letter'
+            ? `<div style="background: #fff; padding: 20px; border-radius: 8px; margin-top: 15px; border: 1px solid #E5E7EB; line-height: 2;">
                 ${convertArticleReferencesToLinks(answer)}
-            </div>
-        `;
-        showFollowUp(type, resultDiv);
+               </div>`
+            : `<div style="background: #f0f7ff; padding: 15px; border-radius: 8px; margin-top: 15px; border-right: 4px solid #006C35; line-height: 1.8;">
+                ${convertArticleReferencesToLinks(answer)}
+               </div>`;
+
+        resultDiv.innerHTML = displayHTML;
+
+        // اعرض followup جديد
+        showFollowUp(type, resultDiv, answer);
+
     } catch (error) {
         resultDiv.innerHTML = '❌ عذراً، حدث خطأ. الرجاء المحاولة مرة أخرى.';
     } finally {
