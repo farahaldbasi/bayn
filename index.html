@@ -8,6 +8,54 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        .followup-container {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #E5E7EB;
+        }
+        .followup-question {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .followup-question span {
+            font-weight: 600;
+            color: #1F2937;
+            font-size: 0.95rem;
+        }
+        .followup-buttons {
+            display: flex;
+            gap: 0.75rem;
+        }
+        .followup-btn {
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.5rem;
+            border: none;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .followup-btn.yes {
+            background: #006C35;
+            color: white;
+        }
+        .followup-btn.yes:hover { background: #004d26; }
+        .followup-btn.no {
+            background: #E5E7EB;
+            color: #6B7280;
+        }
+        .followup-btn.no:hover { background: #d1d5db; }
+        .followup-input { margin-top: 12px; }
+        .followup-textarea {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
     <!-- Background Pattern -->
@@ -41,7 +89,7 @@
                             <circle cx="11" cy="11" r="8"></circle>
                             <path d="m21 21-4.35-4.35"></path>
                         </svg>
-                        <span>البحث في النظام</span>
+                        <span>البحث عن مادة في النظام</span>
                     </button>
                     <button class="tab-btn" onclick="showTab('letter')">
                         <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -152,11 +200,6 @@
                         <div class="form-group">
                             <label>الجهة أو الشخص المعني</label>
                             <input type="text" id="concernedParty" placeholder="مثال: شركة أرامكو، مستشفى الملك فهد، المهندس أحمد" class="form-input">
-                        </div>
-
-                        <div class="form-group">
-                            <label>موضوع الخطاب</label>
-                            <input type="text" id="letterSubject" placeholder="عنوان موجز للموضوع" class="form-input">
                         </div>
 
                         <div class="form-group">

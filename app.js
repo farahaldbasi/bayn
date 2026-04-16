@@ -204,6 +204,7 @@ ${JSON.stringify(relevantArticles, null, 2)}
 
         const answer = await callAPI(systemPrompt, userPrompt);
         resultDiv.innerHTML = convertArticleReferencesToLinks(answer);
+        showFollowUp('search', resultDiv);
 
     } catch (error) {
         resultDiv.innerHTML = '❌ عذراً، حدث خطأ. الرجاء المحاولة مرة أخرى.';
@@ -247,7 +248,7 @@ async function generateLetter() {
     const applicantName = document.getElementById('applicantName').value.trim();
     const phoneNumber = document.getElementById('phoneNumber').value.trim();
     const concernedParty = document.getElementById('concernedParty').value.trim();
-    const letterSubject = document.getElementById('letterSubject').value.trim();
+    const letterSubject = letterType; // يُستخدم نوع الخطاب كموضوع تلقائياً
     const letterDetails = document.getElementById('letterDetails').value.trim();
     const loadingDiv = document.getElementById('letterLoading');
     const resultDiv = document.getElementById('letterResult');
@@ -257,7 +258,7 @@ async function generateLetter() {
         formalityLevel = 'رسمي';
     }
 
-    if (!letterType || !recipientType || !applicantName || !phoneNumber || !concernedParty || !letterSubject || !letterDetails) {
+    if (!letterType || !recipientType || !applicantName || !phoneNumber || !concernedParty || !letterDetails) {
         alert('الرجاء تعبئة جميع الحقول');
         return;
     }
@@ -325,8 +326,10 @@ ${formalityLevel === 'شبه رسمي' ? `
 قواعد إلزامية:
 1. لا تقدم نفسك أبداً
 2. لا تستخدم رموز تنسيق: * ** # ##
-3. طول الخطاب: 200-300 كلمة
+3. طول الخطاب: 150-200 كلمة فقط (موجز ومباشر)
 4. اذكر المواد بصيغة: (المادة X)
+5. لا تخترع أو تضيف تفاصيل لم يذكرها المستخدم
+6. اكتب فقط ما ذكره المستخدم بالضبط
 
 المواد القانونية المناسبة لهذا الخطاب:
 ${JSON.stringify(relevantArticles, null, 2)}
@@ -361,15 +364,16 @@ ${JSON.stringify(relevantArticles, null, 2)}
 التفاصيل: ${letterDetails}
 
 متطلبات هامة:
-1. طول الخطاب: 200-300 كلمة فقط
+1. طول الخطاب: 150-200 كلمة فقط (موجز)
 2. التزم بدرجة الرسمية "${formalityLevel}" بدقة
 3. اذكر مادة واحدة فقط من نظام العمل بصيغة (المادة X)
-4. فقرتان رئيسيتان فقط + مقدمة وخاتمة قصيرة
-5. لا تكرر المعلومات ولا تطيل`;
+4. لا تضف أي تفاصيل أو معلومات لم يذكرها المستخدم
+5. اكتب فقط ما ذكره المستخدم بالضبط`;
 
         const letter = await callAPI(systemPrompt, userPrompt);
         resultDiv.innerHTML = convertArticleReferencesToLinks(letter);
         downloadSection.style.display = 'block';
+        showFollowUp('letter', resultDiv);
 
     } catch (error) {
         resultDiv.innerHTML = '❌ عذراً، حدث خطأ. الرجاء المحاولة مرة أخرى.';
@@ -484,6 +488,7 @@ ${JSON.stringify(relevantArticles, null, 2)}
                 ${convertArticleReferencesToLinks(explanation)}
             </div>
         `;
+        showFollowUp('explain', resultDiv);
 
         console.log('✅ تم الشرح بنجاح');
 
@@ -544,6 +549,7 @@ async function explainArticle() {
                 ${convertArticleReferencesToLinks(explanation)}
             </div>
         `;
+        showFollowUp('explain', resultDiv);
 
     } catch (error) {
         resultDiv.innerHTML = '❌ عذراً، حدث خطأ. الرجاء المحاولة مرة أخرى.';
@@ -636,10 +642,40 @@ console.log('✅ تم تحميل البرنامج بنجاح');
 // ========================================
 
 function convertArticleReferencesToLinks(text) {
-    const regex = /\(المادة\s+(\d+)\)/g;
-    return text.replace(regex, (match, articleNum) => {
-        return `<span class="article-link" onclick="showArticleModal(${articleNum})">${match}</span>`;
+    // التعرف على (المادة 56) أو (المادة ٥٦) أو المادة السادسة والخمسون
+    const patterns = [
+        // (المادة 56) أو المادة 56
+        /\(?\s*المادة\s+(\d+)\s*\)?/g,
+        // (المادة ٥٦) - أرقام عربية
+        /\(?\s*المادة\s+([٠-٩]+)\s*\)?/g,
+    ];
+
+    // تحويل الأرقام العربية للإنجليزية
+    function arabicToEnglish(str) {
+        return str.replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+    }
+
+    let result = text;
+
+    // النمط 1: أرقام إنجليزية
+    result = result.replace(/\(?\s*المادة\s+(\d+)\s*\)?/g, (match, num) => {
+        const articleNum = parseInt(num);
+        if (articleNum >= 1 && articleNum <= 245) {
+            return `<span class="article-link" onclick="showArticleModal(${articleNum})">(المادة ${articleNum})</span>`;
+        }
+        return match;
     });
+
+    // النمط 2: أرقام عربية
+    result = result.replace(/\(?\s*المادة\s+([٠-٩]+)\s*\)?/g, (match, num) => {
+        const articleNum = parseInt(arabicToEnglish(num));
+        if (articleNum >= 1 && articleNum <= 245) {
+            return `<span class="article-link" onclick="showArticleModal(${articleNum})">(المادة ${articleNum})</span>`;
+        }
+        return match;
+    });
+
+    return result;
 }
 
 function showArticleModal(articleNumber) {
@@ -668,4 +704,84 @@ function showArticleModal(articleNumber) {
 function closeArticleModal() {
     const modal = document.getElementById('articleModal');
     modal.classList.remove('active');
+}
+
+// ========================================
+// 6. أزرار المتابعة بعد كل نتيجة
+// ========================================
+
+function showFollowUp(type, resultDiv) {
+    const messages = {
+        search: 'هل تريد مساعدة إضافية؟',
+        letter: 'هل تريد تعديل الخطاب؟',
+        explain: 'هل تريد مساعدة إضافية؟'
+    };
+
+    const followUpDiv = document.createElement('div');
+    followUpDiv.className = 'followup-container';
+    followUpDiv.innerHTML = `
+        <div class="followup-question">
+            <span>${messages[type]}</span>
+            <div class="followup-buttons">
+                <button class="followup-btn yes" onclick="handleFollowUp(this, '${type}')">نعم</button>
+                <button class="followup-btn no" onclick="this.closest('.followup-container').remove()">لا</button>
+            </div>
+        </div>
+        <div class="followup-input" style="display:none;">
+            <textarea class="form-input followup-textarea" rows="3" placeholder="اكتب طلبك هنا..."></textarea>
+            <button class="btn-primary followup-send" onclick="sendFollowUp(this, '${type}')">إرسال</button>
+        </div>
+        <div class="followup-result"></div>
+    `;
+    resultDiv.appendChild(followUpDiv);
+}
+
+function handleFollowUp(btn, type) {
+    const container = btn.closest('.followup-container');
+    container.querySelector('.followup-question').style.display = 'none';
+    container.querySelector('.followup-input').style.display = 'block';
+}
+
+async function sendFollowUp(btn, type) {
+    const container = btn.closest('.followup-container');
+    const textarea = container.querySelector('.followup-textarea');
+    const resultDiv = container.querySelector('.followup-result');
+    const userInput = textarea.value.trim();
+
+    if (!userInput) {
+        alert('الرجاء كتابة طلبك');
+        return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'جاري المعالجة...';
+    resultDiv.innerHTML = '<div class="loading"><div class="spinner"></div><p>جاري المعالجة...</p></div>';
+
+    try {
+        const relevantArticles = retrieveRelevantArticles(userInput);
+        const systemPrompt = `أنت مساعد قانوني متخصص في نظام العمل السعودي.
+قواعد الرد:
+1. ابدأ مباشرة بالإجابة بدون تحيات
+2. لا تستخدم رموز تنسيق: * ** # ##
+3. اذكر المواد بصيغة: (المادة X)
+4. رد موجز ومباشر`;
+
+        const userPrompt = `المواد ذات الصلة:
+${JSON.stringify(relevantArticles, null, 2)}
+
+السؤال: ${userInput}`;
+
+        const answer = await callAPI(systemPrompt, userPrompt);
+        resultDiv.innerHTML = `
+            <div style="background: #f0f7ff; padding: 15px; border-radius: 8px; margin-top: 15px; border-right: 4px solid #006C35;">
+                ${convertArticleReferencesToLinks(answer)}
+            </div>
+        `;
+        showFollowUp(type, resultDiv);
+    } catch (error) {
+        resultDiv.innerHTML = '❌ عذراً، حدث خطأ. الرجاء المحاولة مرة أخرى.';
+    } finally {
+        btn.disabled = false;
+        btn.textContent = 'إرسال';
+    }
 }
