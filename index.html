@@ -3,57 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بَيْن - منصة الأنظمة القانونية</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <title>بَيْن - المساعد القانوني الذكي</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        .followup-container {
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid #E5E7EB;
-        }
-        .followup-question {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-        .followup-question span {
-            font-weight: 600;
-            color: #1F2937;
-            font-size: 0.95rem;
-        }
-        .followup-buttons {
-            display: flex;
-            gap: 0.75rem;
-        }
-        .followup-btn {
-            padding: 0.5rem 1.5rem;
-            border-radius: 0.5rem;
-            border: none;
-            font-family: 'Cairo', sans-serif;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .followup-btn.yes {
-            background: #006C35;
-            color: white;
-        }
-        .followup-btn.yes:hover { background: #004d26; }
-        .followup-btn.no {
-            background: #E5E7EB;
-            color: #6B7280;
-        }
-        .followup-btn.no:hover { background: #d1d5db; }
-        .followup-input { margin-top: 12px; }
-        .followup-textarea {
-            width: 100%;
-            margin-bottom: 10px;
+        /* followup override to use brand font */
+        .followup-btn, .followup-textarea, .followup-send {
+            font-family: 'IBMPlexSansArabic', sans-serif;
         }
     </style>
 </head>
@@ -65,16 +20,19 @@
         <!-- Header -->
         <header class="header">
             <div class="logo-container">
-                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-                    <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                <!-- أيقونة بَيْن - أربع معينات -->
+                <svg class="logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="20" y="2" width="11" height="11" rx="2.5" transform="rotate(45 20 2)" fill="#AFEDD6"/>
+                    <rect x="2" y="20" width="11" height="11" rx="2.5" transform="rotate(45 2 20)" fill="#AFEDD6"/>
+                    <rect x="20" y="20" width="11" height="11" rx="2.5" transform="rotate(45 20 20)" fill="#AFEDD6" opacity="0.5"/>
+                    <rect x="20" y="20" width="11" height="11" rx="2.5" transform="rotate(45 38 20)" fill="#AFEDD6"/>
                 </svg>
                 <h1 class="logo-text">بَيْن</h1>
             </div>
             <p class="tagline">مساعدك القانوني الذكي لفهم نظام العمل السعودي</p>
             <div class="badge">
                 <div class="badge-line"></div>
-                <span class="badge-text">منصة حكومية موثوقة</span>
+                <span class="badge-text">YOUR AI LEGAL ASSISTANT</span>
                 <div class="badge-line"></div>
             </div>
         </header>
@@ -306,14 +264,15 @@
         <footer class="footer">
             <div class="footer-icon">
                 <div class="footer-line"></div>
-                <svg class="footer-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-                    <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                <svg class="footer-scale" viewBox="0 0 40 40" fill="none">
+                    <rect x="20" y="2" width="11" height="11" rx="2" transform="rotate(45 20 2)" fill="currentColor"/>
+                    <rect x="2" y="20" width="11" height="11" rx="2" transform="rotate(45 2 20)" fill="currentColor"/>
+                    <rect x="20" y="20" width="11" height="11" rx="2" transform="rotate(45 38 20)" fill="currentColor"/>
                 </svg>
                 <div class="footer-line"></div>
             </div>
-            <p>منصة بَيْن - مبادرة حكومية لتبسيط الأنظمة القانونية</p>
-            <p>© 2026 المملكة العربية السعودية - جميع الحقوق محفوظة</p>
+            <p>منصة بَيْن — YOUR AI LEGAL ASSISTANT</p>
+            <p>© 2026 فريق أوج — ذكاثون</p>
         </footer>
     </div>
 
