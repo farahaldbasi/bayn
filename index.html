@@ -117,7 +117,11 @@
     .app-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(6,58,64,0.3); }
     .app-result { margin-top: 24px; background: rgba(6,58,64,0.02); border: 1px solid rgba(6,58,64,0.1); border-radius: 14px; padding: 26px 30px; font-size: 0.95rem; line-height: 2.1; color: #16232C; white-space: pre-wrap; }
     .app-flex-row { display: flex; gap: 10px; flex-wrap: wrap; }
-    .info-banner { background: rgba(6,58,64,0.05); border: 1px solid rgba(6,58,64,0.12); border-right: 4px solid #063A40; border-radius: 14px; padding: 16px 20px; margin-bottom: 28px; display: flex; align-items: center; gap: 14px; }
+    .app-chip { background: #AFEDD6; color: #063A40; font-size: 0.92rem; font-weight: 700; padding: 7px 20px; border-radius: 100px; display: inline-block; }
+    .info-banner { background: rgba(6,58,64,0.05); border: 1px solid rgba(6,58,64,0.12); border-right: 4px solid #063A40; border-radius: 14px; padding: 16px 20px; margin-bottom: 28px; }
+    .info-banner h4, .info-banner p { margin: 0; }
+    .info-banner h4 { font-size: 1rem; font-weight: 700; color: #063A40; margin-bottom: 0.25rem; }
+    .info-banner p { font-size: 0.82rem; color: rgba(6,58,64,0.6); }
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     .loading { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; gap: 10px; }
     .spinner { width: 40px; height: 40px; border: 4px solid rgba(6,58,64,0.1); border-top-color: #063A40; border-radius: 50%; animation: spin 0.8s linear infinite; }
@@ -138,14 +142,16 @@
     .modal-header { background: linear-gradient(135deg, #063A40, #16232C); padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; border-radius: 24px 24px 0 0; }
     .modal-header h3 { color: #AFEDD6; margin: 0; }
     .modal-close { background: none; border: none; color: white; font-size: 24px; cursor: pointer; }
-    .modal-body { padding: 24px; color: #16232C; }
+    .modal-body { padding: 24px; background: #DFE7E8; }
     .modal-body .article-text-box { background: #DFE7E8; padding: 1.5rem; border-radius: 0.75rem; border-right: 4px solid #063A40; margin-bottom: 1.5rem; }
-    .modal-body .article-text-box h4 { margin-bottom: 1rem; color: #16232C; font-weight: 700; }
-    .modal-body .article-text-box p { line-height: 1.8; color: #16232C; }
-    .method-option { cursor: pointer; transition: all 0.2s; }
-    .method-option.active { border-color: #063A40; background: rgba(6,58,64,0.06); }
-    .method-option .method-title { font-weight: 700; margin-bottom: 8px; color: #063A40; }
-    .method-option .method-desc { font-size: 0.85rem; color: #063A40; opacity: 0.7; }
+    .modal-body .article-text-box h4 { margin-bottom: 1rem; color: #063A40; font-weight: 700; }
+    .modal-body .article-text-box p { line-height: 1.8; color: #063A40; }
+    .explain-box { background: #DFE7E8; padding: 1.25rem; border-radius: 0.75rem; border-right: 4px solid #063A40; margin-bottom: 1.25rem; color: #063A40; }
+    .explain-box strong { color: #063A40; font-weight: 700; }
+    .explain-box p { margin: 0.5rem 0 0; line-height: 1.8; color: #063A40; }
+    .method-label { flex: 1; padding: 16px; border: 1.5px solid #063A40; border-radius: 14px; cursor: pointer; text-align: center; background: rgba(6,58,64,0.06); font-weight: 700; color: #063A40; transition: all 0.2s; }
+    .method-label.inactive { border-color: rgba(175,237,214,0.4); background: rgba(175,237,214,0.08); color: #063A40; }
+    .method-desc-small { display: block; font-size: 0.75rem; font-weight: normal; margin-top: 8px; color: rgba(6,58,64,0.7); }
     @media (max-width: 900px) {
       .hero-inner { grid-template-columns: 1fr; }
       .hero-visual { display: none; }
@@ -253,7 +259,9 @@
 
       <!-- Panel 0: بحث -->
       <div class="app-panel active" data-panel="0">
-        <div class="info-banner"><h4 style="font-size:1rem;font-weight:700;color:#063A40;">ابحث في نظام العمل</h4><p style="font-size:.82rem;color:rgba(6,58,64,0.6);">اكتب كلمة مفتاحية أو موضوعاً لترى المواد ذات الصلة</p></div>
+        <div class="info-banner">
+          <div><h4>ابحث في نظام العمل</h4><p>اكتب كلمة مفتاحية أو موضوعاً لترى المواد ذات الصلة</p></div>
+        </div>
         <div class="app-flex-row">
           <input type="text" id="searchInput" class="app-input" placeholder="مثال: إنهاء عقد العمل، إجازة الأمومة..." style="flex:1;">
           <button id="searchBtn" class="app-btn" style="width:auto; padding:0 24px; margin-top:0;">بحث</button>
@@ -263,7 +271,9 @@
 
       <!-- Panel 1: خطاب -->
       <div class="app-panel" data-panel="1">
-        <div class="info-banner"><h4 style="font-size:1rem;font-weight:700;color:#063A40;">نموذج خطاب رسمي</h4><p style="font-size:.82rem;color:rgba(6,58,64,0.6);">أدخل التفاصيل وسيقوم بيّن بصياغة خطاب قانوني رسمي</p></div>
+        <div class="info-banner">
+          <div><h4>نموذج خطاب رسمي</h4><p>أدخل التفاصيل وسيقوم بيّن بصياغة خطاب قانوني رسمي</p></div>
+        </div>
         <div class="grid-2">
           <div><label class="app-label">نوع الخطاب</label><select id="letterType" class="app-select"><option>شكوى</option><option>طلب</option><option>استفسار</option><option>اعتراض</option><option>إشعار</option><option>استقالة</option></select></div>
           <div><label class="app-label">نوع المستلم</label><select id="recipientType" class="app-select"><option>شخص</option><option>شركة</option><option>جهة حكومية</option></select></div>
@@ -279,15 +289,17 @@
 
       <!-- Panel 2: شرح -->
       <div class="app-panel" data-panel="2">
-        <div class="info-banner"><h4 style="font-size:1rem;font-weight:700;color:#063A40;">شرح مادة نظامية</h4><p style="font-size:.82rem;color:rgba(6,58,64,0.6);">اختر طريقة البحث وسيشرح بيّن المادة بأسلوب مبسّط</p></div>
+        <div class="info-banner">
+          <div><h4>شرح مادة نظامية</h4><p>اختر طريقة البحث وسيشرح بيّن المادة بأسلوب مبسّط</p></div>
+        </div>
         <div style="display:flex; gap:14px; margin-bottom:26px;">
-          <div id="methodDesc" class="method-option active" style="flex:1; padding:16px; border:1.5px solid #063A40; border-radius:14px; cursor:pointer; background:rgba(6,58,64,0.06);">
-            <div class="method-title">ابحث بالوصف</div>
-            <div class="method-desc">صِف الموقف أو الحقوق التي تهمك</div>
+          <div id="methodDesc" class="method-label">
+            ابحث بالوصف
+            <span class="method-desc-small">اكتب وصفاً للموقف أو السؤال القانوني</span>
           </div>
-          <div id="methodNum" class="method-option" style="flex:1; padding:16px; border:1.5px solid rgba(175,237,214,0.4); border-radius:14px; cursor:pointer; background:rgba(175,237,214,0.08);">
-            <div class="method-title">ابحث برقم المادة</div>
-            <div class="method-desc">أدخل رقم المادة مباشرة (1-245)</div>
+          <div id="methodNum" class="method-label inactive">
+            ابحث برقم المادة
+            <span class="method-desc-small">أدخل رقم المادة مباشرة (مثال: 74)</span>
           </div>
         </div>
         <div id="descDiv"><label class="app-label">صف ما تريد معرفته</label><textarea id="contextInput" rows="3" class="app-textarea" placeholder="مثال: ما حقوق العامل عند إنهاء العقد دون سبب مشروع؟"></textarea></div>
@@ -499,7 +511,7 @@
           const formattedAnswer = convertArticleReferencesToLinks(newAnswer);
           resultDiv.innerHTML = type === 'letter'
               ? `<div style="background:#fff;padding:20px;border-radius:8px;margin-top:15px;border:1px solid #E5E7EB;line-height:2;">${formattedAnswer}</div>`
-              : `<div style="background:#f0f7ff;padding:15px;border-radius:8px;margin-top:15px;border-right:4px solid #006C35;line-height:1.8;">${formattedAnswer}</div>`;
+              : `<div class="explain-box"><strong>الإجابة</strong><p>${formattedAnswer}</p></div>`;
           // تحديث السياق
           if (type === 'search') sessionSearchPrev = newAnswer;
           else if (type === 'letter') sessionLetterPrev = newAnswer;
@@ -541,7 +553,7 @@ ${JSON.stringify(relevantArticles, null, 2)}
 الرجاء الإجابة بشكل واضح ومباشر مع ذكر المادة المرجعية.`;
           const answer = await callAPI(systemPrompt, userPrompt);
           const formattedAnswer = convertArticleReferencesToLinks(answer);
-          resultDiv.innerHTML = formattedAnswer;
+          resultDiv.innerHTML = `<div class="explain-box"><p>${formattedAnswer}</p></div>`;
           sessionSearchPrev = answer;
           showFollowUp(resultDiv, 'search', answer);
       } catch (error) {
@@ -589,7 +601,7 @@ ${JSON.stringify(relevantArticles, null, 2)}
 اكتب الخطاب بشكل رسمي ومهني.`;
           const letter = await callAPI(systemPrompt, userPrompt);
           const formattedLetter = convertArticleReferencesToLinks(letter);
-          resultDiv.innerHTML = formattedLetter;
+          resultDiv.innerHTML = `<div style="background:#fff;padding:20px;border-radius:8px;border:1px solid #E5E7EB;line-height:2;">${formattedLetter}</div>`;
           sessionLetterPrev = letter;
           showFollowUp(resultDiv, 'letter', letter);
           downloadBtn.style.display = 'block';
@@ -639,14 +651,16 @@ ${JSON.stringify(relevantArticles, null, 2)}
           const explanation = await callAPI(explainPrompt, '');
           const formattedExplanation = convertArticleReferencesToLinks(explanation);
           const html = `
-              <div style="background:#AFEDD6;padding:15px;border-radius:8px;margin-bottom:20px;border-right:4px solid #063A40; color:#063A40;">
+              <div class="explain-box">
                   <strong>المادة المناسبة:</strong> (المادة ${article.id})
               </div>
-              <div style="background:#AFEDD6;padding:15px;border-radius:8px;margin-bottom:20px;border-right:4px solid #063A40; color:#063A40;">
-                  <strong>نص المادة:</strong><br><br>${article.text}
+              <div class="explain-box">
+                  <strong>نص المادة:</strong>
+                  <p>${article.text}</p>
               </div>
-              <div style="background:#AFEDD6;padding:15px;border-radius:8px;border-right:4px solid #063A40; color:#063A40; line-height:1.8;">
-                  ${formattedExplanation}
+              <div class="explain-box">
+                  <strong>شرح نص المادة:</strong>
+                  <p>${formattedExplanation}</p>
               </div>
           `;
           resultDiv.innerHTML = html;
@@ -674,14 +688,16 @@ ${JSON.stringify(relevantArticles, null, 2)}
           const explanation = await callAPI(explainPrompt, '');
           const formattedExplanation = convertArticleReferencesToLinks(explanation);
           const html = `
-              <div style="background:#AFEDD6;padding:15px;border-radius:8px;margin-bottom:20px;border-right:4px solid #063A40; color:#063A40;">
+              <div class="explain-box">
                   <strong>المادة المطلوبة:</strong> (المادة ${article.id})
               </div>
-              <div style="background:#AFEDD6;padding:15px;border-radius:8px;margin-bottom:20px;border-right:4px solid #063A40; color:#063A40;">
-                  <strong>نص المادة:</strong><br><br>${article.text}
+              <div class="explain-box">
+                  <strong>نص المادة:</strong>
+                  <p>${article.text}</p>
               </div>
-              <div style="background:#AFEDD6;padding:15px;border-radius:8px;border-right:4px solid #063A40; color:#063A40; line-height:1.8;">
-                  ${formattedExplanation}
+              <div class="explain-box">
+                  <strong>شرح نص المادة:</strong>
+                  <p>${formattedExplanation}</p>
               </div>
           `;
           resultDiv.innerHTML = html;
@@ -698,18 +714,17 @@ ${JSON.stringify(relevantArticles, null, 2)}
   let method = 'desc';
   const methodDescDiv = document.getElementById('methodDesc');
   const methodNumDiv = document.getElementById('methodNum');
-  
   methodDescDiv.addEventListener('click', () => {
       method = 'desc';
-      methodDescDiv.classList.add('active');
-      methodNumDiv.classList.remove('active');
+      methodDescDiv.classList.remove('inactive');
+      methodNumDiv.classList.add('inactive');
       document.getElementById('descDiv').style.display = 'block';
       document.getElementById('numDiv').style.display = 'none';
   });
   methodNumDiv.addEventListener('click', () => {
       method = 'num';
-      methodNumDiv.classList.add('active');
-      methodDescDiv.classList.remove('active');
+      methodNumDiv.classList.remove('inactive');
+      methodDescDiv.classList.add('inactive');
       document.getElementById('descDiv').style.display = 'none';
       document.getElementById('numDiv').style.display = 'block';
   });
