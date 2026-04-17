@@ -3,1546 +3,519 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title> بيّن— مساعدك القانوني الذكي</title>
+  <title>بيّن — مساعدك القانوني الذكي</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* ========================================
-       Variables & Reset — هوية بيّن
-    ========================================= */
-    @font-face {
-        font-family: 'IBMPlexSansArabic';
-        src: url('IBMPlexSansArabic-Regular.ttf') format('truetype');
-        font-weight: 400;
-        font-style: normal;
-    }
-    @font-face {
-        font-family: 'IBMPlexSansArabic';
-        src: url('IBMPlexSansArabic-Bold.ttf') format('truetype');
-        font-weight: 700;
-        font-style: normal;
-    }
-
     :root {
-        --dark-navy:    #16232C;
-        --deep-teal:    #063A40;
-        --mint:         #AFEDD6;
-        --mint-dark:    #7DD4B8;
-        --off-white:    #F1F4F4;
-        --light-gray:   #DFE7E8;
-        --white:        #FFFFFF;
-        --text-primary: #16232C;
-        --text-light:   #4A6572;
-        --border:       #DFE7E8;
-        --card-bg:      #FFFFFF;
-        --input-bg:     #F1F4F4;
-        --shadow:       rgba(6, 58, 64, 0.12);
-        --shadow-strong:rgba(6, 58, 64, 0.24);
-        --link-bg:      rgba(175, 237, 214, 0.25);
-        --link-color:   #063A40;
-        --link-border:  #AFEDD6;
+      --dark-navy: #16232C;
+      --deep-teal: #063A40;
+      --mint: #AFEDD6;
+      --light-gray: #F1F4F4;
+      --soft-gray: #DFE7E8;
+      --white: #ffffff;
+      --radius-sm: 8px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
     }
-
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     body {
-        font-family: 'IBMPlexSansArabic', 'Cairo', sans-serif;
-        background: var(--dark-navy);
-        color: var(--white);
-        line-height: 1.7;
-        min-height: 100vh;
-        direction: rtl;
-        overflow-x: hidden;
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      background: var(--dark-navy);
+      color: var(--white);
+      direction: rtl;
+      scroll-behavior: smooth;
     }
-
-    /* Binary Background */
     .binary-bg { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
     .binary-bg canvas { width: 100%; height: 100%; opacity: 0.07; }
+    section, nav { position: relative; z-index: 1; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
 
-    /* Container */
-    .container {
-        position: relative;
-        z-index: 10;
-        max-width: 860px;
-        margin: 0 auto;
-        padding: 2.5rem 1.25rem 3rem;
+    /* Nav */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      padding: 1.2rem 0;
+      transition: background 0.3s, backdrop-filter 0.3s;
     }
-
-    /* Header */
-    .header {
-        text-align: center;
-        margin-bottom: 2.5rem;
-        animation: fadeInDown 0.5s ease-out both;
+    nav.scrolled {
+      background: rgba(22,35,44,0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(175,237,214,0.12);
     }
-
-    .logo-container {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.875rem;
-        background: linear-gradient(135deg, var(--deep-teal) 0%, var(--dark-navy) 100%);
-        color: var(--mint);
-        padding: 1rem 2rem;
-        border-radius: 1.25rem;
-        margin-bottom: 1.125rem;
-        box-shadow: 0 8px 32px var(--shadow-strong);
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      max-width: 1200px; margin: 0 auto; padding: 0 2rem;
     }
-
-    .logo-icon { width: 2.25rem; height: 2.25rem; color: var(--mint); }
-    .logo-text { font-size: 2.25rem; font-weight: 700; color: var(--mint); }
-    .tagline { font-size: 1rem; color: rgba(255,255,255,0.7); margin-bottom: 0.75rem; }
-
-    .badge { display: inline-flex; align-items: center; gap: 0.75rem; }
-    .badge-line { width: 40px; height: 1px; background: var(--mint-dark); opacity: 0.5; }
-    .badge-text { font-size: 0.75rem; font-weight: 700; color: var(--mint); letter-spacing: 0.08em; }
-
-    /* Main Card */
-    .main-card {
-        background: var(--card-bg);
-        border-radius: 1.5rem;
-        box-shadow: 0 4px 24px var(--shadow), 0 1px 3px rgba(0,0,0,0.06);
-        overflow: hidden;
-        border: 1px solid var(--border);
+    .nav-logo { display: flex; align-items: center; gap: 0.6rem; text-decoration: none; }
+    .nav-logo-icon { width: 36px; height: 36px; }
+    .nav-logo-text { font-size: 1.4rem; font-weight: 700; color: var(--mint); }
+    .nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+    .nav-links a { color: rgba(255,255,255,0.75); text-decoration: none; font-size: 0.95rem; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--mint); }
+    .nav-cta {
+      background: var(--mint); color: var(--deep-teal) !important;
+      font-weight: 700 !important; padding: 0.55rem 1.4rem;
+      border-radius: 100px; transition: transform 0.2s, box-shadow 0.2s !important;
     }
+    .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(175,237,214,0.35) !important; }
 
-    /* Tabs */
-    .tabs-container {
-        background: linear-gradient(135deg, var(--deep-teal) 0%, var(--dark-navy) 100%);
-        padding: 0.25rem 0.25rem 0;
+    /* Hero */
+    .hero {
+      min-height: 100vh; display: flex; align-items: center;
+      padding: 8rem 0 5rem;
+      background: linear-gradient(135deg, var(--dark-navy) 0%, var(--deep-teal) 60%, #0a4a52 100%);
     }
-
-    .tabs { display: grid; grid-template-columns: repeat(3, 1fr); }
-
-    .tab-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        padding: 0.875rem 1rem;
-        background: transparent;
-        color: rgba(175, 237, 214, 0.6);
-        border: none;
-        border-radius: 0.75rem 0.75rem 0 0;
-        font-family: 'IBMPlexSansArabic', sans-serif;
-        font-size: 0.875rem;
-        font-weight: 700;
-        cursor: pointer;
-        transition: all 0.2s;
+    .hero-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(175,237,214,0.12); border: 1px solid rgba(175,237,214,0.25);
+      color: var(--mint); font-size: 0.8rem; font-weight: 700;
+      padding: 0.4rem 1rem; border-radius: 100px; margin-bottom: 1.5rem;
     }
-
-    .tab-btn:hover { color: var(--mint); background: rgba(175,237,214,0.08); }
-    .tab-btn.active { background: var(--card-bg); color: var(--deep-teal); }
-    .tab-icon { width: 1.125rem; height: 1.125rem; flex-shrink: 0; }
-
-    /* Content */
-    .content { padding: 2rem; }
-    .tab-content { display: none; animation: fadeIn 0.3s ease-out both; }
-    .tab-content.active { display: block; }
-
-    /* Search */
-    .search-section { margin-bottom: 1.5rem; }
-    .section-label { display: block; font-size: 0.875rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.625rem; }
-
-    .search-box {
-        display: flex;
-        border-radius: 0.875rem;
-        overflow: hidden;
-        border: 1.5px solid var(--border);
-        transition: border-color 0.2s;
-        background: var(--white);
+    .hero-eyebrow::before {
+      content: ''; width: 6px; height: 6px; background: var(--mint);
+      border-radius: 50%; animation: pulse-dot 2s infinite;
     }
-
-    .search-box:focus-within { border-color: var(--deep-teal); box-shadow: 0 0 0 3px rgba(6,58,64,0.08); }
-
-    .search-input {
-        flex: 1;
-        padding: 0.875rem 1.125rem;
-        border: none;
-        background: transparent;
-        font-family: 'IBMPlexSansArabic', sans-serif;
-        font-size: 0.9375rem;
-        color: var(--text-primary);
-        direction: rtl;
-        outline: none;
-    }
-
-    .search-input::placeholder { color: #9BB0B8; }
-
-    .search-btn {
-        padding: 0.875rem 1.25rem;
-        background: linear-gradient(135deg, var(--deep-teal), var(--dark-navy));
-        border: none;
-        color: var(--mint);
-        cursor: pointer;
-        transition: opacity 0.2s;
-        display: flex;
-        align-items: center;
-    }
-
-    .search-btn:hover { opacity: 0.88; }
-    .btn-icon { width: 1.25rem; height: 1.25rem; }
-
-    /* Info Banner */
-    .info-banner {
-        background: linear-gradient(135deg, rgba(6,58,64,0.05) 0%, rgba(175,237,214,0.12) 100%);
-        border: 1px solid rgba(6,58,64,0.12);
-        border-radius: 0.875rem;
-        padding: 1rem 1.25rem;
-        margin-bottom: 1.75rem;
-    }
-
-    .info-banner h3 { font-size: 1rem; font-weight: 700; color: var(--deep-teal); margin-bottom: 0.25rem; }
-    .info-banner p { font-size: 0.8125rem; color: var(--text-light); }
-
-    /* Forms */
-    .letter-form { display: flex; flex-direction: column; gap: 1.125rem; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .form-group { display: flex; flex-direction: column; gap: 0.375rem; }
-    .form-group label { font-size: 0.8125rem; font-weight: 700; color: var(--text-primary); }
-
-    .form-input {
-        padding: 0.75rem 1rem;
-        border: 1.5px solid var(--border);
-        border-radius: 0.75rem;
-        background: var(--input-bg);
-        font-family: 'IBMPlexSansArabic', sans-serif;
-        font-size: 0.9rem;
-        color: var(--text-primary);
-        direction: rtl;
-        outline: none;
-        transition: border-color 0.2s, box-shadow 0.2s;
-        width: 100%;
-    }
-
-    .form-input:focus { border-color: var(--deep-teal); background: var(--white); box-shadow: 0 0 0 3px rgba(6,58,64,0.07); }
-
-    select.form-input {
-        appearance: none;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23063A40' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: left 1rem center;
-        padding-left: 2.5rem;
-    }
-
-    textarea.form-input { resize: vertical; min-height: 110px; }
-
-    /* Buttons */
+    @keyframes pulse-dot { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.5; transform:scale(1.4); } }
+    .hero-title { font-size: clamp(2.6rem, 5vw, 4rem); font-weight: 700; line-height: 1.15; margin-bottom: 1.5rem; }
+    .hero-title span { color: var(--mint); }
+    .hero-subtitle { font-size: 1.1rem; color: rgba(255,255,255,0.65); line-height: 1.8; margin-bottom: 2.5rem; max-width: 460px; }
+    .hero-subtitle strong { color: var(--mint); }
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
     .btn-primary {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        padding: 0.875rem 2rem;
-        background: linear-gradient(135deg, var(--deep-teal) 0%, var(--dark-navy) 100%);
-        color: var(--mint);
-        border: none;
-        border-radius: 0.875rem;
-        font-family: 'IBMPlexSansArabic', sans-serif;
-        font-size: 0.9375rem;
-        font-weight: 700;
-        cursor: pointer;
-        transition: all 0.2s;
-        width: 100%;
-        margin-top: 0.5rem;
-        box-shadow: 0 4px 16px var(--shadow);
+      background: var(--mint); color: var(--deep-teal);
+      font-family: inherit; font-size: 1rem; font-weight: 700;
+      padding: 0.85rem 2rem; border-radius: 100px; border: none;
+      cursor: pointer; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
-
-    .btn-primary:hover { opacity: 0.9; box-shadow: 0 6px 20px var(--shadow-strong); transform: translateY(-1px); }
-    .btn-primary:active { transform: translateY(0); }
-
-    .btn-download {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        padding: 0.75rem 1.5rem;
-        background: transparent;
-        color: var(--deep-teal);
-        border: 1.5px solid var(--deep-teal);
-        border-radius: 0.75rem;
-        font-family: 'IBMPlexSansArabic', sans-serif;
-        font-size: 0.875rem;
-        font-weight: 700;
-        cursor: pointer;
-        transition: all 0.2s;
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(175,237,214,0.4); }
+    .btn-secondary {
+      background: transparent; color: var(--white);
+      font-family: inherit; font-size: 1rem; font-weight: 400;
+      padding: 0.85rem 2rem; border-radius: 100px;
+      border: 1.5px solid rgba(255,255,255,0.25);
+      cursor: pointer; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      transition: border-color 0.2s, color 0.2s;
     }
+    .btn-secondary:hover { border-color: var(--mint); color: var(--mint); }
 
-    .btn-download:hover { background: var(--deep-teal); color: var(--mint); }
-
-    /* Method Selector */
-    .method-selector { margin-bottom: 1.5rem; }
-
-    .method-options {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 0.875rem;
-        margin-top: 0.625rem;
+    /* Hero card */
+    .hero-visual { position: relative; display: flex; align-items: center; justify-content: center; }
+    .hero-card {
+      background: rgba(255,255,255,0.05); backdrop-filter: blur(20px);
+      border: 1px solid rgba(175,237,214,0.2); border-radius: var(--radius-lg);
+      padding: 2rem; width: 100%; max-width: 420px;
+      animation: float 6s ease-in-out infinite;
     }
-
-    .method-option {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        padding: 0.875rem 1rem;
-        border: 1.5px solid var(--border);
-        border-radius: 0.875rem;
-        cursor: pointer;
-        transition: all 0.2s;
-        background: var(--white);
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+    .chat-message { display: flex; gap: 0.75rem; align-items: flex-start; margin-bottom: 1rem; }
+    .chat-avatar { width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; }
+    .chat-avatar.user { background: var(--soft-gray); color: var(--deep-teal); }
+    .chat-avatar.ai { background: var(--mint); color: var(--deep-teal); }
+    .chat-bubble {
+      background: rgba(255,255,255,0.08); border-radius: 12px 12px 12px 0;
+      padding: 0.75rem 1rem; font-size: 0.88rem; line-height: 1.6;
+      color: rgba(255,255,255,0.85); flex: 1;
     }
-
-    .method-option:hover { border-color: var(--deep-teal); background: rgba(6,58,64,0.02); }
-    .method-option.active { border-color: var(--deep-teal); background: linear-gradient(135deg, rgba(6,58,64,0.04) 0%, rgba(175,237,214,0.1) 100%); }
-
-    .radio-btn {
-        width: 1.125rem;
-        height: 1.125rem;
-        border-radius: 50%;
-        border: 2px solid var(--border);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-        transition: border-color 0.2s;
+    .chat-bubble.user { background: rgba(175,237,214,0.15); border-radius: 12px 12px 0 12px; text-align: right; }
+    .chat-bubble.ai { border-right: 2px solid var(--mint); }
+    .typing-dots span {
+      display: inline-block; width: 6px; height: 6px;
+      background: var(--mint); border-radius: 50%; margin: 0 2px;
+      animation: typing 1.4s infinite;
     }
+    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes typing { 0%,60%,100% { transform:translateY(0); opacity:0.5; } 30% { transform:translateY(-6px); opacity:1; } }
 
-    .method-option.active .radio-btn { border-color: var(--deep-teal); }
+    /* Stats */
+    .stats-bar { background: rgba(6,58,64,0.6); border-top: 1px solid rgba(175,237,214,0.12); border-bottom: 1px solid rgba(175,237,214,0.12); padding: 2rem 0; }
+    .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; text-align: center; }
+    .stat-item { padding: 1rem; border-left: 1px solid rgba(175,237,214,0.15); }
+    .stat-item:last-child { border-left: none; }
+    .stat-number { font-size: 2rem; font-weight: 700; color: var(--mint); display: block; }
+    .stat-label { font-size: 0.85rem; color: rgba(255,255,255,0.55); margin-top: 0.2rem; }
 
-    .radio-dot {
-        width: 0.5rem;
-        height: 0.5rem;
-        border-radius: 50%;
-        background: var(--deep-teal);
-        transform: scale(0);
-        transition: transform 0.2s;
+    /* Features */
+    .features { padding: 7rem 0; background: var(--dark-navy); }
+    .section-header { text-align: center; margin-bottom: 4rem; }
+    .section-tag { display: inline-block; background: rgba(175,237,214,0.1); color: var(--mint); font-size: 0.78rem; font-weight: 700; letter-spacing: 1px; padding: 0.35rem 0.9rem; border-radius: 100px; margin-bottom: 1rem; }
+    .section-title { font-size: clamp(1.8rem,3.5vw,2.8rem); font-weight: 700; margin-bottom: 1rem; }
+    .section-desc { font-size: 1.05rem; color: rgba(255,255,255,0.55); max-width: 520px; margin: 0 auto; line-height: 1.8; }
+    .features-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 1.5rem; }
+    .feature-card {
+      background: rgba(6,58,64,0.25); border: 1px solid rgba(175,237,214,0.1);
+      border-radius: var(--radius-lg); padding: 2rem;
+      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
     }
+    .feature-card:hover { transform: translateY(-6px); border-color: rgba(175,237,214,0.35); box-shadow: 0 20px 50px rgba(6,58,64,0.5); }
+    .feature-icon { width: 52px; height: 52px; background: rgba(175,237,214,0.12); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem; }
+    .feature-icon svg { width: 26px; height: 26px; }
+    .feature-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.6rem; }
+    .feature-desc { font-size: 0.9rem; color: rgba(255,255,255,0.5); line-height: 1.75; }
 
-    .method-option.active .radio-dot { transform: scale(1); }
-    .method-emoji { font-size: 1.25rem; }
+    /* How */
+    .how { padding: 7rem 0; background: linear-gradient(180deg, var(--dark-navy) 0%, var(--deep-teal) 100%); }
+    .steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 2rem; margin-top: 3rem; position: relative; }
+    .steps::before { content: ''; position: absolute; top: 2rem; right: calc(16.6% + 1.5rem); left: calc(16.6% + 1.5rem); height: 1px; background: linear-gradient(90deg, transparent, var(--mint), transparent); opacity: 0.3; }
+    .step { text-align: center; padding: 2rem 1.5rem; }
+    .step-number { width: 52px; height: 52px; background: var(--mint); color: var(--deep-teal); font-weight: 700; font-size: 1.2rem; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; }
+    .step-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.6rem; }
+    .step-desc { font-size: 0.9rem; color: rgba(255,255,255,0.5); line-height: 1.75; }
 
-    .method-text { display: flex; flex-direction: column; gap: 0.1rem; }
-    .method-title { font-size: 0.875rem; font-weight: 700; color: var(--text-primary); }
-    .method-desc { font-size: 0.75rem; color: var(--text-light); }
+    /* CTA */
+    .cta-section { padding: 7rem 0; text-align: center; background: linear-gradient(135deg, var(--deep-teal), #0a4a52); position: relative; overflow: hidden; }
+    .cta-section::before { content: ''; position: absolute; inset: 0; background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='10' y='10' width='16' height='16' rx='4' fill='none' stroke='%23AFEDD6' stroke-width='0.5' opacity='0.15'/%3E%3Crect x='34' y='34' width='16' height='16' rx='4' fill='none' stroke='%23AFEDD6' stroke-width='0.5' opacity='0.1'/%3E%3C/svg%3E") repeat; opacity: 0.5; }
+    .cta-title { font-size: clamp(2rem,4vw,3.2rem); font-weight: 700; margin-bottom: 1rem; position: relative; }
+    .cta-desc { font-size: 1.1rem; color: rgba(255,255,255,0.65); margin-bottom: 2.5rem; position: relative; }
+    .cta-actions { position: relative; }
 
-    /* Explain Method */
-    .explain-method { display: none; }
-    .explain-method.active { display: block; }
+    /* App Section */
+    #app { background: var(--light-gray); padding: 5rem 0 6rem; }
+    .app-card { background: var(--white); border-radius: 20px; box-shadow: 0 8px 48px rgba(6,58,64,0.13); overflow: hidden; }
+    .app-tabs { background: linear-gradient(135deg, #063A40, #16232C); display: flex; padding: 14px 14px 0; gap: 6px; }
+    .app-tab { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 13px 10px 15px; border-radius: 14px 14px 0 0; cursor: pointer; font-family: inherit; font-size: 0.9rem; font-weight: 700; border: none; white-space: nowrap; transition: all 0.22s; background: transparent; color: rgba(175,237,214,0.6); }
+    .app-tab.active { background: var(--white); color: #063A40; }
+    .app-panel { padding: 40px 48px 48px; animation: appFi 0.28s ease; display: none; }
+    .app-panel.active { display: block; }
+    @keyframes appFi { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .app-label { font-size: 0.87rem; font-weight: 700; color: #063A40; margin-bottom: 9px; display: block; }
+    .app-input, .app-select, .app-textarea { width: 100%; font-family: inherit; font-size: 0.97rem; background: rgba(175,237,214,0.12); border: 1.5px solid rgba(175,237,214,0.4); border-radius: 12px; padding: 13px 16px; color: #16232C; outline: none; direction: rtl; transition: border-color 0.2s; }
+    .app-input:focus, .app-select:focus, .app-textarea:focus { border-color: #063A40; box-shadow: 0 0 0 3px rgba(6,58,64,0.1); background: rgba(175,237,214,0.2); }
+    .app-btn { display: flex; align-items: center; justify-content: center; gap: 9px; width: 100%; padding: 15px 24px; margin-top: 24px; background: linear-gradient(135deg, #063A40, #16232C); color: #AFEDD6; font-family: inherit; font-size: 1.02rem; font-weight: 700; border: none; border-radius: 12px; cursor: pointer; transition: transform 0.18s, box-shadow 0.18s; }
+    .app-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(6,58,64,0.3); }
+    .app-result { margin-top: 24px; background: rgba(6,58,64,0.02); border: 1px solid rgba(6,58,64,0.1); border-radius: 14px; padding: 26px 30px; font-size: 0.95rem; line-height: 2.1; color: #16232C; white-space: pre-wrap; }
+    .app-flex-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .app-chip { background: #AFEDD6; color: #063A40; font-size: 0.92rem; font-weight: 700; padding: 7px 20px; border-radius: 100px; display: inline-block; }
+    .info-banner { background: rgba(6,58,64,0.05); border: 1px solid rgba(6,58,64,0.12); border-right: 4px solid #063A40; border-radius: 14px; padding: 16px 20px; margin-bottom: 28px; display: flex; align-items: center; gap: 14px; }
+    .info-icon { width: 42px; height: 42px; border-radius: 11px; background: #063A40; color: #AFEDD6; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.25rem; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 
-    .examples-box {
-        background: var(--input-bg);
-        border-radius: 0.75rem;
-        padding: 0.875rem 1rem;
-        margin: 1rem 0;
-        border: 1px solid var(--border);
+    @media (max-width: 900px) {
+      .hero-inner { grid-template-columns: 1fr; }
+      .hero-visual { display: none; }
+      .features-grid { grid-template-columns: 1fr 1fr; }
+      .steps { grid-template-columns: 1fr; }
+      .steps::before { display: none; }
+      .stats-grid { grid-template-columns: repeat(2,1fr); }
+      .app-panel { padding: 30px 24px; }
+      .grid-2 { grid-template-columns: 1fr; }
     }
-
-    .examples-title { font-size: 0.8rem; font-weight: 700; color: var(--text-light); margin-bottom: 0.5rem; }
-
-    .examples-list { list-style: none; display: flex; flex-direction: column; gap: 0.25rem; }
-    .examples-list li { font-size: 0.8125rem; color: var(--text-light); padding-right: 0.875rem; position: relative; }
-    .examples-list li::before { content: '←'; position: absolute; right: 0; color: var(--mint-dark); font-size: 0.7rem; }
-
-    .article-number-input { max-width: 200px; }
-
-    /* Loading */
-    .loading { display: flex; align-items: center; gap: 0.875rem; padding: 1.25rem; color: var(--text-light); font-size: 0.875rem; }
-
-    .spinner {
-        width: 1.375rem;
-        height: 1.375rem;
-        border: 2.5px solid var(--light-gray);
-        border-top-color: var(--deep-teal);
-        border-radius: 50%;
-        animation: spin 0.8s linear infinite;
-        flex-shrink: 0;
-    }
-
-    /* Result Box */
-    .result-box { margin-top: 1.25rem; line-height: 1.85; font-size: 0.9375rem; color: var(--text-primary); }
-
-    /* Article Link */
-    .article-link {
-        display: inline-block;
-        background: var(--link-bg);
-        color: var(--link-color);
-        border: 1px solid var(--link-border);
-        border-radius: 0.375rem;
-        padding: 0.1rem 0.5rem;
-        font-weight: 700;
-        cursor: pointer;
-        transition: all 0.15s;
-        font-size: 0.875rem;
-    }
-
-    .article-link:hover { background: var(--mint); border-color: var(--mint-dark); transform: translateY(-1px); box-shadow: 0 2px 8px var(--shadow); }
-
-    /* Follow-up */
-    .followup-container { margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
-
-    .followup-question { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
-    .followup-question span { font-weight: 700; color: var(--text-primary); font-size: 0.9rem; }
-    .followup-buttons { display: flex; gap: 0.625rem; }
-
-    .followup-btn {
-        padding: 0.5rem 1.375rem;
-        border-radius: 0.625rem;
-        border: 1.5px solid transparent;
-        font-family: 'IBMPlexSansArabic', sans-serif;
-        font-size: 0.875rem;
-        font-weight: 700;
-        cursor: pointer;
-        transition: all 0.2s;
-    }
-
-    .followup-btn.yes { background: linear-gradient(135deg, var(--deep-teal), var(--dark-navy)); color: var(--mint); }
-    .followup-btn.yes:hover { opacity: 0.88; }
-    .followup-btn.no { background: transparent; color: var(--text-light); border-color: var(--border); }
-    .followup-btn.no:hover { background: var(--light-gray); color: var(--text-primary); }
-    .followup-input { margin-top: 0.875rem; }
-    .followup-textarea { width: 100%; margin-bottom: 0.75rem; }
-    .followup-send { margin-top: 0 !important; }
-
-    /* Footer */
-    .footer { text-align: center; margin-top: 2.5rem; padding: 0 1rem; animation: fadeIn 0.5s ease-out 0.3s both; }
-    .footer-icon { display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-bottom: 0.75rem; }
-    .footer-line { width: 40px; height: 1px; background: rgba(175,237,214,0.3); }
-    .footer-scale { width: 1.25rem; height: 1.25rem; color: var(--mint); opacity: 0.5; }
-    .footer p { font-size: 0.75rem; color: rgba(255,255,255,0.5); line-height: 1.6; }
-
-    /* Modal */
-    .modal {
-        position: fixed;
-        inset: 0;
-        background: rgba(22,35,44,0.6);
-        backdrop-filter: blur(4px);
-        z-index: 2000;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 1.25rem;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.2s;
-    }
-
-    .modal.active { opacity: 1; pointer-events: all; }
-
-    .modal-content {
-        background: var(--white);
-        border-radius: 1.25rem;
-        width: 100%;
-        max-width: 560px;
-        max-height: 80vh;
-        overflow-y: auto;
-        box-shadow: 0 24px 64px rgba(22,35,44,0.3);
-        transform: scale(0.96);
-        transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    .modal.active .modal-content { transform: scale(1); }
-
-    .modal-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 1.25rem 1.5rem;
-        background: linear-gradient(135deg, var(--deep-teal), var(--dark-navy));
-        border-radius: 1.25rem 1.25rem 0 0;
-    }
-
-    .modal-title { display: flex; align-items: center; gap: 0.625rem; color: var(--mint); }
-    .modal-icon { width: 1.25rem; height: 1.25rem; }
-    .modal-title h2 { font-size: 1rem; font-weight: 700; color: var(--mint); }
-    .modal-close { background: none; border: none; color: var(--mint); font-size: 1.5rem; cursor: pointer; opacity: 0.7; transition: opacity 0.15s; line-height: 1; }
-    .modal-close:hover { opacity: 1; }
-    .modal-body { padding: 1.5rem; }
-
-    /* Article Display Box */
-    .article-display-box {
-        background-color: #063A40;
-        color: #FFFFFF;
-        padding: 1.5rem;
-        border-radius: 0.75rem;
-        margin-bottom: 1.5rem;
-        border-right: 4px solid #AFEDD6;
-        line-height: 1.8;
-    }
-    .article-display-box strong {
-        color: #AFEDD6;
-    }
-
-    /* Animations */
-    @keyframes fadeInDown {
-        from { opacity: 0; transform: translateY(-16px); }
-        to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(8px); }
-        to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* Responsive */
-    @media (max-width: 640px) {
-        .container { padding: 1.25rem 0.875rem 2rem; }
-        .content { padding: 1.25rem; }
-        .tabs { grid-template-columns: 1fr; }
-        .tab-btn { border-radius: 0; padding: 0.75rem; font-size: 0.8rem; }
-        .tab-btn.active { border-right: 3px solid var(--deep-teal); background: rgba(6,58,64,0.05); color: var(--deep-teal); border-radius: 0; }
-        .form-row { grid-template-columns: 1fr; }
-        .method-options { grid-template-columns: 1fr; }
-        .logo-text { font-size: 1.75rem; }
+    @media (max-width: 600px) {
+      .features-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .app-tab span { display: none; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Binary Background -->
-  <div class="binary-bg"><canvas id="binaryCanvas"></canvas></div>
+<div class="binary-bg"><canvas id="binaryCanvas"></canvas></div>
 
-  <div class="container">
-    <!-- Header -->
-    <header class="header">
-      <div class="logo-container">
-        <svg class="logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="20" y="2" width="11" height="11" rx="2.5" transform="rotate(45 20 2)" fill="#AFEDD6"/>
-          <rect x="2" y="20" width="11" height="11" rx="2.5" transform="rotate(45 2 20)" fill="#AFEDD6"/>
-          <rect x="20" y="20" width="11" height="11" rx="2.5" transform="rotate(45 20 20)" fill="#AFEDD6" opacity="0.5"/>
-          <rect x="20" y="20" width="11" height="11" rx="2.5" transform="rotate(45 38 20)" fill="#AFEDD6"/>
-        </svg>
-        <h1 class="logo-text">بيّن</h1>
-      </div>
-      <p class="tagline">مساعدك القانوني الذكي لفهم نظام العمل السعودي</p>
-      <div class="badge">
-        <div class="badge-line"></div>
-        <span class="badge-text">YOUR AI LEGAL ASSISTANT</span>
-        <div class="badge-line"></div>
-      </div>
-    </header>
-
-    <!-- Main Card -->
-    <main class="main-card">
-      <!-- Tabs -->
-      <div class="tabs-container">
-        <div class="tabs">
-          <button class="tab-btn active" onclick="showTab('search', event)">
-            <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="11" cy="11" r="8"></circle>
-              <path d="m21 21-4.35-4.35"></path>
-            </svg>
-            <span>البحث عن مادة في النظام</span>
-          </button>
-          <button class="tab-btn" onclick="showTab('letter', event)">
-            <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
-              <polyline points="14 2 14 8 20 8"></polyline>
-            </svg>
-            <span>كتابة خطاب رسمي</span>
-          </button>
-          <button class="tab-btn" onclick="showTab('article', event)">
-            <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-            </svg>
-            <span>شرح مادة</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Tab Content -->
-      <div class="content">
-        <!-- Search Tab -->
-        <div id="search-tab" class="tab-content active">
-          <div class="search-section">
-            <label class="section-label">ابحث عن موضوع أو كلمة مفتاحية</label>
-            <div class="search-box">
-              <input type="text" id="searchInput" placeholder="مثال: ساعات العمل، الإجازات، الفصل التعسفي..." class="search-input"/>
-              <button onclick="searchLaw()" class="search-btn">
-                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="11" cy="11" r="8"></circle>
-                  <path d="m21 21-4.35-4.35"></path>
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          <div id="searchLoading" class="loading" style="display: none;">
-            <div class="spinner"></div>
-            <p>جاري البحث...</p>
-          </div>
-
-          <div id="searchResult" class="result-box"></div>
-        </div>
-
-        <!-- Letter Tab -->
-        <div id="letter-tab" class="tab-content">
-          <div class="info-banner">
-            <h3>نموذج خطاب رسمي</h3>
-            <p>أدخل البيانات المطلوبة وسيتم إنشاء خطاب رسمي متوافق مع نظام العمل السعودي</p>
-          </div>
-
-          <div class="letter-form">
-            <div class="form-row">
-              <div class="form-group">
-                <label>نوع الخطاب</label>
-                <select id="letterType" class="form-input">
-                  <option value="">اختر نوع الخطاب</option>
-                  <option value="شكوى">شكوى</option>
-                  <option value="طلب">طلب</option>
-                  <option value="استفسار">استفسار</option>
-                  <option value="اعتراض">اعتراض</option>
-                  <option value="إشعار">إشعار</option>
-                  <option value="استقالة">استقالة</option>
-                  <option value="تظلم">تظلم</option>
-                  <option value="أخرى">أخرى</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label>نوع المستلم</label>
-                <select id="recipientType" class="form-input" onchange="updateFormalityField()">
-                  <option value="">اختر نوع المستلم</option>
-                  <option value="شخص">شخص (فرد)</option>
-                  <option value="شركة">شركة</option>
-                  <option value="جهة حكومية">جهة حكومية</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="form-row" id="formalityRow" style="display: none;">
-              <div class="form-group" style="grid-column: 1 / -1;">
-                <label>درجة الرسمية</label>
-                <select id="formalityLevel" class="form-input">
-                  <option value="">اختر درجة الرسمية</option>
-                  <option value="رسمي جداً">رسمي جداً</option>
-                  <option value="رسمي">رسمي</option>
-                  <option value="شبه رسمي">شبه رسمي</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="form-row">
-              <div class="form-group">
-                <label>الاسم</label>
-                <input type="text" id="applicantName" placeholder="الاسم الكامل" class="form-input">
-              </div>
-
-              <div class="form-group">
-                <label>رقم الجوال</label>
-                <input type="tel" id="phoneNumber" placeholder="05xxxxxxxx" class="form-input">
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label>الجهة أو الشخص المعني</label>
-              <input type="text" id="concernedParty" placeholder="مثال: شركة أرامكو، مستشفى الملك فهد، المهندس أحمد" class="form-input">
-            </div>
-
-            <div class="form-group">
-              <label>التفاصيل</label>
-              <textarea id="letterDetails" rows="5" placeholder="اكتب تفاصيل الموضوع بشكل واضح..." class="form-input"></textarea>
-            </div>
-
-            <button onclick="generateLetter()" class="btn-primary">إنشاء الخطاب</button>
-          </div>
-
-          <div id="letterLoading" class="loading" style="display: none;">
-            <div class="spinner"></div>
-            <p>جاري كتابة الخطاب...</p>
-          </div>
-
-          <div id="letterResult" class="result-box"></div>
-
-          <div id="downloadSection" style="display: none; margin-top: 20px;">
-            <button onclick="downloadWord()" class="btn-download">
-              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-              </svg>
-              <span>تحميل (Word)</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Article Tab -->
-        <div id="article-tab" class="tab-content">
-          <div class="info-banner">
-            <h3>شرح مبسط للمواد القانونية</h3>
-            <p>اختر طريقة البحث المناسبة للحصول على شرح مبسط بلغة واضحة ومفهومة</p>
-          </div>
-
-          <div class="method-selector">
-            <label class="section-label">طريقة البحث</label>
-            <div class="method-options">
-              <div class="method-option active" onclick="selectMethod('description', event)">
-                <div class="radio-btn">
-                  <div class="radio-dot"></div>
-                </div>
-                <span class="method-emoji">🔍</span>
-                <div class="method-text">
-                  <span class="method-title">ابحث بالوصف</span>
-                  <span class="method-desc">ذكي - اكتب وصف الحالة</span>
-                </div>
-              </div>
-
-              <div class="method-option" onclick="selectMethod('number', event)">
-                <div class="radio-btn">
-                  <div class="radio-dot"></div>
-                </div>
-                <span class="method-emoji">🔢</span>
-                <div class="method-text">
-                  <span class="method-title">ابحث برقم المادة</span>
-                  <span class="method-desc">مباشر - إذا كنت تعرف الرقم</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Description Method -->
-          <div id="descriptionMethod" class="explain-method active">
-            <div class="form-group">
-              <label>اكتب وصف الحالة</label>
-              <textarea id="contextInput" rows="5" placeholder="مثال: موظف يتأخر كل يوم عن العمل وصاحب العمل يريد فصله..." class="form-input"></textarea>
-            </div>
-
-            <div class="examples-box">
-              <p class="examples-title">أمثلة للمساعدة:</p>
-              <ul class="examples-list">
-                <li>موظف يريد إجازة سنوية ولكن صاحب العمل يرفض</li>
-                <li>عامل يعمل ساعات إضافية ولا يحصل على أجر إضافي</li>
-                <li>موظف تم فصله بدون سبب واضح</li>
-              </ul>
-            </div>
-
-            <button onclick="explainByContext()" class="btn-primary">حدد المادة واشرحها</button>
-          </div>
-
-          <!-- Number Method -->
-          <div id="numberMethod" class="explain-method">
-            <div class="form-group">
-              <label>رقم المادة (1-245)</label>
-              <input type="number" id="articleNumber" min="1" max="245" placeholder="98" class="form-input article-number-input">
-            </div>
-
-            <button onclick="explainArticle()" class="btn-primary">اشرح المادة</button>
-          </div>
-
-          <div id="explainLoading" class="loading" style="display: none;">
-            <div class="spinner"></div>
-            <p>جاري الشرح...</p>
-          </div>
-
-          <div id="explainResult" class="result-box"></div>
-        </div>
-      </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="footer">
-      <div class="footer-icon">
-        <div class="footer-line"></div>
-        <svg class="footer-scale" viewBox="0 0 40 40" fill="none">
-          <rect x="20" y="2" width="11" height="11" rx="2" transform="rotate(45 20 2)" fill="currentColor"/>
-          <rect x="2" y="20" width="11" height="11" rx="2" transform="rotate(45 2 20)" fill="currentColor"/>
-          <rect x="20" y="20" width="11" height="11" rx="2" transform="rotate(45 38 20)" fill="currentColor"/>
-        </svg>
-        <div class="footer-line"></div>
-      </div>
-      <p>منصة بيّن — YOUR AI LEGAL ASSISTANT</p>
-      <p>© 2026 فريق أوج — ذكاثون</p>
-    </footer>
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <svg class="nav-logo-icon" viewBox="0 0 36 36" fill="none">
+        <rect x="3" y="3" width="13" height="13" rx="3.5" fill="#AFEDD6"/>
+        <rect x="20" y="3" width="13" height="13" rx="3.5" fill="#AFEDD6" opacity="0.7"/>
+        <rect x="3" y="20" width="13" height="13" rx="3.5" fill="#AFEDD6" opacity="0.7"/>
+        <rect x="20" y="20" width="13" height="13" rx="3.5" fill="#AFEDD6"/>
+      </svg>
+      <span class="nav-logo-text">بيّن</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#features">المميزات</a></li>
+      <li><a href="#how">كيف يعمل</a></li>
+      <li><a href="#app">التطبيق</a></li>
+      <li><a href="#app" class="nav-cta">ابدأ الآن</a></li>
+    </ul>
   </div>
+</nav>
 
-  <!-- Article Modal -->
-  <div id="articleModal" class="modal" onclick="closeArticleModal()">
-    <div class="modal-content" onclick="event.stopPropagation()">
-      <div class="modal-header">
-        <div class="modal-title">
-          <svg class="modal-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-          </svg>
-          <h2 id="modalArticleNumber"></h2>
+<section class="hero">
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-content">
+        <div class="hero-eyebrow">YOUR AI LEGAL ASSISTANT</div>
+        <h1 class="hero-title">مساعدك القانوني<br><span>الذكي</span></h1>
+        <p class="hero-subtitle">بيّن يحوّل <strong>كل ما هو معقد</strong> في القانون إلى إجابات واضحة ومباشرة. اسأل، افهم، وتصرّف بثقة.</p>
+        <div class="hero-actions">
+          <a href="#app" class="btn-primary">ابدأ الآن <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l7 7-7 7"/></svg></a>
+          <a href="#how" class="btn-secondary">كيف يعمل؟</a>
         </div>
-        <button onclick="closeArticleModal()" class="modal-close">×</button>
       </div>
-      <div class="modal-body" id="modalArticleContent"></div>
+      <div class="hero-visual">
+        <div class="hero-card">
+          <div class="chat-message"><div class="chat-avatar user">أ</div><div class="chat-bubble user">ما حقوقي إذا أنهى صاحب العمل عقدي بدون سبب؟</div></div>
+          <div class="chat-message"><div class="chat-avatar ai"><svg width="20" height="20" viewBox="0 0 36 36" fill="none"><rect x="3" y="3" width="13" height="13" rx="3" fill="#063A40"/><rect x="20" y="3" width="13" height="13" rx="3" fill="#063A40" opacity="0.7"/><rect x="3" y="20" width="13" height="13" rx="3" fill="#063A40" opacity="0.7"/><rect x="20" y="20" width="13" height="13" rx="3" fill="#063A40"/></svg></div><div class="chat-bubble ai">بموجب نظام العمل السعودي، يحق لك الحصول على:<br><br>✦ مكافأة نهاية الخدمة<br>✦ تعويض لا يقل عن أجر 15 يوم عن كل سنة<br>✦ شهادة الخبرة</div></div>
+          <div class="chat-message"><div class="chat-avatar ai"><svg width="20" height="20" viewBox="0 0 36 36" fill="none"><rect x="3" y="3" width="13" height="13" rx="3" fill="#063A40"/><rect x="20" y="3" width="13" height="13" rx="3" fill="#063A40" opacity="0.7"/><rect x="3" y="20" width="13" height="13" rx="3" fill="#063A40" opacity="0.7"/><rect x="20" y="20" width="13" height="13" rx="3" fill="#063A40"/></svg></div><div class="chat-bubble ai"><div class="typing-dots"><span></span><span></span><span></span></div></div></div>
+        </div>
+      </div>
     </div>
   </div>
+</section>
 
-  <script>
-    // ========================================
-    // تحميل الداتاسيت
-    // ========================================
-    let lawDataset = [];
+<div class="stats-bar">
+  <div class="container"><div class="stats-grid">
+    <div class="stat-item"><span class="stat-number">245</span><span class="stat-label">مادة من نظام العمل</span></div>
+    <div class="stat-item"><span class="stat-number">24/7</span><span class="stat-label">متاح في أي وقت</span></div>
+    <div class="stat-item"><span class="stat-number">98%</span><span class="stat-label">دقة في الإجابات</span></div>
+    <div class="stat-item"><span class="stat-number">&lt;10ث</span><span class="stat-label">متوسط وقت الرد</span></div>
+  </div></div>
+</div>
 
-    async function loadDataset() {
-        try {
-            const response = await fetch('labor_law_cleaned.json');
-            lawDataset = await response.json();
-            console.log('✅ تم تحميل الداتاسيت:', lawDataset.length, 'مادة');
-        } catch (error) {
-            console.error('❌ خطأ في تحميل الداتاسيت:', error);
-            alert('لم نتمكن من تحميل البيانات');
-        }
-    }
+<section class="features" id="features">
+  <div class="container">
+    <div class="section-header"><span class="section-tag">المميزات</span><h2 class="section-title">لماذا بيّن؟</h2><p class="section-desc">أداة ذكية تجمع بين عمق المعرفة القانونية وسهولة التواصل</p></div>
+    <div class="features-grid">
+      <div class="feature-card"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#AFEDD6" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><h3 class="feature-title">محتوى قانوني موثوق</h3><p class="feature-desc">مبني على أنظمة ولوائح المملكة العربية السعودية المحدّثة. كل إجابة مستندة إلى مصادر رسمية.</p></div>
+      <div class="feature-card"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#AFEDD6" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><h3 class="feature-title">ردود فورية</h3><p class="feature-desc">لا انتظار، لا مواعيد. احصل على إجابتك القانونية في ثوانٍ معدودة في أي وقت.</p></div>
+      <div class="feature-card"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#AFEDD6" stroke-width="1.8"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div><h3 class="feature-title">لغة بشرية مبسّطة</h3><p class="feature-desc">يُترجم النصوص القانونية المعقدة إلى لغة عربية واضحة يفهمها الجميع دون خلفية قانونية.</p></div>
+      <div class="feature-card"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#AFEDD6" stroke-width="1.8"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div><h3 class="feature-title">خصوصية تامة</h3><p class="feature-desc">محادثاتك وملفاتك سرية ومحمية. لا نشارك معلوماتك مع أي طرف ثالث.</p></div>
+    </div>
+  </div>
+</section>
 
-    loadDataset();
+<section class="how" id="how">
+  <div class="container">
+    <div class="section-header"><span class="section-tag">كيف يعمل</span><h2 class="section-title">ثلاث خطوات بسيطة</h2><p class="section-desc">من سؤالك إلى إجابة واضحة في ثوانٍ</p></div>
+    <div class="steps">
+      <div class="step"><div class="step-number">١</div><h3 class="step-title">اكتب سؤالك</h3><p class="step-desc">اسأل بلغتك الطبيعية دون الحاجة إلى مصطلحات قانونية. بيّن يفهم ما تقصده.</p></div>
+      <div class="step"><div class="step-number">٢</div><h3 class="step-title">يحلّل ويبحث</h3><p class="step-desc">يبحث في قاعدة البيانات القانونية الشاملة ويحدد الأنظمة واللوائح ذات الصلة.</p></div>
+      <div class="step"><div class="step-number">٣</div><h3 class="step-title">يبيّن لك الحل</h3><p class="step-desc">تحصل على إجابة واضحة ومنظمة مع الاستشهاد بالمصادر ونصائح عملية للخطوات التالية.</p></div>
+    </div>
+  </div>
+</section>
 
-    // ========================================
-    // RAG - البحث الذكي في الداتاسيت
-    // ========================================
-    function retrieveRelevantArticles(query, topK = 7) {
-        const cleanQuery = query.replace(/[؟?.,،]/g, ' ').trim();
-        const queryWords = cleanQuery.split(/\s+/).filter(w => w.length > 2);
-        const stopWords = new Set([
-            'من', 'في', 'على', 'إلى', 'عن', 'مع', 'هل', 'ما', 'هو', 'هي',
-            'أن', 'إن', 'كان', 'يكون', 'لكن', 'لو', 'إذا', 'عند', 'بعد',
-            'قبل', 'كيف', 'لماذا', 'متى', 'أين', 'التي', 'الذي', 'التي',
-            'وما', 'وهو', 'وهي', 'ولا', 'وأن', 'ولم', 'لم', 'لن', 'ليس'
-        ]);
-        const keywords = queryWords.filter(w => !stopWords.has(w));
-        const scored = lawDataset.map(article => {
-            const text = article.text.toLowerCase();
-            let score = 0;
-            keywords.forEach(keyword => {
-                if (text.includes(keyword)) score += 3;
-                if (keyword.length > 4) {
-                    const root = keyword.substring(0, Math.floor(keyword.length * 0.7));
-                    if (text.includes(root)) score += 1;
-                }
-            });
-            return { article, score };
-        });
-        return scored.filter(item => item.score > 0).sort((a, b) => b.score - a.score).slice(0, topK).map(item => item.article);
-    }
+<section id="app">
+  <div class="container">
+    <div class="app-card">
+      <div class="app-tabs">
+        <button class="app-tab active" data-tab="0">🔍 البحث عن مادة</button>
+        <button class="app-tab" data-tab="1">📄 كتابة خطاب رسمي</button>
+        <button class="app-tab" data-tab="2">📖 شرح مادة</button>
+      </div>
 
-    // ========================================
-    // التبديل بين طرق شرح المادة
-    // ========================================
-    function selectMethod(method, event) {
-        document.querySelectorAll('.method-option').forEach(option => {
-            option.classList.remove('active');
-        });
-        if (event && event.target) {
-            event.target.closest('.method-option').classList.add('active');
-        }
-        if (method === 'description') {
-            document.getElementById('descriptionMethod').classList.add('active');
-            document.getElementById('numberMethod').classList.remove('active');
-        } else {
-            document.getElementById('descriptionMethod').classList.remove('active');
-            document.getElementById('numberMethod').classList.add('active');
-        }
-    }
+      <!-- Panel 0: بحث -->
+      <div class="app-panel active" data-panel="0">
+        <div class="info-banner"><div class="info-icon">⚖️</div><div><h4 style="font-size:1rem;font-weight:700;color:#063A40;">ابحث في نظام العمل</h4><p style="font-size:.82rem;color:rgba(6,58,64,0.6);">اكتب كلمة مفتاحية أو موضوعاً لترى المواد ذات الصلة</p></div></div>
+        <div class="app-flex-row">
+          <input type="text" id="searchInput" class="app-input" placeholder="مثال: إنهاء عقد العمل، إجازة الأمومة..." style="flex:1;">
+          <button id="searchBtn" class="app-btn" style="width:auto; padding:0 24px; margin-top:0;">🔍 بحث</button>
+        </div>
+        <div id="searchResult" style="display:none;" class="app-result"></div>
+        <div id="searchExtra" style="display:none; margin-top:24px; padding:16px 20px; background:rgba(6,58,64,0.04); border-radius:14px; display:flex; justify-content:space-between; flex-wrap:wrap;">
+          <span style="color:#063A40; font-weight:700;">هل تريد مساعدة إضافية؟</span>
+          <div><button id="gotoExplain" style="background:#063A40; color:#AFEDD6; border:none; border-radius:100px; padding:8px 24px; margin-left:10px; cursor:pointer;">نعم، شرح المادة</button><button id="closeExtra" style="background:transparent; border:1px solid #063A40; border-radius:100px; padding:8px 24px; color:#063A40; cursor:pointer;">لا، شكراً</button></div>
+        </div>
+      </div>
 
-    // ========================================
-    // التبديل بين التبويبات
-    // ========================================
-    function showTab(tabName, event) {
-        document.querySelectorAll('.tab-content').forEach(tab => {
-            tab.classList.remove('active');
-        });
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.classList.remove('active');
-        });
-        document.getElementById(tabName + '-tab').classList.add('active');
-        if (event && event.target) {
-            event.target.classList.add('active');
-        }
-    }
+      <!-- Panel 1: خطاب -->
+      <div class="app-panel" data-panel="1">
+        <div class="info-banner"><div class="info-icon">📄</div><div><h4 style="font-size:1rem;font-weight:700;color:#063A40;">نموذج خطاب رسمي</h4><p style="font-size:.82rem;color:rgba(6,58,64,0.6);">أدخل التفاصيل وسيقوم بيّن بصياغة خطاب قانوني رسمي</p></div></div>
+        <div class="grid-2">
+          <div><label class="app-label">نوع الخطاب</label><select id="letterType" class="app-select"><option>شكوى</option><option>طلب</option><option>استفسار</option><option>اعتراض</option><option>إشعار</option><option>استقالة</option></select></div>
+          <div><label class="app-label">نوع المستلم</label><select id="recipientType" class="app-select"><option>شخص</option><option>شركة</option><option>جهة حكومية</option></select></div>
+          <div><label class="app-label">الاسم</label><input type="text" id="senderName" class="app-input" placeholder="اسمك الكامل"></div>
+          <div><label class="app-label">رقم الجوال</label><input type="text" id="senderPhone" class="app-input" placeholder="05XXXXXXXX"></div>
+          <div style="grid-column:1/-1;"><label class="app-label">الجهة أو الشخص المعني</label><input type="text" id="recipientName" class="app-input" placeholder="اسم الجهة أو الشخص المستلم"></div>
+          <div style="grid-column:1/-1;"><label class="app-label">التفاصيل</label><textarea id="letterDetails" rows="4" class="app-textarea" placeholder="اشرح تفاصيل الموضوع بإيجاز..."></textarea></div>
+        </div>
+        <button id="generateLetterBtn" class="app-btn">📝 إنشاء الخطاب</button>
+        <div id="letterResult" style="display:none;" class="app-result"></div>
+        <button id="downloadLetterBtn" style="display:none; width:100%; margin-top:16px; background:transparent; border:2px solid #063A40; color:#063A40; border-radius:12px; padding:12px; font-weight:700; cursor:pointer;">⬇️ تحميل الخطاب (Word)</button>
+        <div id="letterExtra" style="display:none; margin-top:24px; padding:16px 20px; background:rgba(6,58,64,0.04); border-radius:14px; display:flex; justify-content:space-between; flex-wrap:wrap;">
+          <span style="color:#063A40; font-weight:700;">هل تريد تعديل الخطاب؟</span>
+          <div><button id="resetLetterBtn" style="background:#063A40; color:#AFEDD6; border:none; border-radius:100px; padding:8px 24px; margin-left:10px; cursor:pointer;">نعم، أعد الكتابة</button><button id="closeLetterExtra" style="background:transparent; border:1px solid #063A40; border-radius:100px; padding:8px 24px; color:#063A40; cursor:pointer;">لا، حسناً</button></div>
+        </div>
+      </div>
 
-    // ========================================
-    // الاتصال بالـ Backend
-    // ========================================
-    async function callAPI(systemPrompt, userPrompt) {
-        try {
-            console.log('🔄 إرسال طلب للـ Backend...');
-            const response = await fetch('/api/chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: userPrompt }] })
-            });
-            if (!response.ok) throw new Error('فشل الاتصال بالسيرفر');
-            const data = await response.json();
-            if (data.choices && data.choices[0] && data.choices[0].message) return data.choices[0].message.content;
-            if (data.content && data.content[0] && data.content[0].text) return data.content[0].text;
-            if (data.response) return data.response;
-            throw new Error('تنسيق الجواب غير متوقع');
-        } catch (error) {
-            console.error('❌ خطأ:', error);
-            throw error;
-        }
-    }
+      <!-- Panel 2: شرح -->
+      <div class="app-panel" data-panel="2">
+        <div class="info-banner"><div class="info-icon">📖</div><div><h4 style="font-size:1rem;font-weight:700;color:#063A40;">شرح مادة نظامية</h4><p style="font-size:.82rem;color:rgba(6,58,64,0.6);">اختر طريقة البحث وسيشرح بيّن المادة بأسلوب مبسّط</p></div></div>
+        <div style="display:flex; gap:14px; margin-bottom:26px;">
+          <label id="methodDesc" style="flex:1; padding:16px; border:1.5px solid #063A40; border-radius:14px; cursor:pointer; text-align:center; background:rgba(6,58,64,0.06); font-weight:700;">🔍 ابحث بالوصف</label>
+          <label id="methodNum" style="flex:1; padding:16px; border:1.5px solid rgba(175,237,214,0.4); border-radius:14px; cursor:pointer; text-align:center; background:rgba(175,237,214,0.08); font-weight:700;">🔢 ابحث برقم المادة</label>
+        </div>
+        <div id="descDiv"><label class="app-label">صف ما تريد معرفته</label><textarea id="explainDesc" rows="3" class="app-textarea" placeholder="مثال: ما حقوق العامل عند إنهاء العقد دون سبب مشروع؟"></textarea></div>
+        <div id="numDiv" style="display:none;"><label class="app-label">رقم المادة</label><input type="number" id="explainNum" class="app-input" placeholder="مثال: 74"></div>
+        <button id="explainBtn" class="app-btn">📖 شرح المادة</button>
+        <div id="explainResult" style="display:none; margin-top:24px;">
+          <div id="explainChip" class="app-chip" style="margin-bottom:16px;"></div>
+          <div id="explainArt" style="background:#fffbf0; border:1px solid #f0e4b0; border-radius:14px; padding:20px; font-size:0.95rem; line-height:1.9; color:#4a3a10; margin-bottom:16px;"></div>
+          <div style="background:rgba(6,58,64,0.04); border-right:4px solid #AFEDD6; border-radius:14px; padding:20px;"><div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;"><div style="width:32px;height:32px; background:linear-gradient(135deg,#063A40,#16232C); border-radius:8px; display:flex; align-items:center; justify-content:center;"><svg width="16" height="16" viewBox="0 0 36 36" fill="none"><rect x="3" y="3" width="13" height="13" rx="3" fill="#AFEDD6"/><rect x="20" y="3" width="13" height="13" rx="3" fill="#AFEDD6" opacity=".7"/><rect x="3" y="20" width="13" height="13" rx="3" fill="#AFEDD6" opacity=".7"/><rect x="20" y="20" width="13" height="13" rx="3" fill="#AFEDD6"/></svg></div><span style="background:linear-gradient(135deg,#063A40,#16232C); color:#AFEDD6; font-size:.75rem; font-weight:700; padding:4px 13px; border-radius:100px;">شرح بيّن</span></div><p id="explainAI" style="font-size:0.94rem; color:#063A40; line-height:1.9;"></p></div>
+        </div>
+        <div id="explainExtra" style="display:none; margin-top:24px; padding:16px 20px; background:rgba(6,58,64,0.04); border-radius:14px; display:flex; justify-content:space-between; flex-wrap:wrap;">
+          <span style="color:#063A40; font-weight:700;">هل تريد البحث عن مادة أخرى؟</span>
+          <div><button id="gotoSearch" style="background:#063A40; color:#AFEDD6; border:none; border-radius:100px; padding:8px 24px; margin-left:10px; cursor:pointer;">نعم، بحث إضافي</button><button id="closeExplainExtra" style="background:transparent; border:1px solid #063A40; border-radius:100px; padding:8px 24px; color:#063A40; cursor:pointer;">لا، شكراً</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    // ========================================
-    // 1. البحث في الأنظمة (مع RAG)
-    // ========================================
-    async function searchLaw() {
-        const searchInput = document.getElementById('searchInput').value.trim();
-        const loadingDiv = document.getElementById('searchLoading');
-        const resultDiv = document.getElementById('searchResult');
-        if (!searchInput) { alert('الرجاء كتابة سؤال'); return; }
-        loadingDiv.style.display = 'block';
-        resultDiv.innerHTML = '';
-        try {
-            const relevantArticles = retrieveRelevantArticles(searchInput);
-            const systemPrompt = `أنت محلل قانوني متخصص في نظام العمل السعودي.
-تعليمات صارمة لا تُخالَف أبداً:
-- ممنوع منعاً باتاً أن تقدم نفسك أو تذكر اسمك أو الشركة التي طورتك
-- ممنوع أي تحية أو مقدمة مثل "أهلاً" أو "مرحباً" أو ما شابهها
-- ابدأ ردك مباشرة بـ "أولاً:" أو بالجواب مباشرة
-- استخدم لغة عربية فصحى رسمية واضحة
-- لا تستخدم النجوم أو الرموز: * ** *** # ##
-- اذكر رقم المادة دائماً بالأرقام الإنجليزية فقط بين قوسين مثل: (المادة 98) - ممنوع كتابة رقم المادة بالحروف العربية
-- رتب الإجابة: أولاً، ثانياً، ثالثاً`;
-            const userPrompt = `المواد القانونية الأكثر صلة بالسؤال:
-${JSON.stringify(relevantArticles, null, 2)}
-سؤال الموظف: ${searchInput}
-الرجاء الإجابة بشكل واضح ومباشر مع ذكر المادة المرجعية.`;
-            const answer = await callAPI(systemPrompt, userPrompt);
-            resultDiv.innerHTML = convertArticleReferencesToLinks(answer);
-            sessionContext.search.previousContent = answer;
-            showFollowUp('search', resultDiv, answer);
-        } catch (error) {
-            resultDiv.innerHTML = '❌ عذراً، حدث خطأ. الرجاء المحاولة مرة أخرى.';
-        } finally {
-            loadingDiv.style.display = 'none';
-        }
-    }
+<section class="cta-section">
+  <div class="container"><h2 class="cta-title">جاهز لتبيين الأمور؟</h2><p class="cta-desc">ابدأ محادثتك القانونية الأولى الآن</p><div class="cta-actions"><a href="#app" class="btn-primary" style="font-size:1.1rem;padding:1rem 2.5rem;">ابدأ مع بيّن <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l7 7-7 7"/></svg></a></div></div>
+</section>
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const searchInput = document.getElementById('searchInput');
-        if (searchInput) {
-            searchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') searchLaw(); });
-        }
-        const articleInput = document.getElementById('articleNumber');
-        if (articleInput) {
-            articleInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') explainArticle(); });
-        }
+<script>
+  // Binary BG
+  const canvas = document.getElementById('binaryCanvas');
+  const ctx = canvas.getContext('2d');
+  let cols, drops;
+  function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; cols = Math.floor(canvas.width / 18); drops = Array(cols).fill(1); }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+  function drawBinary() {
+    ctx.fillStyle = 'rgba(22,35,44,0.04)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#AFEDD6'; ctx.font = '13px monospace';
+    drops.forEach((y, i) => { ctx.fillText(Math.random() > 0.5 ? '1' : '0', i * 18, y * 18); if (y * 18 > canvas.height && Math.random() > 0.975) drops[i] = 0; drops[i]++; });
+  }
+  setInterval(drawBinary, 80);
+
+  // Navbar scroll
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', window.scrollY > 40));
+
+  // Tab switching
+  const tabs = document.querySelectorAll('.app-tab');
+  const panels = document.querySelectorAll('.app-panel');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const tabId = tab.getAttribute('data-tab');
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      panels.forEach(p => p.classList.remove('active'));
+      document.querySelector(`.app-panel[data-panel="${tabId}"]`).classList.add('active');
     });
+  });
 
-    // ========================================
-    // 2. كتابة الخطابات (مع RAG)
-    // ========================================
-    function updateFormalityField() {
-        const recipientType = document.getElementById('recipientType').value;
-        const formalityRow = document.getElementById('formalityRow');
-        const formalitySelect = document.getElementById('formalityLevel');
-        if (recipientType === 'شخص') {
-            formalityRow.style.display = 'grid';
-        } else {
-            formalityRow.style.display = 'none';
-            formalitySelect.value = '';
-        }
+  // --- بيانات تجريبية ---
+  const legalDB = {
+    "إنهاء عقد العمل": { title: "المادة 74", text: "إذا أنهي عقد العمل من قبل صاحب العمل دون سبب مشروع، يستحق العامل تعويضاً لا يقل عن أجر خمسة عشر يوماً عن كل سنة من سنوات خدمته، بالإضافة إلى مكافأة نهاية الخدمة كاملة." },
+    "إجازة الأمومة": { title: "المادة 151", text: "للعاملة الحق في إجازة وضع لمدة عشرة أسابيع توزعها كيف تشاء، وتستحق أجراً كاملاً." },
+    "مكافأة نهاية الخدمة": { title: "المادة 84", text: "يستحق العامل مكافأة نهاية خدمة مقدارها أجر نصف شهر عن كل سنة من السنوات الخمس الأولى، وأجر شهر عن كل سنة من السنوات التالية." }
+  };
+  function searchLaw(query) {
+    let found = null;
+    for (let key in legalDB) { if (query.includes(key) || key.includes(query)) { found = legalDB[key]; break; } }
+    if (!found && (query.includes("إنهاء") || query.includes("عقد"))) found = legalDB["إنهاء عقد العمل"];
+    else if (!found && (query.includes("أمومة") || query.includes("وضع"))) found = legalDB["إجازة الأمومة"];
+    else if (!found && (query.includes("مكافأة") || query.includes("نهاية الخدمة"))) found = legalDB["مكافأة نهاية الخدمة"];
+    return found;
+  }
+
+  // بحث
+  const searchInput = document.getElementById('searchInput');
+  const searchBtn = document.getElementById('searchBtn');
+  const searchResult = document.getElementById('searchResult');
+  const searchExtra = document.getElementById('searchExtra');
+  const gotoExplain = document.getElementById('gotoExplain');
+  const closeExtra = document.getElementById('closeExtra');
+  searchBtn.addEventListener('click', () => {
+    const q = searchInput.value.trim();
+    if (!q) { searchResult.style.display = 'none'; searchExtra.style.display = 'none'; return; }
+    const res = searchLaw(q);
+    if (res) {
+      searchResult.innerHTML = `<div style="font-weight:700; color:#063A40; margin-bottom:12px;">📌 ${res.title}</div><div style="line-height:1.8;">${res.text}</div>`;
+      searchResult.style.display = 'block';
+      searchExtra.style.display = 'flex';
+    } else {
+      searchResult.innerHTML = `<div style="color:#063A40;">⚠️ لم نعثر على نتائج. حاول بكلمات أخرى مثل "إنهاء عقد" أو "إجازة أمومة".</div>`;
+      searchResult.style.display = 'block';
+      searchExtra.style.display = 'none';
     }
+  });
+  gotoExplain.addEventListener('click', () => { tabs[2].click(); document.getElementById('explainDesc').value = searchInput.value; });
+  closeExtra.addEventListener('click', () => searchExtra.style.display = 'none');
 
-    async function generateLetter() {
-        const letterType = document.getElementById('letterType').value;
-        const recipientType = document.getElementById('recipientType').value;
-        let formalityLevel = document.getElementById('formalityLevel').value;
-        const applicantName = document.getElementById('applicantName').value.trim();
-        const phoneNumber = document.getElementById('phoneNumber').value.trim();
-        const concernedParty = document.getElementById('concernedParty').value.trim();
-        const letterSubject = letterType;
-        const letterDetails = document.getElementById('letterDetails').value.trim();
-        const loadingDiv = document.getElementById('letterLoading');
-        const resultDiv = document.getElementById('letterResult');
-        const downloadSection = document.getElementById('downloadSection');
+  // خطاب
+  const generateLetterBtn = document.getElementById('generateLetterBtn');
+  const letterResult = document.getElementById('letterResult');
+  const downloadLetterBtn = document.getElementById('downloadLetterBtn');
+  const letterExtra = document.getElementById('letterExtra');
+  const resetLetterBtn = document.getElementById('resetLetterBtn');
+  const closeLetterExtra = document.getElementById('closeLetterExtra');
+  let lastLetter = '';
+  function generateLetter() {
+    const type = document.getElementById('letterType').value;
+    const recipType = document.getElementById('recipientType').value;
+    const sender = document.getElementById('senderName').value || "الموكل";
+    const phone = document.getElementById('senderPhone').value || "_____";
+    const recipient = document.getElementById('recipientName').value || "السيد/السيدة المعني";
+    const details = document.getElementById('letterDetails').value || "تفاصيل الموضوع";
+    const date = new Date().toLocaleDateString('ar-SA');
+    let letter = `التاريخ: ${date}\n\n${type === 'شكوى' ? 'شكوى' : type === 'طلب' ? 'طلب' : type === 'استفسار' ? 'استفسار' : 'خطاب رسمي'}\n\nالمستلم: ${recipient}\n\nمن: ${sender}\nالجوال: ${phone}\n\nالموضوع: ${type} بشأن: ${details}\n\nالسلام عليكم ورحمة الله وبركاته،\n\nأفيدكم بأنه ... (نص الخطاب)\n\nوتفضلوا بقبول فائق الاحترام،\n${sender}`;
+    letterResult.innerText = letter;
+    letterResult.style.display = 'block';
+    downloadLetterBtn.style.display = 'block';
+    letterExtra.style.display = 'flex';
+    lastLetter = letter;
+  }
+  generateLetterBtn.addEventListener('click', generateLetter);
+  downloadLetterBtn.addEventListener('click', () => {
+    const blob = new Blob([lastLetter], { type: 'application/msword' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'خطاب_رسمي.doc';
+    link.click();
+    URL.revokeObjectURL(link.href);
+  });
+  resetLetterBtn.addEventListener('click', () => { letterResult.style.display = 'none'; downloadLetterBtn.style.display = 'none'; letterExtra.style.display = 'none'; });
+  closeLetterExtra.addEventListener('click', () => letterExtra.style.display = 'none');
 
-        if (recipientType !== 'شخص') formalityLevel = 'رسمي';
-        if (!letterType || !recipientType || !applicantName || !phoneNumber || !concernedParty || !letterDetails) {
-            alert('الرجاء تعبئة جميع الحقول');
-            return;
-        }
-        if (recipientType === 'شخص' && !formalityLevel) {
-            alert('الرجاء اختيار درجة الرسمية');
-            return;
-        }
+  // شرح
+  let method = 'desc';
+  const methodDesc = document.getElementById('methodDesc');
+  const methodNum = document.getElementById('methodNum');
+  const descDiv = document.getElementById('descDiv');
+  const numDiv = document.getElementById('numDiv');
+  const explainBtn = document.getElementById('explainBtn');
+  const explainResultDiv = document.getElementById('explainResult');
+  const explainChip = document.getElementById('explainChip');
+  const explainArt = document.getElementById('explainArt');
+  const explainAI = document.getElementById('explainAI');
+  const explainExtraDiv = document.getElementById('explainExtra');
+  const gotoSearchBtn = document.getElementById('gotoSearch');
+  const closeExplainExtra = document.getElementById('closeExplainExtra');
 
-        loadingDiv.style.display = 'block';
-        resultDiv.innerHTML = '';
-        downloadSection.style.display = 'none';
+  methodDesc.addEventListener('click', () => { method = 'desc'; methodDesc.style.borderColor = '#063A40'; methodDesc.style.background = 'rgba(6,58,64,0.06)'; methodNum.style.borderColor = 'rgba(175,237,214,0.4)'; methodNum.style.background = 'rgba(175,237,214,0.08)'; descDiv.style.display = 'block'; numDiv.style.display = 'none'; });
+  methodNum.addEventListener('click', () => { method = 'num'; methodNum.style.borderColor = '#063A40'; methodNum.style.background = 'rgba(6,58,64,0.06)'; methodDesc.style.borderColor = 'rgba(175,237,214,0.4)'; methodDesc.style.background = 'rgba(175,237,214,0.08)'; descDiv.style.display = 'none'; numDiv.style.display = 'block'; });
 
-        try {
-            const today = new Date();
-            const hijriDate = new Intl.DateTimeFormat('ar-SA-u-ca-islamic', { day: 'numeric', month: 'long', year: 'numeric' }).format(today);
-            const gregorianDate = new Intl.DateTimeFormat('ar-SA', { day: 'numeric', month: 'numeric', year: 'numeric' }).format(today);
-            const relevantArticles = retrieveRelevantArticles(`${letterType} ${letterSubject} ${letterDetails}`, 5);
-            
-            const systemPrompt = `أنت متخصص في كتابة الخطابات الرسمية الحكومية السعودية.
-معلومات الخطاب:
-- نوع المستلم: ${recipientType}
-- الجهة/الشخص المعني: "${concernedParty}"
-- درجة الرسمية: ${formalityLevel}
-- نوع الخطاب: ${letterType}
-
-**مهم جداً: التقيد الصارم بدرجة الرسمية:**
-
-${formalityLevel === 'رسمي جداً' ? `
-- استخدم "معالي" أو "سعادة" في المخاطبة
-- لغة رسمية جداً وعبارات محترمة للغاية
-- مثال: "يشرفني أن أتقدم لمعاليكم"، "أرجو من معاليكم التكرم"
-` : ''}
-${formalityLevel === 'رسمي' ? `
-- استخدم "سعادة" أو "حضرة" في المخاطبة
-- لغة رسمية واضحة ومهنية
-- مثال: "أتقدم لسعادتكم"، "أرجو من سعادتكم"
-` : ''}
-${formalityLevel === 'شبه رسمي' ? `
-- استخدم "الأستاذ" أو "السيد" في المخاطبة
-- لغة واضحة ومباشرة
-- مثال: "أود أن أوضح لكم"، "أرجو منكم"
-` : ''}
-
-مهمتك: تحليل الجهة/الشخص وتحديد القطاع تلقائياً:
-- مستشفى/مركز صحي → قطاع صحي
-- وزارة/هيئة عسكرية → قطاع عسكري
-- جامعة/مدرسة → قطاع تعليمي
-- محكمة/نيابة → قطاع قضائي
-- بنك/مالية → قطاع مالي
-- شركة → قطاع خاص
-
-قواعد إلزامية:
-1. ممنوع تقديم نفسك أو ذكر اسمك أو الشركة التي طورتك
-2. ابدأ الخطاب مباشرة بالتاريخ
-3. لا تستخدم رموز تنسيق: * ** # ##
-4. طول الخطاب: 150-200 كلمة فقط (موجز ومباشر)
-5. اذكر المواد بالأرقام الإنجليزية فقط مثل: (المادة 98) - ممنوع كتابة الأرقام بالحروف
-6. لا تخترع أو تضيف تفاصيل لم يذكرها المستخدم
-
-المواد القانونية المناسبة لهذا الخطاب:
-${JSON.stringify(relevantArticles, null, 2)}
-
-هيكل الخطاب:
-التاريخ: ${hijriDate} الموافق ${gregorianDate}
-
-[المخاطَب حسب نوع المستلم ودرجة الرسمية]
-تحية طيبة وبعد،
-
-الموضوع: [عنوان الخطاب]
-
-[فقرة افتتاحية قصيرة]
-[الفقرة الأولى: الموقف والتفاصيل]
-[الفقرة الثانية: المادة القانونية + المطلوب]
-
-[خاتمة قصيرة]
-
-وتفضلوا بقبول فائق الاحترام والتقدير،
-
-مقدم الطلب: ${applicantName}
-رقم الجوال: ${phoneNumber}
-التوقيع: ___________`;
-
-            const userPrompt = `اكتب خطاباً رسمياً:
-
-نوع الخطاب: ${letterType}
-المستلم: ${recipientType}
-الجهة/الشخص المعني: "${concernedParty}"
-درجة الرسمية: ${formalityLevel}
-الموضوع: ${letterSubject}
-التفاصيل: ${letterDetails}
-
-متطلبات هامة:
-1. طول الخطاب: 150-200 كلمة فقط (موجز)
-2. التزم بدرجة الرسمية "${formalityLevel}" بدقة
-3. اذكر مادة واحدة فقط بالرقم الإنجليزي مثل: (المادة 98) - ممنوع كتابة رقم المادة بالحروف
-4. لا تضف أي تفاصيل أو معلومات لم يذكرها المستخدم
-5. اكتب فقط ما ذكره المستخدم بالضبط`;
-
-            const letter = await callAPI(systemPrompt, userPrompt);
-            // تنسيق الخطاب مع إضافة مسافات وسطور بيضاء
-            const formattedLetter = letter
-                .replace(/التاريخ:/g, '\n\nالتاريخ:')
-                .replace(/تحية طيبة وبعد،/g, '\n\nتحية طيبة وبعد،\n')
-                .replace(/الموضوع:/g, '\n\nالموضوع:')
-                .replace(/الفقرة الافتتاحية:/g, '\n\n')
-                .replace(/الفقرة الأولى:/g, '\n\n')
-                .replace(/الفقرة الثانية:/g, '\n\n')
-                .replace(/الخاتمة:/g, '\n\n')
-                .replace(/وتفضلوا بقبول فائق الاحترام والتقدير،/g, '\n\nوتفضلوا بقبول فائق الاحترام والتقدير،\n')
-                .replace(/مقدم الطلب:/g, '\n\nمقدم الطلب:')
-                .replace(/رقم الجوال:/g, '\nرقم الجوال:')
-                .replace(/التوقيع:/g, '\nالتوقيع:')
-                .replace(/التاريخ:/g, '\n\nالتاريخ:')
-                .replace(/الموضوع:/g, '\n\nالموضوع:')
-                .replace(/تحية طيبة وبعد،/g, '\n\nتحية طيبة وبعد،\n');
-            
-            resultDiv.innerHTML = convertArticleReferencesToLinks(formattedLetter);
-            downloadSection.style.display = 'block';
-            sessionContext.letter.previousContent = formattedLetter;
-            showFollowUp('letter', resultDiv, formattedLetter);
-        } catch (error) {
-            resultDiv.innerHTML = '❌ عذراً، حدث خطأ. الرجاء المحاولة مرة أخرى.';
-        } finally {
-            loadingDiv.style.display = 'none';
-        }
+  explainBtn.addEventListener('click', () => {
+    let art = null;
+    if (method === 'desc') {
+      const q = document.getElementById('explainDesc').value.trim();
+      art = searchLaw(q);
+    } else {
+      const num = document.getElementById('explainNum').value;
+      if (num === "74") art = legalDB["إنهاء عقد العمل"];
+      else if (num === "151") art = legalDB["إجازة الأمومة"];
+      else if (num === "84") art = legalDB["مكافأة نهاية الخدمة"];
+      else art = null;
     }
-
-    // ========================================
-    // 3. شرح الأنظمة (مع RAG)
-    // ========================================
-    async function explainByContext() {
-        const contextInput = document.getElementById('contextInput').value.trim();
-        const loadingDiv = document.getElementById('explainLoading');
-        const resultDiv = document.getElementById('explainResult');
-        if (!contextInput) { alert('الرجاء كتابة وصف الموقف أو السؤال'); return; }
-        loadingDiv.style.display = 'block';
-        resultDiv.innerHTML = '';
-        try {
-            const relevantArticles = retrieveRelevantArticles(contextInput);
-            const identifyPrompt = `أنت محلل قانوني ذكي متخصص في نظام العمل السعودي.
-مهمتك: تحديد المادة الأنسب من القائمة التالية بناءً على وصف الموقف.
-المواد المرشحة:
-${JSON.stringify(relevantArticles, null, 2)}
-وصف الموقف:
-"${contextInput}"
-المطلوب: اذكر رقم المادة الأنسب فقط كرقم، بدون أي شرح.
-مثال للرد: 66`;
-            const articleNumResponse = await callAPI(identifyPrompt, '');
-            const articleNumber = parseInt(articleNumResponse.trim());
-            if (!articleNumber || articleNumber < 1 || articleNumber > 245) {
-                resultDiv.innerHTML = '⚠️ عذراً، لم أتمكن من تحديد مادة مناسبة. جرب إعادة صياغة السؤال.';
-                return;
-            }
-            const article = lawDataset.find(item => item.id === articleNumber);
-            if (!article) { resultDiv.innerHTML = '❌ المادة غير موجودة في قاعدة البيانات'; return; }
-            const explainPrompt = `أنت محلل قانوني متخصص في نظام العمل السعودي.
-تعليمات صارمة لا تُخالَف أبداً:
-- ممنوع منعاً باتاً أن تقدم نفسك أو تذكر اسمك أو الشركة التي طورتك
-- ممنوع أي تحية أو مقدمة
-- ابدأ مباشرة بـ "أولاً:" أو بالشرح مباشرة
-- لا تستخدم النجوم أو الرموز: * ** *** # ##
-- استخدم لغة بسيطة واضحة مع الاحترافية
-- رتب المعلومات: أولاً، ثانياً، ثالثاً
-- اربط الشرح بالموقف المذكور
-- اذكر أرقام المواد بالأرقام الإنجليزية فقط بين قوسين: (المادة 98) - ممنوع كتابة الأرقام بالحروف`;
-            const userPrompt = `المادة ${article.article} من نظام العمل:
-"${article.text}"
-الموقف المطروح:
-"${contextInput}"
-اشرح هذه المادة وكيف تنطبق على الموقف المذكور.`;
-            const explanation = await callAPI(explainPrompt, userPrompt);
-            resultDiv.innerHTML = `
-                <div class="article-display-box">
-                    <strong>🎯 المادة المناسبة لموقفك:</strong> (المادة ${article.id})
-                </div>
-                <div class="article-display-box">
-                    <strong>📋 نص المادة:</strong><br><br>
-                    ${article.text}
-                </div>
-                <div style="background: #f0f7ff; padding: 15px; border-radius: 8px; margin-top: 15px; border-right: 4px solid #AFEDD6; line-height: 1.8;">
-                    ${convertArticleReferencesToLinks(explanation)}
-                </div>
-            `;
-            sessionContext.explain.previousContent = `المادة ${article.id}: ${article.text}\n\n${explanation}`;
-            showFollowUp('explain', resultDiv, sessionContext.explain.previousContent);
-        } catch (error) {
-            resultDiv.innerHTML = '❌ عذراً، حدث خطأ. الرجاء المحاولة مرة أخرى.';
-        } finally {
-            loadingDiv.style.display = 'none';
-        }
+    if (art) {
+      explainChip.innerText = art.title;
+      explainArt.innerText = art.text;
+      explainAI.innerText = "بموجب هذه المادة، يحق للعامل الحصول على تعويضات مالية ومكافأة نهاية الخدمة في حال انتهاء العقد دون سبب مشروع. يُنصح بالتوثيق الرسمي والاحتفاظ بجميع المستندات.";
+      explainResultDiv.style.display = 'block';
+      explainExtraDiv.style.display = 'flex';
+    } else {
+      explainChip.innerText = "لم نعثر على المادة";
+      explainArt.innerText = "يرجى التأكد من رقم المادة أو وصفها بشكل أدق.";
+      explainAI.innerText = "حاول البحث عن 'إنهاء عقد العمل' أو 'إجازة الأمومة' أو 'مكافأة نهاية الخدمة'.";
+      explainResultDiv.style.display = 'block';
+      explainExtraDiv.style.display = 'flex';
     }
+  });
+  gotoSearchBtn.addEventListener('click', () => { tabs[0].click(); });
+  closeExplainExtra.addEventListener('click', () => explainExtraDiv.style.display = 'none');
 
-    async function explainArticle() {
-        const articleNumber = parseInt(document.getElementById('articleNumber').value);
-        const loadingDiv = document.getElementById('explainLoading');
-        const resultDiv = document.getElementById('explainResult');
-        if (!articleNumber || articleNumber < 1 || articleNumber > 245) {
-            alert('الرجاء إدخال رقم مادة صحيح (من 1 إلى 245)');
-            return;
-        }
-        const article = lawDataset.find(item => item.id === articleNumber);
-        if (!article) { alert('المادة غير موجودة'); return; }
-        loadingDiv.style.display = 'block';
-        resultDiv.innerHTML = '';
-        try {
-            const systemPrompt = `أنت محلل قانوني متخصص في نظام العمل السعودي.
-تعليمات صارمة لا تُخالَف أبداً:
-- ممنوع منعاً باتاً أن تقدم نفسك أو تذكر اسمك أو الشركة التي طورتك
-- ممنوع أي تحية أو مقدمة
-- ابدأ مباشرة بـ "أولاً:" أو بالشرح مباشرة
-- لا تستخدم النجوم أو الرموز: * ** *** # ##
-- استخدم لغة بسيطة واضحة مع الاحترافية
-- رتب المعلومات: أولاً، ثانياً، ثالثاً
-- اذكر أرقام المواد بالأرقام الإنجليزية فقط بين قوسين: (المادة 98) - ممنوع كتابة الأرقام بالحروف`;
-            const userPrompt = `المادة ${article.article} من نظام العمل:
-"${article.text}"
-اشرح هذه المادة بلغة بسيطة للموظف العادي.`;
-            const explanation = await callAPI(systemPrompt, userPrompt);
-            resultDiv.innerHTML = `
-                <div class="article-display-box">
-                    <strong>📌 المادة المطلوبة:</strong> (المادة ${article.id})
-                </div>
-                <div class="article-display-box">
-                    <strong>📋 نص المادة:</strong><br><br>
-                    ${article.text}
-                </div>
-                <div style="background: #f0f7ff; padding: 15px; border-radius: 8px; margin-top: 15px; border-right: 4px solid #AFEDD6; line-height: 1.8;">
-                    ${convertArticleReferencesToLinks(explanation)}
-                </div>
-            `;
-            sessionContext.explain.previousContent = `المادة ${article.id}: ${article.text}\n\n${explanation}`;
-            showFollowUp('explain', resultDiv, sessionContext.explain.previousContent);
-        } catch (error) {
-            resultDiv.innerHTML = '❌ عذراً، حدث خطأ. الرجاء المحاولة مرة أخرى.';
-        } finally {
-            loadingDiv.style.display = 'none';
-        }
-    }
-
-    // ========================================
-    // 4. تحميل الخطاب كملف Word
-    // ========================================
-    function downloadWord() {
-        const letterResultDiv = document.getElementById('letterResult');
-        if (!letterResultDiv || !letterResultDiv.innerText) { alert('لا يوجد خطاب لتحميله'); return; }
-        const tempDiv = letterResultDiv.cloneNode(true);
-        const articleLinks = tempDiv.querySelectorAll('.article-link');
-        articleLinks.forEach(link => { link.replaceWith(link.textContent); });
-        const letterContent = tempDiv.innerText;
-        if (!letterContent) { alert('لا يوجد خطاب لتحميله'); return; }
-        const htmlContent = `
-            <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
-            <head><meta charset='utf-8'><style>body { font-family: 'Arial', 'Tahoma', sans-serif; direction: rtl; text-align: right; line-height: 1.8; padding: 40px; font-size: 14pt; } p { margin: 10px 0; }</style></head>
-            <body><div style="white-space: pre-wrap;">${letterContent}</div></body>
-            </html>
-        `;
-        const blob = new Blob(['\ufeff', htmlContent], { type: 'application/msword' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'الخطاب_الرسمي.doc';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-    }
-
-    // ========================================
-    // 5. نظام عرض المواد المنبثق (بدون شرح)
-    // ========================================
-    function convertArticleReferencesToLinks(text) {
-        const writtenNumbers = {
-            'الأولى': 1, 'الأول': 1, 'الثانية': 2, 'الثاني': 2,
-            'الثالثة': 3, 'الثالث': 3, 'الرابعة': 4, 'الرابع': 4,
-            'الخامسة': 5, 'الخامس': 5, 'السادسة': 6, 'السادس': 6,
-            'السابعة': 7, 'السابع': 7, 'الثامنة': 8, 'الثامن': 8,
-            'التاسعة': 9, 'التاسع': 9, 'العاشرة': 10, 'العاشر': 10,
-            'الحادية عشرة': 11, 'الحادي عشر': 11, 'الثانية عشرة': 12, 'الثاني عشر': 12,
-            'الثالثة عشرة': 13, 'الثالث عشر': 13, 'الرابعة عشرة': 14, 'الرابع عشر': 14,
-            'الخامسة عشرة': 15, 'الخامس عشر': 15, 'السادسة عشرة': 16, 'السادس عشر': 16,
-            'السابعة عشرة': 17, 'السابع عشر': 17, 'الثامنة عشرة': 18, 'الثامن عشر': 18,
-            'التاسعة عشرة': 19, 'التاسع عشر': 19, 'العشرون': 20, 'العشرين': 20,
-            'الحادية والعشرون': 21, 'الحادي والعشرون': 21,
-            'الثانية والعشرون': 22, 'الثاني والعشرون': 22,
-            'الثلاثون': 30, 'الثلاثين': 30, 'الأربعون': 40, 'الأربعين': 40,
-            'الخمسون': 50, 'الخمسين': 50, 'الستون': 60, 'الستين': 60,
-            'السبعون': 70, 'السبعين': 70, 'الثمانون': 80, 'الثمانين': 80,
-            'التسعون': 90, 'التسعين': 90, 'المئة': 100, 'مئة': 100,
-            'الخامسة والسبعون': 75, 'الخامس والسبعون': 75,
-            'الرابعة والسبعون': 74, 'الرابع والسبعون': 74,
-            'الثالثة والسبعون': 73, 'الثالث والسبعون': 73,
-            'الثانية والسبعون': 72, 'الثاني والسبعون': 72,
-            'الحادية والسبعون': 71, 'الحادي والسبعون': 71,
-            'التاسعة والستون': 69, 'التاسع والستون': 69,
-            'الثامنة والستون': 68, 'الثامن والستون': 68,
-            'السابعة والستون': 67, 'السابع والستون': 67,
-            'السادسة والستون': 66, 'السادس والستون': 66,
-            'الخامسة والستون': 65, 'الخامس والستون': 65,
-            'الرابعة والستون': 64, 'الرابع والستون': 64,
-            'الثالثة والستون': 63, 'الثالث والستون': 63,
-            'الثانية والستون': 62, 'الثاني والستون': 62,
-            'الحادية والستون': 61, 'الحادي والستون': 61,
-            'التاسعة والخمسون': 59, 'التاسع والخمسون': 59,
-            'الثامنة والخمسون': 58, 'الثامن والخمسون': 58,
-            'السابعة والخمسون': 57, 'السابع والخمسون': 57,
-            'السادسة والخمسون': 56, 'السادس والخمسون': 56,
-            'الخامسة والخمسون': 55, 'الخامس والخمسون': 55,
-            'الرابعة والخمسون': 54, 'الرابع والخمسون': 54,
-            'الثالثة والخمسون': 53, 'الثالث والخمسون': 53,
-            'الثانية والخمسون': 52, 'الثاني والخمسون': 52,
-            'الحادية والخمسون': 51, 'الحادي والخمسون': 51,
-            'التاسعة والأربعون': 49, 'التاسع والأربعون': 49,
-            'الثامنة والأربعون': 48, 'الثامن والأربعون': 48,
-            'السابعة والأربعون': 47, 'السابع والأربعون': 47,
-            'السادسة والأربعون': 46, 'السادس والأربعون': 46,
-            'الخامسة والأربعون': 45, 'الخامس والأربعون': 45,
-            'الرابعة والأربعون': 44, 'الرابع والأربعون': 44,
-            'الثالثة والأربعون': 43, 'الثالث والأربعون': 43,
-            'الثانية والأربعون': 42, 'الثاني والأربعون': 42,
-            'الحادية والأربعون': 41, 'الحادي والأربعون': 41,
-            'التاسعة والثلاثون': 39, 'التاسع والثلاثون': 39,
-            'الثامنة والثلاثون': 38, 'الثامن والثلاثون': 38,
-            'السابعة والثلاثون': 37, 'السابع والثلاثون': 37,
-            'السادسة والثلاثون': 36, 'السادس والثلاثون': 36,
-            'الخامسة والثلاثون': 35, 'الخامس والثلاثون': 35,
-            'الرابعة والثلاثون': 34, 'الرابع والثلاثون': 34,
-            'الثالثة والثلاثون': 33, 'الثالث والثلاثون': 33,
-            'الثانية والثلاثون': 32, 'الثاني والثلاثون': 32,
-            'الحادية والثلاثون': 31, 'الحادي والثلاثون': 31,
-            'التاسعة والعشرون': 29, 'التاسع والعشرون': 29,
-            'الثامنة والعشرون': 28, 'الثامن والعشرون': 28,
-            'السابعة والعشرون': 27, 'السابع والعشرون': 27,
-            'السادسة والعشرون': 26, 'السادس والعشرون': 26,
-            'الخامسة والعشرون': 25, 'الخامس والعشرون': 25,
-            'الرابعة والعشرون': 24, 'الرابع والعشرون': 24,
-            'الثالثة والعشرون': 23, 'الثالث والعشرون': 23,
-            'الحادية والعشرون': 21, 'الحادي والعشرون': 21,
-            'التاسعة والتسعون': 99, 'التاسع والتسعون': 99,
-            'الثامنة والتسعون': 98, 'الثامن والتسعون': 98,
-            'السابعة والتسعون': 97, 'السابع والتسعون': 97,
-            'السادسة والتسعون': 96, 'السادس والتسعون': 96,
-            'الخامسة والتسعون': 95, 'الخامس والتسعون': 95,
-            'الرابعة والتسعون': 94, 'الرابع والتسعون': 94,
-            'الثالثة والتسعون': 93, 'الثالث والتسعون': 93,
-            'الثانية والتسعون': 92, 'الثاني والتسعون': 92,
-            'الحادية والتسعون': 91, 'الحادي والتسعون': 91,
-            'التاسعة والثمانون': 89, 'التاسع والثمانون': 89,
-            'الثامنة والثمانون': 88, 'الثامن والثمانون': 88,
-            'السابعة والثمانون': 87, 'السابع والثمانون': 87,
-            'السادسة والثمانون': 86, 'السادس والثمانون': 86,
-            'الخامسة والثمانون': 85, 'الخامس والثمانون': 85,
-            'الرابعة والثمانون': 84, 'الرابع والثمانون': 84,
-            'الثالثة والثمانون': 83, 'الثالث والثمانون': 83,
-            'الثانية والثمانون': 82, 'الثاني والثمانون': 82,
-            'الحادية والثمانون': 81, 'الحادي والثمانون': 81,
-            'التاسعة والسبعون': 79, 'التاسع والسبعون': 79,
-            'الثامنة والسبعون': 78, 'الثامن والسبعون': 78,
-            'السابعة والسبعون': 77, 'السابع والسبعون': 77,
-            'السادسة والسبعون': 76, 'السادس والسبعون': 76,
-            'مائة وسبعة': 107, 'مائة وثمانية': 108, 'مائة وتسعة': 109,
-            'مائة وعشرة': 110, 'مائة وأحد عشر': 111, 'مائة واثني عشر': 112,
-            'المائة': 100, 'مائة': 100,
-            'مائة وواحد': 101, 'مائة واثنان': 102, 'مائة وثلاثة': 103,
-            'مائة وأربعة': 104, 'مائة وخمسة': 105, 'مائة وستة': 106,
-            'مائة وثلاثة عشر': 113, 'مائة وأربعة عشر': 114, 'مائة وخمسة عشر': 115,
-            'مائة وستة عشر': 116, 'مائة وسبعة عشر': 117, 'مائة وثمانية عشر': 118,
-            'مائة وتسعة عشر': 119, 'مائة وعشرون': 120, 'مائة وعشرين': 120,
-            'مائة وواحد وعشرون': 121, 'مائة واثنان وعشرون': 122,
-            'مائة وثلاثة وعشرون': 123, 'مائة وأربعة وعشرون': 124,
-            'مائة وخمسة وعشرون': 125, 'مائة وستة وعشرون': 126,
-            'مائة وسبعة وعشرون': 127, 'مائة وثمانية وعشرون': 128,
-            'مائة وتسعة وعشرون': 129, 'مائة وثلاثون': 130, 'مائة وثلاثين': 130,
-            'مائة وواحد وثلاثون': 131, 'مائة واثنان وثلاثون': 132,
-            'مائة وثلاثة وثلاثون': 133, 'مائة وأربعة وثلاثون': 134,
-            'مائة وخمسة وثلاثون': 135, 'مائة وستة وثلاثون': 136,
-            'مائة وسبعة وثلاثون': 137, 'مائة وثمانية وثلاثون': 138,
-            'مائة وتسعة وثلاثون': 139, 'مائة وأربعون': 140, 'مائة وأربعين': 140,
-            'مائة وواحد وأربعون': 141, 'مائة واثنان وأربعون': 142,
-            'مائة وثلاثة وأربعون': 143, 'مائة وأربعة وأربعون': 144,
-            'مائة وخمسة وأربعون': 145, 'مائة وستة وأربعون': 146,
-            'مائة وسبعة وأربعون': 147, 'مائة وثمانية وأربعون': 148,
-            'مائة وتسعة وأربعون': 149, 'مائة وخمسون': 150, 'مائة وخمسين': 150,
-            'مائة وواحد وخمسون': 151, 'مائة واثنان وخمسون': 152,
-            'مائة وثلاثة وخمسون': 153, 'مائة وأربعة وخمسون': 154,
-            'مائة وخمسة وخمسون': 155, 'مائة وستة وخمسون': 156,
-            'مائة وسبعة وخمسون': 157, 'مائة وثمانية وخمسون': 158,
-            'مائة وتسعة وخمسون': 159, 'مائة وستون': 160, 'مائة وستين': 160,
-            'مائة وواحد وستون': 161, 'مائة واثنان وستون': 162,
-            'مائة وثلاثة وستون': 163, 'مائة وأربعة وستون': 164,
-            'مائة وخمسة وستون': 165, 'مائة وستة وستون': 166,
-            'مائة وسبعة وستون': 167, 'مائة وثمانية وستون': 168,
-            'مائة وتسعة وستون': 169, 'مائة وسبعون': 170, 'مائة وسبعين': 170,
-            'مائة وواحد وسبعون': 171, 'مائة واثنان وسبعون': 172,
-            'مائة وثلاثة وسبعون': 173, 'مائة وأربعة وسبعون': 174,
-            'مائة وخمسة وسبعون': 175, 'مائة وستة وسبعون': 176,
-            'مائة وسبعة وسبعون': 177, 'مائة وثمانية وسبعون': 178,
-            'مائة وتسعة وسبعون': 179, 'مائة وثمانون': 180, 'مائة وثمانين': 180,
-            'مائة وواحد وثمانون': 181, 'مائة واثنان وثمانون': 182,
-            'مائة وثلاثة وثمانون': 183, 'مائة وأربعة وثمانون': 184,
-            'مائة وخمسة وثمانون': 185, 'مائة وستة وثمانون': 186,
-            'مائة وسبعة وثمانون': 187, 'مائة وثمانية وثمانون': 188,
-            'مائة وتسعة وثمانون': 189, 'مائة وتسعون': 190, 'مائة وتسعين': 190,
-            'مائة وواحد وتسعون': 191, 'مائة واثنان وتسعون': 192,
-            'مائة وثلاثة وتسعون': 193, 'مائة وأربعة وتسعون': 194,
-            'مائة وخمسة وتسعون': 195, 'مائة وستة وتسعون': 196,
-            'مائة وسبعة وتسعون': 197, 'مائة وثمانية وتسعون': 198,
-            'مائة وتسعة وتسعون': 199,
-            'مئتان': 200, 'مئتين': 200,
-            'مئتان وواحد': 201, 'مئتان واثنان': 202, 'مئتان وثلاثة': 203,
-            'مئتان وأربعة': 204, 'مئتان وخمسة': 205, 'مئتان وستة': 206,
-            'مئتان وسبعة': 207, 'مئتان وثمانية': 208, 'مئتان وتسعة': 209,
-            'مئتان وعشرة': 210, 'مئتان وأحد عشر': 211, 'مئتان واثنا عشر': 212,
-            'مئتان وثلاثة عشر': 213, 'مئتان وأربعة عشر': 214, 'مئتان وخمسة عشر': 215,
-            'مئتان وستة عشر': 216, 'مئتان وسبعة عشر': 217, 'مئتان وثمانية عشر': 218,
-            'مئتان وتسعة عشر': 219, 'مئتان وعشرون': 220, 'مئتان وعشرين': 220,
-            'مئتان وواحد وعشرون': 221, 'مئتان واثنان وعشرون': 222,
-            'مئتان وثلاثة وعشرون': 223, 'مئتان وأربعة وعشرون': 224,
-            'مئتان وخمسة وعشرون': 225, 'مئتان وستة وعشرون': 226,
-            'مئتان وسبعة وعشرون': 227, 'مئتان وثمانية وعشرون': 228,
-            'مئتان وتسعة وعشرون': 229, 'مئتان وثلاثون': 230,
-            'مئتان وواحد وثلاثون': 231, 'مئتان واثنان وثلاثون': 232,
-            'مئتان وثلاثة وثلاثون': 233, 'مئتان وأربعة وثلاثون': 234,
-            'مئتان وخمسة وثلاثون': 235, 'مئتان وستة وثلاثون': 236,
-            'مئتان وسبعة وثلاثون': 237, 'مئتان وثمانية وثلاثون': 238,
-            'مئتان وتسعة وثلاثون': 239, 'مئتان وأربعون': 240,
-            'مئتان وواحد وأربعون': 241, 'مئتان واثنان وأربعون': 242,
-            'مئتان وثلاثة وأربعون': 243, 'مئتان وأربعة وأربعون': 244,
-            'مئتان وخمسة وأربعون': 245
-        };
-        function arabicToEnglish(str) {
-            return str.replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
-        }
-        let result = text;
-        result = result.replace(/\(?\s*المادة\s+(\d+)\s*\)?/g, (match, num) => {
-            const articleNum = parseInt(num);
-            if (articleNum >= 1 && articleNum <= 245) return `<span class="article-link" onclick="showArticleModal(${articleNum})">(المادة ${articleNum})</span>`;
-            return match;
-        });
-        result = result.replace(/\(?\s*المادة\s+([٠-٩]+)\s*\)?/g, (match, num) => {
-            const articleNum = parseInt(arabicToEnglish(num));
-            if (articleNum >= 1 && articleNum <= 245) return `<span class="article-link" onclick="showArticleModal(${articleNum})">(المادة ${articleNum})</span>`;
-            return match;
-        });
-        const sortedKeys = Object.keys(writtenNumbers).sort((a, b) => b.length - a.length);
-        for (const written of sortedKeys) {
-            const num = writtenNumbers[written];
-            const regex = new RegExp(`المادة\\s+${written}`, 'g');
-            result = result.replace(regex, () => `<span class="article-link" onclick="showArticleModal(${num})">(المادة ${num})</span>`);
-        }
-        return result;
-    }
-
-    // عرض نص المادة فقط بدون شرح
-    function showArticleModal(articleNumber) {
-        const article = lawDataset.find(item => item.id === parseInt(articleNumber));
-        if (!article) { alert('المادة غير موجودة'); return; }
-        const modal = document.getElementById('articleModal');
-        const modalTitle = document.getElementById('modalArticleNumber');
-        const modalContent = document.getElementById('modalArticleContent');
-        modalTitle.textContent = `المادة ${article.id}`;
-        modalContent.innerHTML = `
-            <div class="article-display-box">
-                <strong>📋 نص المادة:</strong><br><br>
-                ${article.text}
-            </div>
-        `;
-        modal.classList.add('active');
-    }
-
-    function closeArticleModal() {
-        const modal = document.getElementById('articleModal');
-        modal.classList.remove('active');
-    }
-
-    // ========================================
-    // 6. أزرار المتابعة بعد كل نتيجة
-    // ========================================
-    const sessionContext = {
-        search: { previousContent: '', conversationHistory: [] },
-        letter: { previousContent: '', conversationHistory: [] },
-        explain: { previousContent: '', conversationHistory: [] }
-    };
-
-    function showFollowUp(type, resultDiv, currentContent) {
-        if (currentContent) sessionContext[type].previousContent = currentContent;
-        const messages = { search: 'هل تريد مساعدة إضافية؟', letter: 'هل تريد تعديل الخطاب؟', explain: 'هل تريد مساعدة إضافية؟' };
-        const placeholders = { search: 'مثال: وضّح لي أكثر، أو اسألني عن تفصيل معين...', letter: 'مثال: اجعل الأسلوب أقوى، أو أضف فقرة عن...', explain: 'مثال: وضّح لي أكثر، أو ماذا يحدث إذا...' };
-        const old = resultDiv.querySelector('.followup-container');
-        if (old) old.remove();
-        const followUpDiv = document.createElement('div');
-        followUpDiv.className = 'followup-container';
-        followUpDiv.innerHTML = `
-            <div class="followup-question">
-                <span>${messages[type]}</span>
-                <div class="followup-buttons">
-                    <button class="followup-btn yes" onclick="handleFollowUp(this)">نعم</button>
-                    <button class="followup-btn no" onclick="this.closest('.followup-container').remove()">لا</button>
-                </div>
-            </div>
-            <div class="followup-input" style="display:none;">
-                <textarea class="form-input followup-textarea" rows="3" placeholder="${placeholders[type]}"></textarea>
-                <button class="btn-primary followup-send" onclick="sendFollowUp(this, '${type}')">إرسال</button>
-            </div>
-            <div class="followup-result"></div>
-        `;
-        resultDiv.appendChild(followUpDiv);
-    }
-
-    function handleFollowUp(btn) {
-        const container = btn.closest('.followup-container');
-        container.querySelector('.followup-question').style.display = 'none';
-        container.querySelector('.followup-input').style.display = 'block';
-        container.querySelector('.followup-textarea').focus();
-    }
-
-    async function sendFollowUp(btn, type) {
-        const container = btn.closest('.followup-container');
-        const textarea = container.querySelector('.followup-textarea');
-        const resultDiv = container.querySelector('.followup-result');
-        const userInput = textarea.value.trim();
-        if (!userInput) { alert('الرجاء كتابة طلبك'); return; }
-        btn.disabled = true;
-        btn.textContent = 'جاري المعالجة...';
-        resultDiv.innerHTML = '<div class="loading"><div class="spinner"></div><p>جاري المعالجة...</p></div>';
-        try {
-            const context = sessionContext[type];
-            const relevantArticles = retrieveRelevantArticles(userInput + ' ' + context.previousContent.substring(0, 200));
-            let systemPrompt = '', userPrompt = '';
-            if (type === 'letter') {
-                systemPrompt = `أنت متخصص في تعديل الخطابات الرسمية السعودية.
-قواعد التعديل:
-1. عدّل الخطاب بناءً على طلب المستخدم فقط
-2. أعد كتابة الخطاب كاملاً بعد التعديل مع الحفاظ على التنسيق والمسافات
-3. لا تستخدم رموز تنسيق: * ** # ##
-4. حافظ على نفس الهيكل والتاريخ والبيانات
-5. اذكر المواد بالأرقام الإنجليزية فقط مثل: (المادة 98) - ممنوع كتابة الأرقام بالحروف`;
-                userPrompt = `الخطاب الحالي:
-"${context.previousContent}"
-طلب التعديل: ${userInput}
-أعد كتابة الخطاب كاملاً مع تطبيق التعديل المطلوب فقط.`;
-            } else {
-                systemPrompt = `أنت مساعد قانوني متخصص في نظام العمل السعودي.
-قواعد الرد:
-1. أنت تعرف السياق السابق للمحادثة، لا تطلب من المستخدم إعادة الشرح
-2. ابدأ مباشرة بالإجابة
-3. لا تستخدم رموز تنسيق: * ** # ##
-4. اذكر المواد بالأرقام الإنجليزية فقط مثل: (المادة 98) - ممنوع كتابة الأرقام بالحروف
-5. رد موجز ومباشر مبني على السياق السابق`;
-                userPrompt = `السياق السابق للمحادثة:
-"${context.previousContent.substring(0, 500)}"
-المواد القانونية ذات الصلة:
-${JSON.stringify(relevantArticles, null, 2)}
-السؤال الجديد: ${userInput}`;
-            }
-            const answer = await callAPI(systemPrompt, userPrompt);
-            sessionContext[type].previousContent = answer;
-            const displayHTML = type === 'letter'
-                ? `<div style="background: #fff; padding: 20px; border-radius: 8px; margin-top: 15px; border: 1px solid #E5E7EB; line-height: 2; white-space: pre-wrap;">${convertArticleReferencesToLinks(answer)}</div>`
-                : `<div style="background: #f0f7ff; padding: 15px; border-radius: 8px; margin-top: 15px; border-right: 4px solid #006C35; line-height: 1.8;">${convertArticleReferencesToLinks(answer)}</div>`;
-            resultDiv.innerHTML = displayHTML;
-            showFollowUp(type, resultDiv, answer);
-        } catch (error) {
-            resultDiv.innerHTML = '❌ عذراً، حدث خطأ. الرجاء المحاولة مرة أخرى.';
-        } finally {
-            btn.disabled = false;
-            btn.textContent = 'إرسال';
-        }
-    }
-
-    // Binary Background Animation
-    const canvas = document.getElementById('binaryCanvas');
-    const ctx = canvas.getContext('2d');
-    let cols, drops;
-    function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        cols = Math.floor(canvas.width / 18);
-        drops = Array(cols).fill(1);
-    }
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-    function drawBinary() {
-        ctx.fillStyle = 'rgba(22,35,44,0.04)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#AFEDD6';
-        ctx.font = '13px monospace';
-        drops.forEach((y, i) => {
-            ctx.fillText(Math.random() > 0.5 ? '1' : '0', i * 18, y * 18);
-            if (y * 18 > canvas.height && Math.random() > 0.975) drops[i] = 0;
-            drops[i]++;
-        });
-    }
-    setInterval(drawBinary, 80);
-  </script>
+  // Animations on scroll
+  const observer = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) { e.target.style.opacity = '1'; e.target.style.transform = 'translateY(0)'; } }); }, { threshold: 0.1 });
+  document.querySelectorAll('.feature-card,.step,.stat-item').forEach(el => { el.style.opacity = '0'; el.style.transform = 'translateY(24px)'; el.style.transition = 'opacity 0.6s ease,transform 0.6s ease'; observer.observe(el); });
+</script>
 </body>
 </html>
