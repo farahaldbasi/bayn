@@ -1,18 +1,12 @@
 <div align="center">
 
-<img src="images.IMG_2115.PNG" alt="بيّن" width="120"/>
 
 # بيّن — المساعد القانوني الذكي
 
 **منصة ذكاء اصطناعي تجعل نظام العمل السعودي في متناول الجميع**
 
-[![Node.js](https://img.shields.io/badge/Node.js-v18+-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
-[![Railway](https://img.shields.io/badge/Hosted_on-Railway-0B0D0E?style=flat-square&logo=railway&logoColor=white)](https://railway.app/)
-[![License](https://img.shields.io/badge/License-All_Rights_Reserved-red?style=flat-square)]()
-[![Hackathon](https://img.shields.io/badge/ذكاثون-2025-gold?style=flat-square)]()
-[![Arabic](https://img.shields.io/badge/Language-Arabic_RTL-blue?style=flat-square)]()
 
-*مشاركة في هاكاثون ذكاثون 2026*
+
 
 </div>
 
