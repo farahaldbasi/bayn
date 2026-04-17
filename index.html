@@ -117,9 +117,7 @@
     .app-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(6,58,64,0.3); }
     .app-result { margin-top: 24px; background: rgba(6,58,64,0.02); border: 1px solid rgba(6,58,64,0.1); border-radius: 14px; padding: 26px 30px; font-size: 0.95rem; line-height: 2.1; color: #16232C; white-space: pre-wrap; }
     .app-flex-row { display: flex; gap: 10px; flex-wrap: wrap; }
-    .app-chip { background: #AFEDD6; color: #063A40; font-size: 0.92rem; font-weight: 700; padding: 7px 20px; border-radius: 100px; display: inline-block; }
     .info-banner { background: rgba(6,58,64,0.05); border: 1px solid rgba(6,58,64,0.12); border-right: 4px solid #063A40; border-radius: 14px; padding: 16px 20px; margin-bottom: 28px; display: flex; align-items: center; gap: 14px; }
-    .info-icon { width: 42px; height: 42px; border-radius: 11px; background: #063A40; color: #AFEDD6; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.25rem; }
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     .loading { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; gap: 10px; }
     .spinner { width: 40px; height: 40px; border: 4px solid rgba(6,58,64,0.1); border-top-color: #063A40; border-radius: 50%; animation: spin 0.8s linear infinite; }
@@ -141,9 +139,13 @@
     .modal-header h3 { color: #AFEDD6; margin: 0; }
     .modal-close { background: none; border: none; color: white; font-size: 24px; cursor: pointer; }
     .modal-body { padding: 24px; color: #16232C; }
-    .modal-body .article-text-box { background: #AFEDD6; padding: 1.5rem; border-radius: 0.75rem; border-right: 4px solid #063A40; margin-bottom: 1.5rem; }
-    .modal-body .article-text-box h4 { margin-bottom: 1rem; color: #063A40; font-weight: 700; }
-    .modal-body .article-text-box p { line-height: 1.8; color: #063A40; }
+    .modal-body .article-text-box { background: #DFE7E8; padding: 1.5rem; border-radius: 0.75rem; border-right: 4px solid #063A40; margin-bottom: 1.5rem; }
+    .modal-body .article-text-box h4 { margin-bottom: 1rem; color: #16232C; font-weight: 700; }
+    .modal-body .article-text-box p { line-height: 1.8; color: #16232C; }
+    .method-option { cursor: pointer; transition: all 0.2s; }
+    .method-option.active { border-color: #063A40; background: rgba(6,58,64,0.06); }
+    .method-option .method-title { font-weight: 700; margin-bottom: 8px; color: #063A40; }
+    .method-option .method-desc { font-size: 0.85rem; color: #063A40; opacity: 0.7; }
     @media (max-width: 900px) {
       .hero-inner { grid-template-columns: 1fr; }
       .hero-visual { display: none; }
@@ -251,7 +253,7 @@
 
       <!-- Panel 0: بحث -->
       <div class="app-panel active" data-panel="0">
-        <div class="info-banner"><div class="info-icon">⚖️</div><div><h4 style="font-size:1rem;font-weight:700;color:#063A40;">ابحث في نظام العمل</h4><p style="font-size:.82rem;color:rgba(6,58,64,0.6);">اكتب كلمة مفتاحية أو موضوعاً لترى المواد ذات الصلة</p></div></div>
+        <div class="info-banner"><h4 style="font-size:1rem;font-weight:700;color:#063A40;">ابحث في نظام العمل</h4><p style="font-size:.82rem;color:rgba(6,58,64,0.6);">اكتب كلمة مفتاحية أو موضوعاً لترى المواد ذات الصلة</p></div>
         <div class="app-flex-row">
           <input type="text" id="searchInput" class="app-input" placeholder="مثال: إنهاء عقد العمل، إجازة الأمومة..." style="flex:1;">
           <button id="searchBtn" class="app-btn" style="width:auto; padding:0 24px; margin-top:0;">بحث</button>
@@ -261,7 +263,7 @@
 
       <!-- Panel 1: خطاب -->
       <div class="app-panel" data-panel="1">
-        <div class="info-banner"><div class="info-icon">📄</div><div><h4 style="font-size:1rem;font-weight:700;color:#063A40;">نموذج خطاب رسمي</h4><p style="font-size:.82rem;color:rgba(6,58,64,0.6);">أدخل التفاصيل وسيقوم بيّن بصياغة خطاب قانوني رسمي</p></div></div>
+        <div class="info-banner"><h4 style="font-size:1rem;font-weight:700;color:#063A40;">نموذج خطاب رسمي</h4><p style="font-size:.82rem;color:rgba(6,58,64,0.6);">أدخل التفاصيل وسيقوم بيّن بصياغة خطاب قانوني رسمي</p></div>
         <div class="grid-2">
           <div><label class="app-label">نوع الخطاب</label><select id="letterType" class="app-select"><option>شكوى</option><option>طلب</option><option>استفسار</option><option>اعتراض</option><option>إشعار</option><option>استقالة</option></select></div>
           <div><label class="app-label">نوع المستلم</label><select id="recipientType" class="app-select"><option>شخص</option><option>شركة</option><option>جهة حكومية</option></select></div>
@@ -277,10 +279,16 @@
 
       <!-- Panel 2: شرح -->
       <div class="app-panel" data-panel="2">
-        <div class="info-banner"><div class="info-icon">📖</div><div><h4 style="font-size:1rem;font-weight:700;color:#063A40;">شرح مادة نظامية</h4><p style="font-size:.82rem;color:rgba(6,58,64,0.6);">اختر طريقة البحث وسيشرح بيّن المادة بأسلوب مبسّط</p></div></div>
+        <div class="info-banner"><h4 style="font-size:1rem;font-weight:700;color:#063A40;">شرح مادة نظامية</h4><p style="font-size:.82rem;color:rgba(6,58,64,0.6);">اختر طريقة البحث وسيشرح بيّن المادة بأسلوب مبسّط</p></div>
         <div style="display:flex; gap:14px; margin-bottom:26px;">
-          <label id="methodDesc" style="flex:1; padding:16px; border:1.5px solid #063A40; border-radius:14px; cursor:pointer; text-align:center; background:rgba(6,58,64,0.06); font-weight:700;">ابحث بالوصف</label>
-          <label id="methodNum" style="flex:1; padding:16px; border:1.5px solid rgba(175,237,214,0.4); border-radius:14px; cursor:pointer; text-align:center; background:rgba(175,237,214,0.08); font-weight:700;">ابحث برقم المادة</label>
+          <div id="methodDesc" class="method-option active" style="flex:1; padding:16px; border:1.5px solid #063A40; border-radius:14px; cursor:pointer; background:rgba(6,58,64,0.06);">
+            <div class="method-title">ابحث بالوصف</div>
+            <div class="method-desc">صِف الموقف أو الحقوق التي تهمك</div>
+          </div>
+          <div id="methodNum" class="method-option" style="flex:1; padding:16px; border:1.5px solid rgba(175,237,214,0.4); border-radius:14px; cursor:pointer; background:rgba(175,237,214,0.08);">
+            <div class="method-title">ابحث برقم المادة</div>
+            <div class="method-desc">أدخل رقم المادة مباشرة (1-245)</div>
+          </div>
         </div>
         <div id="descDiv"><label class="app-label">صف ما تريد معرفته</label><textarea id="contextInput" rows="3" class="app-textarea" placeholder="مثال: ما حقوق العامل عند إنهاء العقد دون سبب مشروع؟"></textarea></div>
         <div id="numDiv" style="display:none;"><label class="app-label">رقم المادة</label><input type="number" id="articleNumber" class="app-input" placeholder="مثال: 74"></div>
@@ -627,13 +635,19 @@ ${JSON.stringify(relevantArticles, null, 2)}
 الموقف المطروح: "${contextInput}"
 اشرح كيف تنطبق هذه المادة على الموقف.
 لا تستخدم أي رموز تنسيق مثل * أو # أو -.
-لا تقدم نفسك.`;
+لا تقدم نفسك، ابدأ مباشرة بالشرح.`;
           const explanation = await callAPI(explainPrompt, '');
           const formattedExplanation = convertArticleReferencesToLinks(explanation);
           const html = `
-              <div style="background:#f0f7ff;padding:15px;border-radius:8px;margin-bottom:20px;border-right:4px solid #667eea;"><strong>المادة المناسبة:</strong> (المادة ${article.id})</div>
-              <div style="background:#AFEDD6;padding:15px;border-radius:8px;margin-bottom:20px;border-right:4px solid #063A40; color:#063A40;"><strong>نص المادة:</strong><br><br>${article.text}</div>
-              <div style="line-height:1.8;">${formattedExplanation}</div>
+              <div style="background:#AFEDD6;padding:15px;border-radius:8px;margin-bottom:20px;border-right:4px solid #063A40; color:#063A40;">
+                  <strong>المادة المناسبة:</strong> (المادة ${article.id})
+              </div>
+              <div style="background:#AFEDD6;padding:15px;border-radius:8px;margin-bottom:20px;border-right:4px solid #063A40; color:#063A40;">
+                  <strong>نص المادة:</strong><br><br>${article.text}
+              </div>
+              <div style="background:#AFEDD6;padding:15px;border-radius:8px;border-right:4px solid #063A40; color:#063A40; line-height:1.8;">
+                  ${formattedExplanation}
+              </div>
           `;
           resultDiv.innerHTML = html;
           sessionExplainPrev = explanation;
@@ -660,9 +674,15 @@ ${JSON.stringify(relevantArticles, null, 2)}
           const explanation = await callAPI(explainPrompt, '');
           const formattedExplanation = convertArticleReferencesToLinks(explanation);
           const html = `
-              <div style="background:#f0f7ff;padding:15px;border-radius:8px;margin-bottom:20px;border-right:4px solid #667eea;"><strong>المادة المطلوبة:</strong> (المادة ${article.id})</div>
-              <div style="background:#AFEDD6;padding:15px;border-radius:8px;margin-bottom:20px;border-right:4px solid #063A40; color:#063A40;"><strong>نص المادة:</strong><br><br>${article.text}</div>
-              <div style="line-height:1.8;">${formattedExplanation}</div>
+              <div style="background:#AFEDD6;padding:15px;border-radius:8px;margin-bottom:20px;border-right:4px solid #063A40; color:#063A40;">
+                  <strong>المادة المطلوبة:</strong> (المادة ${article.id})
+              </div>
+              <div style="background:#AFEDD6;padding:15px;border-radius:8px;margin-bottom:20px;border-right:4px solid #063A40; color:#063A40;">
+                  <strong>نص المادة:</strong><br><br>${article.text}
+              </div>
+              <div style="background:#AFEDD6;padding:15px;border-radius:8px;border-right:4px solid #063A40; color:#063A40; line-height:1.8;">
+                  ${formattedExplanation}
+              </div>
           `;
           resultDiv.innerHTML = html;
           sessionExplainPrev = explanation;
@@ -676,21 +696,20 @@ ${JSON.stringify(relevantArticles, null, 2)}
   // UI Interactions
   // ========================================
   let method = 'desc';
-  document.getElementById('methodDesc').addEventListener('click', () => {
+  const methodDescDiv = document.getElementById('methodDesc');
+  const methodNumDiv = document.getElementById('methodNum');
+  
+  methodDescDiv.addEventListener('click', () => {
       method = 'desc';
-      document.getElementById('methodDesc').style.borderColor = '#063A40';
-      document.getElementById('methodDesc').style.background = 'rgba(6,58,64,0.06)';
-      document.getElementById('methodNum').style.borderColor = 'rgba(175,237,214,0.4)';
-      document.getElementById('methodNum').style.background = 'rgba(175,237,214,0.08)';
+      methodDescDiv.classList.add('active');
+      methodNumDiv.classList.remove('active');
       document.getElementById('descDiv').style.display = 'block';
       document.getElementById('numDiv').style.display = 'none';
   });
-  document.getElementById('methodNum').addEventListener('click', () => {
+  methodNumDiv.addEventListener('click', () => {
       method = 'num';
-      document.getElementById('methodNum').style.borderColor = '#063A40';
-      document.getElementById('methodNum').style.background = 'rgba(6,58,64,0.06)';
-      document.getElementById('methodDesc').style.borderColor = 'rgba(175,237,214,0.4)';
-      document.getElementById('methodDesc').style.background = 'rgba(175,237,214,0.08)';
+      methodNumDiv.classList.add('active');
+      methodDescDiv.classList.remove('active');
       document.getElementById('descDiv').style.display = 'none';
       document.getElementById('numDiv').style.display = 'block';
   });
