@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>بيّن — مساعدك القانوني الذكي</title>
+  <title>بَيْـن — مساعدك القانوني الذكي</title>
   <style>
     /* ========================================
-       Variables & Reset — هوية بَيْن
+       Variables & Reset — هوية بَيْـن
     ========================================= */
     @font-face {
         font-family: 'IBMPlexSansArabic';
@@ -507,7 +507,7 @@
           <rect x="20" y="20" width="11" height="11" rx="2.5" transform="rotate(45 20 20)" fill="#AFEDD6" opacity="0.5"/>
           <rect x="20" y="20" width="11" height="11" rx="2.5" transform="rotate(45 38 20)" fill="#AFEDD6"/>
         </svg>
-        <h1 class="logo-text">بَيْن</h1>
+        <h1 class="logo-text">بَيْـن</h1>
       </div>
       <p class="tagline">مساعدك القانوني الذكي لفهم نظام العمل السعودي</p>
       <div class="badge">
@@ -746,7 +746,7 @@
         </svg>
         <div class="footer-line"></div>
       </div>
-      <p>منصة بَيْن — YOUR AI LEGAL ASSISTANT</p>
+      <p>منصة بَيْـن — YOUR AI LEGAL ASSISTANT</p>
       <p>© 2026 فريق أوج — ذكاثون</p>
     </footer>
   </div>
@@ -856,7 +856,7 @@
     async function callAPI(systemPrompt, userPrompt) {
         try {
             console.log('🔄 إرسال طلب للـ Backend...');
-            const response = await fetch('https://bayn-production.up.railway.app/api/chat', {
+            const response = await fetch('/api/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: userPrompt }] })
@@ -1218,7 +1218,7 @@ ${JSON.stringify(relevantArticles, null, 2)}
     }
 
     // ========================================
-    // 5. نظام عرض المواد المنبثق
+    // 5. نظام عرض المواد المنبثق (بدون شرح)
     // ========================================
     function convertArticleReferencesToLinks(text) {
         const writtenNumbers = {
@@ -1402,6 +1402,7 @@ ${JSON.stringify(relevantArticles, null, 2)}
         return result;
     }
 
+    // عرض نص المادة فقط بدون شرح
     function showArticleModal(articleNumber) {
         const article = lawDataset.find(item => item.id === parseInt(articleNumber));
         if (!article) { alert('المادة غير موجودة'); return; }
@@ -1410,46 +1411,12 @@ ${JSON.stringify(relevantArticles, null, 2)}
         const modalContent = document.getElementById('modalArticleContent');
         modalTitle.textContent = `المادة ${article.id}`;
         modalContent.innerHTML = `
-            <div class="article-display-box" style="margin-bottom: 1rem;">
+            <div class="article-display-box">
                 <strong>📋 نص المادة:</strong><br><br>
                 ${article.text}
             </div>
-            <div style="background: #f0f7ff; padding: 1.5rem; border-radius: 0.75rem; border-right: 4px solid #AFEDD6;">
-                <strong>💡 شرح المادة:</strong><br><br>
-                <div class="loading" style="justify-content: center;"><div class="spinner"></div><p>جاري تحميل الشرح...</p></div>
-            </div>
         `;
         modal.classList.add('active');
-        // جلب الشرح من API
-        (async () => {
-            try {
-                const systemPrompt = `أنت محلل قانوني متخصص في نظام العمل السعودي. اشرح المادة بلغة بسيطة دون تعريف بنفسك.`;
-                const userPrompt = `المادة ${article.article}: "${article.text}"\n\nاشرح هذه المادة بلغة بسيطة.`;
-                const explanation = await callAPI(systemPrompt, userPrompt);
-                modalContent.innerHTML = `
-                    <div class="article-display-box" style="margin-bottom: 1rem;">
-                        <strong>📋 نص المادة:</strong><br><br>
-                        ${article.text}
-                    </div>
-                    <div style="background: #f0f7ff; padding: 1.5rem; border-radius: 0.75rem; border-right: 4px solid #AFEDD6;">
-                        <strong>💡 شرح المادة:</strong><br><br>
-                        ${convertArticleReferencesToLinks(explanation)}
-                    </div>
-                `;
-            } catch (e) {
-                console.error(e);
-                modalContent.innerHTML = `
-                    <div class="article-display-box" style="margin-bottom: 1rem;">
-                        <strong>📋 نص المادة:</strong><br><br>
-                        ${article.text}
-                    </div>
-                    <div style="background: #f0f7ff; padding: 1.5rem; border-radius: 0.75rem; border-right: 4px solid #AFEDD6;">
-                        <strong>💡 شرح المادة:</strong><br><br>
-                        عذراً، حدث خطأ أثناء جلب الشرح. يرجى المحاولة مرة أخرى.
-                    </div>
-                `;
-            }
-        })();
     }
 
     function closeArticleModal() {
