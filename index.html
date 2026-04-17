@@ -6,6 +6,14 @@
   <title>بيّن — مساعدك القانوني الذكي</title>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      background: #16232C;
+      color: white;
+      direction: rtl;
+      scroll-behavior: smooth;
+    }
     :root {
       --dark-navy: #16232C;
       --deep-teal: #063A40;
@@ -17,146 +25,71 @@
       --radius-md: 16px;
       --radius-lg: 24px;
     }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'IBM Plex Sans Arabic', sans-serif;
-      background: var(--dark-navy);
-      color: var(--white);
-      direction: rtl;
-      scroll-behavior: smooth;
-    }
     .binary-bg { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
     .binary-bg canvas { width: 100%; height: 100%; opacity: 0.07; }
     section, nav { position: relative; z-index: 1; }
     .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
-
-    /* Nav */
     nav {
       position: fixed; top: 0; width: 100%; z-index: 100;
       padding: 1.2rem 0;
       transition: background 0.3s, backdrop-filter 0.3s;
     }
-    nav.scrolled {
-      background: rgba(22,35,44,0.92);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(175,237,214,0.12);
-    }
-    .nav-inner {
-      display: flex; align-items: center; justify-content: space-between;
-      max-width: 1200px; margin: 0 auto; padding: 0 2rem;
-    }
+    nav.scrolled { background: rgba(22,35,44,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(175,237,214,0.12); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
     .nav-logo { display: flex; align-items: center; gap: 0.6rem; text-decoration: none; }
     .nav-logo-icon { width: 36px; height: 36px; }
     .nav-logo-text { font-size: 1.4rem; font-weight: 700; color: var(--mint); }
     .nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
     .nav-links a { color: rgba(255,255,255,0.75); text-decoration: none; font-size: 0.95rem; transition: color 0.2s; }
     .nav-links a:hover { color: var(--mint); }
-    .nav-cta {
-      background: var(--mint); color: var(--deep-teal) !important;
-      font-weight: 700 !important; padding: 0.55rem 1.4rem;
-      border-radius: 100px; transition: transform 0.2s, box-shadow 0.2s !important;
-    }
+    .nav-cta { background: var(--mint); color: var(--deep-teal) !important; font-weight: 700 !important; padding: 0.55rem 1.4rem; border-radius: 100px; transition: transform 0.2s, box-shadow 0.2s !important; }
     .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(175,237,214,0.35) !important; }
-
-    /* Hero */
-    .hero {
-      min-height: 100vh; display: flex; align-items: center;
-      padding: 8rem 0 5rem;
-      background: linear-gradient(135deg, var(--dark-navy) 0%, var(--deep-teal) 60%, #0a4a52 100%);
-    }
+    .hero { min-height: 100vh; display: flex; align-items: center; padding: 8rem 0 5rem; background: linear-gradient(135deg, var(--dark-navy) 0%, var(--deep-teal) 60%, #0a4a52 100%); }
     .hero-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
-    .hero-eyebrow {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      background: rgba(175,237,214,0.12); border: 1px solid rgba(175,237,214,0.25);
-      color: var(--mint); font-size: 0.8rem; font-weight: 700;
-      padding: 0.4rem 1rem; border-radius: 100px; margin-bottom: 1.5rem;
-    }
-    .hero-eyebrow::before {
-      content: ''; width: 6px; height: 6px; background: var(--mint);
-      border-radius: 50%; animation: pulse-dot 2s infinite;
-    }
+    .hero-eyebrow { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(175,237,214,0.12); border: 1px solid rgba(175,237,214,0.25); color: var(--mint); font-size: 0.8rem; font-weight: 700; padding: 0.4rem 1rem; border-radius: 100px; margin-bottom: 1.5rem; }
+    .hero-eyebrow::before { content: ''; width: 6px; height: 6px; background: var(--mint); border-radius: 50%; animation: pulse-dot 2s infinite; }
     @keyframes pulse-dot { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.5; transform:scale(1.4); } }
     .hero-title { font-size: clamp(2.6rem, 5vw, 4rem); font-weight: 700; line-height: 1.15; margin-bottom: 1.5rem; }
     .hero-title span { color: var(--mint); }
     .hero-subtitle { font-size: 1.1rem; color: rgba(255,255,255,0.65); line-height: 1.8; margin-bottom: 2.5rem; max-width: 460px; }
     .hero-subtitle strong { color: var(--mint); }
     .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
-    .btn-primary {
-      background: var(--mint); color: var(--deep-teal);
-      font-family: inherit; font-size: 1rem; font-weight: 700;
-      padding: 0.85rem 2rem; border-radius: 100px; border: none;
-      cursor: pointer; text-decoration: none;
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
+    .btn-primary { background: var(--mint); color: var(--deep-teal); font-family: inherit; font-size: 1rem; font-weight: 700; padding: 0.85rem 2rem; border-radius: 100px; border: none; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: transform 0.2s, box-shadow 0.2s; }
     .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(175,237,214,0.4); }
-    .btn-secondary {
-      background: transparent; color: var(--white);
-      font-family: inherit; font-size: 1rem; font-weight: 400;
-      padding: 0.85rem 2rem; border-radius: 100px;
-      border: 1.5px solid rgba(255,255,255,0.25);
-      cursor: pointer; text-decoration: none;
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      transition: border-color 0.2s, color 0.2s;
-    }
+    .btn-secondary { background: transparent; color: var(--white); font-family: inherit; font-size: 1rem; font-weight: 400; padding: 0.85rem 2rem; border-radius: 100px; border: 1.5px solid rgba(255,255,255,0.25); cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: border-color 0.2s, color 0.2s; }
     .btn-secondary:hover { border-color: var(--mint); color: var(--mint); }
-
-    /* Hero card */
     .hero-visual { position: relative; display: flex; align-items: center; justify-content: center; }
-    .hero-card {
-      background: rgba(255,255,255,0.05); backdrop-filter: blur(20px);
-      border: 1px solid rgba(175,237,214,0.2); border-radius: var(--radius-lg);
-      padding: 2rem; width: 100%; max-width: 420px;
-      animation: float 6s ease-in-out infinite;
-    }
+    .hero-card { background: rgba(255,255,255,0.05); backdrop-filter: blur(20px); border: 1px solid rgba(175,237,214,0.2); border-radius: var(--radius-lg); padding: 2rem; width: 100%; max-width: 420px; animation: float 6s ease-in-out infinite; }
     @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
     .chat-message { display: flex; gap: 0.75rem; align-items: flex-start; margin-bottom: 1rem; }
     .chat-avatar { width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; }
     .chat-avatar.user { background: var(--soft-gray); color: var(--deep-teal); }
     .chat-avatar.ai { background: var(--mint); color: var(--deep-teal); }
-    .chat-bubble {
-      background: rgba(255,255,255,0.08); border-radius: 12px 12px 12px 0;
-      padding: 0.75rem 1rem; font-size: 0.88rem; line-height: 1.6;
-      color: rgba(255,255,255,0.85); flex: 1;
-    }
+    .chat-bubble { background: rgba(255,255,255,0.08); border-radius: 12px 12px 12px 0; padding: 0.75rem 1rem; font-size: 0.88rem; line-height: 1.6; color: rgba(255,255,255,0.85); flex: 1; }
     .chat-bubble.user { background: rgba(175,237,214,0.15); border-radius: 12px 12px 0 12px; text-align: right; }
     .chat-bubble.ai { border-right: 2px solid var(--mint); }
-    .typing-dots span {
-      display: inline-block; width: 6px; height: 6px;
-      background: var(--mint); border-radius: 50%; margin: 0 2px;
-      animation: typing 1.4s infinite;
-    }
+    .typing-dots span { display: inline-block; width: 6px; height: 6px; background: var(--mint); border-radius: 50%; margin: 0 2px; animation: typing 1.4s infinite; }
     .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
     .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
     @keyframes typing { 0%,60%,100% { transform:translateY(0); opacity:0.5; } 30% { transform:translateY(-6px); opacity:1; } }
-
-    /* Stats */
     .stats-bar { background: rgba(6,58,64,0.6); border-top: 1px solid rgba(175,237,214,0.12); border-bottom: 1px solid rgba(175,237,214,0.12); padding: 2rem 0; }
     .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; text-align: center; }
     .stat-item { padding: 1rem; border-left: 1px solid rgba(175,237,214,0.15); }
     .stat-item:last-child { border-left: none; }
     .stat-number { font-size: 2rem; font-weight: 700; color: var(--mint); display: block; }
     .stat-label { font-size: 0.85rem; color: rgba(255,255,255,0.55); margin-top: 0.2rem; }
-
-    /* Features */
     .features { padding: 7rem 0; background: var(--dark-navy); }
     .section-header { text-align: center; margin-bottom: 4rem; }
     .section-tag { display: inline-block; background: rgba(175,237,214,0.1); color: var(--mint); font-size: 0.78rem; font-weight: 700; letter-spacing: 1px; padding: 0.35rem 0.9rem; border-radius: 100px; margin-bottom: 1rem; }
     .section-title { font-size: clamp(1.8rem,3.5vw,2.8rem); font-weight: 700; margin-bottom: 1rem; }
     .section-desc { font-size: 1.05rem; color: rgba(255,255,255,0.55); max-width: 520px; margin: 0 auto; line-height: 1.8; }
     .features-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 1.5rem; }
-    .feature-card {
-      background: rgba(6,58,64,0.25); border: 1px solid rgba(175,237,214,0.1);
-      border-radius: var(--radius-lg); padding: 2rem;
-      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
-    }
+    .feature-card { background: rgba(6,58,64,0.25); border: 1px solid rgba(175,237,214,0.1); border-radius: var(--radius-lg); padding: 2rem; transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s; }
     .feature-card:hover { transform: translateY(-6px); border-color: rgba(175,237,214,0.35); box-shadow: 0 20px 50px rgba(6,58,64,0.5); }
     .feature-icon { width: 52px; height: 52px; background: rgba(175,237,214,0.12); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem; }
     .feature-icon svg { width: 26px; height: 26px; }
     .feature-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.6rem; }
     .feature-desc { font-size: 0.9rem; color: rgba(255,255,255,0.5); line-height: 1.75; }
-
-    /* How */
     .how { padding: 7rem 0; background: linear-gradient(180deg, var(--dark-navy) 0%, var(--deep-teal) 100%); }
     .steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 2rem; margin-top: 3rem; position: relative; }
     .steps::before { content: ''; position: absolute; top: 2rem; right: calc(16.6% + 1.5rem); left: calc(16.6% + 1.5rem); height: 1px; background: linear-gradient(90deg, transparent, var(--mint), transparent); opacity: 0.3; }
@@ -164,15 +97,11 @@
     .step-number { width: 52px; height: 52px; background: var(--mint); color: var(--deep-teal); font-weight: 700; font-size: 1.2rem; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; }
     .step-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.6rem; }
     .step-desc { font-size: 0.9rem; color: rgba(255,255,255,0.5); line-height: 1.75; }
-
-    /* CTA */
     .cta-section { padding: 7rem 0; text-align: center; background: linear-gradient(135deg, var(--deep-teal), #0a4a52); position: relative; overflow: hidden; }
     .cta-section::before { content: ''; position: absolute; inset: 0; background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='10' y='10' width='16' height='16' rx='4' fill='none' stroke='%23AFEDD6' stroke-width='0.5' opacity='0.15'/%3E%3Crect x='34' y='34' width='16' height='16' rx='4' fill='none' stroke='%23AFEDD6' stroke-width='0.5' opacity='0.1'/%3E%3C/svg%3E") repeat; opacity: 0.5; }
     .cta-title { font-size: clamp(2rem,4vw,3.2rem); font-weight: 700; margin-bottom: 1rem; position: relative; }
     .cta-desc { font-size: 1.1rem; color: rgba(255,255,255,0.65); margin-bottom: 2.5rem; position: relative; }
     .cta-actions { position: relative; }
-
-    /* App Section */
     #app { background: var(--light-gray); padding: 5rem 0 6rem; }
     .app-card { background: var(--white); border-radius: 20px; box-shadow: 0 8px 48px rgba(6,58,64,0.13); overflow: hidden; }
     .app-tabs { background: linear-gradient(135deg, #063A40, #16232C); display: flex; padding: 14px 14px 0; gap: 6px; }
@@ -192,7 +121,26 @@
     .info-banner { background: rgba(6,58,64,0.05); border: 1px solid rgba(6,58,64,0.12); border-right: 4px solid #063A40; border-radius: 14px; padding: 16px 20px; margin-bottom: 28px; display: flex; align-items: center; gap: 14px; }
     .info-icon { width: 42px; height: 42px; border-radius: 11px; background: #063A40; color: #AFEDD6; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.25rem; }
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-
+    .loading { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; gap: 10px; }
+    .spinner { width: 40px; height: 40px; border: 4px solid rgba(6,58,64,0.1); border-top-color: #063A40; border-radius: 50%; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .followup-container { margin-top: 24px; border-top: 1px solid rgba(6,58,64,0.1); padding-top: 20px; }
+    .followup-question { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .followup-buttons { display: flex; gap: 10px; }
+    .followup-btn { padding: 8px 20px; border-radius: 100px; border: none; font-family: inherit; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+    .followup-btn.yes { background: #063A40; color: #AFEDD6; }
+    .followup-btn.no { background: transparent; border: 1px solid #063A40; color: #063A40; }
+    .followup-input { margin-top: 16px; display: flex; flex-direction: column; gap: 12px; }
+    .followup-textarea { width: 100%; font-family: inherit; font-size: 0.9rem; background: rgba(175,237,214,0.12); border: 1.5px solid rgba(175,237,214,0.4); border-radius: 12px; padding: 12px; resize: vertical; }
+    .followup-send { width: auto; padding: 10px 24px; margin-top: 0; }
+    .article-link { color: #006C35; cursor: pointer; text-decoration: underline; font-weight: 500; }
+    .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.3s; }
+    .modal.active { opacity: 1; visibility: visible; }
+    .modal-content { background: white; border-radius: 24px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; direction: rtl; padding: 0; }
+    .modal-header { background: linear-gradient(135deg, #063A40, #16232C); padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; border-radius: 24px 24px 0 0; }
+    .modal-header h3 { color: #AFEDD6; margin: 0; }
+    .modal-close { background: none; border: none; color: white; font-size: 24px; cursor: pointer; }
+    .modal-body { padding: 24px; color: #16232C; }
     @media (max-width: 900px) {
       .hero-inner { grid-template-columns: 1fr; }
       .hero-visual { display: none; }
@@ -318,9 +266,9 @@
         <div class="grid-2">
           <div><label class="app-label">نوع الخطاب</label><select id="letterType" class="app-select"><option>شكوى</option><option>طلب</option><option>استفسار</option><option>اعتراض</option><option>إشعار</option><option>استقالة</option></select></div>
           <div><label class="app-label">نوع المستلم</label><select id="recipientType" class="app-select"><option>شخص</option><option>شركة</option><option>جهة حكومية</option></select></div>
-          <div><label class="app-label">الاسم</label><input type="text" id="senderName" class="app-input" placeholder="اسمك الكامل"></div>
-          <div><label class="app-label">رقم الجوال</label><input type="text" id="senderPhone" class="app-input" placeholder="05XXXXXXXX"></div>
-          <div style="grid-column:1/-1;"><label class="app-label">الجهة أو الشخص المعني</label><input type="text" id="recipientName" class="app-input" placeholder="اسم الجهة أو الشخص المستلم"></div>
+          <div><label class="app-label">الاسم</label><input type="text" id="applicantName" class="app-input" placeholder="اسمك الكامل"></div>
+          <div><label class="app-label">رقم الجوال</label><input type="text" id="phoneNumber" class="app-input" placeholder="05XXXXXXXX"></div>
+          <div style="grid-column:1/-1;"><label class="app-label">الجهة أو الشخص المعني</label><input type="text" id="concernedParty" class="app-input" placeholder="اسم الجهة أو الشخص المستلم"></div>
           <div style="grid-column:1/-1;"><label class="app-label">التفاصيل</label><textarea id="letterDetails" rows="4" class="app-textarea" placeholder="اشرح تفاصيل الموضوع بإيجاز..."></textarea></div>
         </div>
         <button id="generateLetterBtn" class="app-btn">📝 إنشاء الخطاب</button>
@@ -339,14 +287,10 @@
           <label id="methodDesc" style="flex:1; padding:16px; border:1.5px solid #063A40; border-radius:14px; cursor:pointer; text-align:center; background:rgba(6,58,64,0.06); font-weight:700;">🔍 ابحث بالوصف</label>
           <label id="methodNum" style="flex:1; padding:16px; border:1.5px solid rgba(175,237,214,0.4); border-radius:14px; cursor:pointer; text-align:center; background:rgba(175,237,214,0.08); font-weight:700;">🔢 ابحث برقم المادة</label>
         </div>
-        <div id="descDiv"><label class="app-label">صف ما تريد معرفته</label><textarea id="explainDesc" rows="3" class="app-textarea" placeholder="مثال: ما حقوق العامل عند إنهاء العقد دون سبب مشروع؟"></textarea></div>
-        <div id="numDiv" style="display:none;"><label class="app-label">رقم المادة</label><input type="number" id="explainNum" class="app-input" placeholder="مثال: 74"></div>
+        <div id="descDiv"><label class="app-label">صف ما تريد معرفته</label><textarea id="contextInput" rows="3" class="app-textarea" placeholder="مثال: ما حقوق العامل عند إنهاء العقد دون سبب مشروع؟"></textarea></div>
+        <div id="numDiv" style="display:none;"><label class="app-label">رقم المادة</label><input type="number" id="articleNumber" class="app-input" placeholder="مثال: 74"></div>
         <button id="explainBtn" class="app-btn">📖 شرح المادة</button>
-        <div id="explainResult" style="display:none; margin-top:24px;">
-          <div id="explainChip" class="app-chip" style="margin-bottom:16px;"></div>
-          <div id="explainArt" style="background:#fffbf0; border:1px solid #f0e4b0; border-radius:14px; padding:20px; font-size:0.95rem; line-height:1.9; color:#4a3a10; margin-bottom:16px;"></div>
-          <div style="background:rgba(6,58,64,0.04); border-right:4px solid #AFEDD6; border-radius:14px; padding:20px;"><div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;"><div style="width:32px;height:32px; background:linear-gradient(135deg,#063A40,#16232C); border-radius:8px; display:flex; align-items:center; justify-content:center;"><svg width="16" height="16" viewBox="0 0 36 36" fill="none"><rect x="3" y="3" width="13" height="13" rx="3" fill="#AFEDD6"/><rect x="20" y="3" width="13" height="13" rx="3" fill="#AFEDD6" opacity=".7"/><rect x="3" y="20" width="13" height="13" rx="3" fill="#AFEDD6" opacity=".7"/><rect x="20" y="20" width="13" height="13" rx="3" fill="#AFEDD6"/></svg></div><span style="background:linear-gradient(135deg,#063A40,#16232C); color:#AFEDD6; font-size:.75rem; font-weight:700; padding:4px 13px; border-radius:100px;">شرح بيّن</span></div><p id="explainAI" style="font-size:0.94rem; color:#063A40; line-height:1.9;"></p></div>
-        </div>
+        <div id="explainResult" style="display:none; margin-top:24px;"></div>
         <div id="explainExtra" style="display:none; margin-top:24px; padding:16px 20px; background:rgba(6,58,64,0.04); border-radius:14px; display:flex; justify-content:space-between; flex-wrap:wrap;">
           <span style="color:#063A40; font-weight:700;">هل تريد البحث عن مادة أخرى؟</span>
           <div><button id="gotoSearch" style="background:#063A40; color:#AFEDD6; border:none; border-radius:100px; padding:8px 24px; margin-left:10px; cursor:pointer;">نعم، بحث إضافي</button><button id="closeExplainExtra" style="background:transparent; border:1px solid #063A40; border-radius:100px; padding:8px 24px; color:#063A40; cursor:pointer;">لا، شكراً</button></div>
@@ -360,8 +304,327 @@
   <div class="container"><h2 class="cta-title">جاهز لتبيين الأمور؟</h2><p class="cta-desc">ابدأ محادثتك القانونية الأولى الآن</p><div class="cta-actions"><a href="#app" class="btn-primary" style="font-size:1.1rem;padding:1rem 2.5rem;">ابدأ مع بيّن <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l7 7-7 7"/></svg></a></div></div>
 </section>
 
+<!-- Modal for articles -->
+<div id="articleModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 id="modalArticleNumber">المادة</h3>
+      <button class="modal-close" onclick="closeArticleModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalArticleContent"></div>
+  </div>
+</div>
+
 <script>
-  // Binary BG
+  // ========================================
+  // تحميل الداتاسيت
+  // ========================================
+  let lawDataset = [];
+
+  async function loadDataset() {
+      try {
+          const response = await fetch('labor_law_cleaned.json');
+          lawDataset = await response.json();
+          console.log('✅ تم تحميل الداتاسيت:', lawDataset.length, 'مادة');
+      } catch (error) {
+          console.error('❌ خطأ في تحميل الداتاسيت:', error);
+          alert('لم نتمكن من تحميل البيانات');
+      }
+  }
+
+  loadDataset();
+
+  // ========================================
+  // RAG - البحث الذكي في الداتاسيت
+  // ========================================
+  function retrieveRelevantArticles(query, topK = 7) {
+      if (!lawDataset.length) return [];
+      const cleanQuery = query.replace(/[؟?.,،]/g, ' ').trim();
+      const queryWords = cleanQuery.split(/\s+/).filter(w => w.length > 2);
+      const stopWords = new Set(['من','في','على','إلى','عن','مع','هل','ما','هو','هي','أن','إن','كان','يكون','لكن','لو','إذا','عند','بعد','قبل','كيف','لماذا','متى','أين','التي','الذي','وما','وهو','وهي','ولا','وأن','ولم','لم','لن','ليس']);
+      const keywords = queryWords.filter(w => !stopWords.has(w));
+      const scored = lawDataset.map(article => {
+          const text = article.text.toLowerCase();
+          let score = 0;
+          keywords.forEach(keyword => {
+              if (text.includes(keyword)) score += 3;
+              if (keyword.length > 4) {
+                  const root = keyword.substring(0, Math.floor(keyword.length * 0.7));
+                  if (text.includes(root)) score += 1;
+              }
+          });
+          return { article, score };
+      });
+      return scored.filter(item => item.score > 0).sort((a,b) => b.score - a.score).slice(0, topK).map(item => item.article);
+  }
+
+  // ========================================
+  // الاتصال بالـ API
+  // ========================================
+  async function callAPI(systemPrompt, userPrompt) {
+      try {
+          console.log('🔄 إرسال طلب للـ Backend...');
+          const response = await fetch('/api/chat', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                  messages: [
+                      { role: 'system', content: systemPrompt },
+                      { role: 'user', content: userPrompt }
+                  ]
+              })
+          });
+          if (!response.ok) throw new Error('فشل الاتصال بالسيرفر');
+          const data = await response.json();
+          if (data.choices && data.choices[0] && data.choices[0].message) {
+              return data.choices[0].message.content;
+          } else if (data.content && data.content[0] && data.content[0].text) {
+              return data.content[0].text;
+          } else if (data.response) {
+              return data.response;
+          } else {
+              throw new Error('تنسيق الجواب غير متوقع');
+          }
+      } catch (error) {
+          console.error('❌ خطأ:', error);
+          throw error;
+      }
+  }
+
+  // ========================================
+  // 1. البحث في الأنظمة
+  // ========================================
+  async function searchLaw() {
+      const searchInput = document.getElementById('searchInput').value.trim();
+      const resultDiv = document.getElementById('searchResult');
+      const extraDiv = document.getElementById('searchExtra');
+      if (!searchInput) { alert('الرجاء كتابة سؤال'); return; }
+      resultDiv.innerHTML = '<div class="loading"><div class="spinner"></div><p>جاري البحث...</p></div>';
+      resultDiv.style.display = 'block';
+      extraDiv.style.display = 'none';
+      try {
+          const relevantArticles = retrieveRelevantArticles(searchInput);
+          const systemPrompt = `أنت محلل قانوني متخصص في نظام العمل السعودي.
+تعليمات صارمة: ممنوع تقديم نفسك أو تحية، ابدأ مباشرة بـ "أولاً:" أو بالجواب مباشرة.
+استخدم لغة عربية فصحى واضحة. لا تستخدم رموز تنسيق.
+اذكر رقم المادة بالأرقام الإنجليزية فقط بين قوسين مثل: (المادة 98).
+رتب الإجابة: أولاً، ثانياً، ثالثاً.`;
+          const userPrompt = `المواد القانونية الأكثر صلة بالسؤال:
+${JSON.stringify(relevantArticles, null, 2)}
+سؤال الموظف: ${searchInput}
+الرجاء الإجابة بشكل واضح ومباشر مع ذكر المادة المرجعية.`;
+          const answer = await callAPI(systemPrompt, userPrompt);
+          resultDiv.innerHTML = convertArticleReferencesToLinks(answer);
+          extraDiv.style.display = 'flex';
+      } catch (error) {
+          resultDiv.innerHTML = '❌ عذراً، حدث خطأ. الرجاء المحاولة مرة أخرى.';
+      }
+  }
+
+  // ========================================
+  // 2. كتابة الخطابات
+  // ========================================
+  async function generateLetter() {
+      const letterType = document.getElementById('letterType').value;
+      const recipientType = document.getElementById('recipientType').value;
+      const applicantName = document.getElementById('applicantName').value.trim();
+      const phoneNumber = document.getElementById('phoneNumber').value.trim();
+      const concernedParty = document.getElementById('concernedParty').value.trim();
+      const letterDetails = document.getElementById('letterDetails').value.trim();
+      const resultDiv = document.getElementById('letterResult');
+      const downloadBtn = document.getElementById('downloadLetterBtn');
+      const extraDiv = document.getElementById('letterExtra');
+      if (!applicantName || !phoneNumber || !concernedParty || !letterDetails) {
+          alert('الرجاء تعبئة جميع الحقول'); return;
+      }
+      resultDiv.innerHTML = '<div class="loading"><div class="spinner"></div><p>جاري إنشاء الخطاب...</p></div>';
+      resultDiv.style.display = 'block';
+      downloadBtn.style.display = 'none';
+      extraDiv.style.display = 'none';
+      try {
+          const relevantArticles = retrieveRelevantArticles(`${letterType} ${letterDetails}`, 5);
+          const today = new Date();
+          const hijriDate = new Intl.DateTimeFormat('ar-SA-u-ca-islamic', { day: 'numeric', month: 'long', year: 'numeric' }).format(today);
+          const gregorianDate = new Intl.DateTimeFormat('ar-SA', { day: 'numeric', month: 'numeric', year: 'numeric' }).format(today);
+          const systemPrompt = `أنت متخصص في كتابة الخطابات الرسمية السعودية.
+معلومات الخطاب: نوع المستلم: ${recipientType}, الجهة: "${concernedParty}", نوع الخطاب: ${letterType}
+قواعد إلزامية: ممنوع تقديم نفسك، ابدأ بالتاريخ مباشرة، لا تستخدم رموز تنسيق.
+اذكر المواد بالأرقام الإنجليزية فقط مثل: (المادة 98).
+طول الخطاب: 150-200 كلمة فقط.`;
+          const userPrompt = `اكتب خطاباً رسمياً:
+التاريخ: ${hijriDate} الموافق ${gregorianDate}
+المستلم: ${recipientType} - ${concernedParty}
+المرسل: ${applicantName}, جوال: ${phoneNumber}
+الموضوع: ${letterType}
+التفاصيل: ${letterDetails}
+المواد القانونية المناسبة: ${JSON.stringify(relevantArticles, null, 2)}
+اكتب الخطاب بشكل رسمي ومهني.`;
+          const letter = await callAPI(systemPrompt, userPrompt);
+          resultDiv.innerHTML = convertArticleReferencesToLinks(letter);
+          downloadBtn.style.display = 'block';
+          extraDiv.style.display = 'flex';
+      } catch (error) {
+          resultDiv.innerHTML = '❌ عذراً، حدث خطأ. الرجاء المحاولة مرة أخرى.';
+      }
+  }
+
+  function downloadWord() {
+      const content = document.getElementById('letterResult').innerText;
+      if (!content) { alert('لا يوجد خطاب لتحميله'); return; }
+      const htmlContent = `<html><head><meta charset="utf-8"><style>body{font-family:Arial;direction:rtl;padding:40px;line-height:1.8;}</style></head><body><div>${content}</div></body></html>`;
+      const blob = new Blob(['\ufeff', htmlContent], { type: 'application/msword' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'الخطاب_الرسمي.doc';
+      link.click();
+      URL.revokeObjectURL(link.href);
+  }
+
+  // ========================================
+  // 3. شرح الأنظمة
+  // ========================================
+  async function explainByContext() {
+      const contextInput = document.getElementById('contextInput').value.trim();
+      const resultDiv = document.getElementById('explainResult');
+      if (!contextInput) { alert('الرجاء كتابة وصف الموقف'); return; }
+      resultDiv.innerHTML = '<div class="loading"><div class="spinner"></div><p>جاري البحث والشرح...</p></div>';
+      resultDiv.style.display = 'block';
+      try {
+          const relevantArticles = retrieveRelevantArticles(contextInput);
+          const identifyPrompt = `أنت محلل قانوني. حدد المادة الأنسب من القائمة التالية بناءً على وصف الموقف.
+المواد المرشحة: ${JSON.stringify(relevantArticles, null, 2)}
+وصف الموقف: "${contextInput}"
+المطلوب: اذكر رقم المادة الأنسب فقط كرقم، بدون أي شرح.`;
+          const articleNumResponse = await callAPI(identifyPrompt, '');
+          const articleNumber = parseInt(articleNumResponse.trim());
+          const article = lawDataset.find(item => item.id === articleNumber);
+          if (!article) throw new Error('لم يتم العثور على المادة');
+          const explainPrompt = `أنت محلل قانوني متخصص في نظام العمل السعودي.
+اشرح هذه المادة بلغة بسيطة للموظف العادي.
+المادة ${article.id}: "${article.text}"
+الموقف المطروح: "${contextInput}"
+اشرح كيف تنطبق هذه المادة على الموقف.`;
+          const explanation = await callAPI(explainPrompt, '');
+          resultDiv.innerHTML = `
+              <div style="background:#f0f7ff;padding:15px;border-radius:8px;margin-bottom:20px;border-right:4px solid #667eea;"><strong>🎯 المادة المناسبة:</strong> (المادة ${article.id})</div>
+              <div style="background:#fff9e6;padding:15px;border-radius:8px;margin-bottom:20px;border-right:4px solid #D4AF37;"><strong>📋 نص المادة:</strong><br><br>${article.text}</div>
+              <div style="line-height:1.8;">${convertArticleReferencesToLinks(explanation)}</div>
+          `;
+      } catch (error) {
+          resultDiv.innerHTML = '❌ عذراً، لم نتمكن من العثور على مادة مناسبة. حاول إعادة صياغة السؤال.';
+      }
+  }
+
+  async function explainArticle() {
+      const articleNumber = parseInt(document.getElementById('articleNumber').value);
+      const resultDiv = document.getElementById('explainResult');
+      if (!articleNumber || articleNumber < 1) { alert('الرجاء إدخال رقم مادة صحيح'); return; }
+      const article = lawDataset.find(item => item.id === articleNumber);
+      if (!article) { alert('المادة غير موجودة'); return; }
+      resultDiv.innerHTML = '<div class="loading"><div class="spinner"></div><p>جاري شرح المادة...</p></div>';
+      resultDiv.style.display = 'block';
+      try {
+          const explainPrompt = `أنت محلل قانوني متخصص في نظام العمل السعودي.
+اشرح هذه المادة بلغة بسيطة للموظف العادي.
+المادة ${article.id}: "${article.text}"
+لا تقدم نفسك، ابدأ مباشرة بالشرح.`;
+          const explanation = await callAPI(explainPrompt, '');
+          resultDiv.innerHTML = `
+              <div style="background:#f0f7ff;padding:15px;border-radius:8px;margin-bottom:20px;border-right:4px solid #667eea;"><strong>📌 المادة المطلوبة:</strong> (المادة ${article.id})</div>
+              <div style="background:#fff9e6;padding:15px;border-radius:8px;margin-bottom:20px;border-right:4px solid #D4AF37;"><strong>📋 نص المادة:</strong><br><br>${article.text}</div>
+              <div style="line-height:1.8;">${convertArticleReferencesToLinks(explanation)}</div>
+          `;
+      } catch (error) {
+          resultDiv.innerHTML = '❌ عذراً، حدث خطأ. الرجاء المحاولة مرة أخرى.';
+      }
+  }
+
+  // ========================================
+  // عرض المواد المنبثق
+  // ========================================
+  function convertArticleReferencesToLinks(text) {
+      if (!text) return '';
+      return text.replace(/\(?\s*المادة\s+(\d+)\s*\)?/g, (match, num) => {
+          const articleNum = parseInt(num);
+          if (articleNum >= 1 && articleNum <= 245) {
+              return `<span class="article-link" onclick="showArticleModal(${articleNum})">(المادة ${articleNum})</span>`;
+          }
+          return match;
+      });
+  }
+
+  function showArticleModal(articleNumber) {
+      const article = lawDataset.find(item => item.id === articleNumber);
+      if (!article) { alert('المادة غير موجودة'); return; }
+      const modal = document.getElementById('articleModal');
+      document.getElementById('modalArticleNumber').innerText = `المادة ${article.id}`;
+      document.getElementById('modalArticleContent').innerHTML = `<div style="background:#fff9e6;padding:1.5rem;border-radius:0.75rem;border-right:4px solid #D4AF37;"><h4 style="margin-bottom:1rem;">📋 نص المادة:</h4><p style="line-height:1.8;">${article.text}</p></div>`;
+      modal.classList.add('active');
+  }
+
+  function closeArticleModal() {
+      document.getElementById('articleModal').classList.remove('active');
+  }
+
+  // ========================================
+  // UI Interactions
+  // ========================================
+  let method = 'desc';
+  document.getElementById('methodDesc').addEventListener('click', () => {
+      method = 'desc';
+      document.getElementById('methodDesc').style.borderColor = '#063A40';
+      document.getElementById('methodDesc').style.background = 'rgba(6,58,64,0.06)';
+      document.getElementById('methodNum').style.borderColor = 'rgba(175,237,214,0.4)';
+      document.getElementById('methodNum').style.background = 'rgba(175,237,214,0.08)';
+      document.getElementById('descDiv').style.display = 'block';
+      document.getElementById('numDiv').style.display = 'none';
+  });
+  document.getElementById('methodNum').addEventListener('click', () => {
+      method = 'num';
+      document.getElementById('methodNum').style.borderColor = '#063A40';
+      document.getElementById('methodNum').style.background = 'rgba(6,58,64,0.06)';
+      document.getElementById('methodDesc').style.borderColor = 'rgba(175,237,214,0.4)';
+      document.getElementById('methodDesc').style.background = 'rgba(175,237,214,0.08)';
+      document.getElementById('descDiv').style.display = 'none';
+      document.getElementById('numDiv').style.display = 'block';
+  });
+
+  document.getElementById('explainBtn').addEventListener('click', () => {
+      if (method === 'desc') explainByContext();
+      else explainArticle();
+  });
+
+  document.getElementById('searchBtn').addEventListener('click', searchLaw);
+  document.getElementById('generateLetterBtn').addEventListener('click', generateLetter);
+  document.getElementById('downloadLetterBtn').addEventListener('click', downloadWord);
+  document.getElementById('gotoExplain').addEventListener('click', () => {
+      document.querySelector('.app-tab[data-tab="2"]').click();
+      document.getElementById('contextInput').value = document.getElementById('searchInput').value;
+  });
+  document.getElementById('closeExtra').addEventListener('click', () => document.getElementById('searchExtra').style.display = 'none');
+  document.getElementById('resetLetterBtn').addEventListener('click', () => {
+      document.getElementById('letterResult').style.display = 'none';
+      document.getElementById('downloadLetterBtn').style.display = 'none';
+      document.getElementById('letterExtra').style.display = 'none';
+  });
+  document.getElementById('closeLetterExtra').addEventListener('click', () => document.getElementById('letterExtra').style.display = 'none');
+  document.getElementById('gotoSearch').addEventListener('click', () => document.querySelector('.app-tab[data-tab="0"]').click());
+  document.getElementById('closeExplainExtra').addEventListener('click', () => document.getElementById('explainExtra').style.display = 'none');
+
+  // Tab switching
+  const tabs = document.querySelectorAll('.app-tab');
+  const panels = document.querySelectorAll('.app-panel');
+  tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+          const tabId = tab.getAttribute('data-tab');
+          tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          panels.forEach(p => p.classList.remove('active'));
+          document.querySelector(`.app-panel[data-panel="${tabId}"]`).classList.add('active');
+      });
+  });
+
+  // Binary background
   const canvas = document.getElementById('binaryCanvas');
   const ctx = canvas.getContext('2d');
   let cols, drops;
@@ -369,9 +632,15 @@
   resizeCanvas();
   window.addEventListener('resize', resizeCanvas);
   function drawBinary() {
-    ctx.fillStyle = 'rgba(22,35,44,0.04)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = '#AFEDD6'; ctx.font = '13px monospace';
-    drops.forEach((y, i) => { ctx.fillText(Math.random() > 0.5 ? '1' : '0', i * 18, y * 18); if (y * 18 > canvas.height && Math.random() > 0.975) drops[i] = 0; drops[i]++; });
+      ctx.fillStyle = 'rgba(22,35,44,0.04)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#AFEDD6';
+      ctx.font = '13px monospace';
+      drops.forEach((y, i) => {
+          ctx.fillText(Math.random() > 0.5 ? '1' : '0', i * 18, y * 18);
+          if (y * 18 > canvas.height && Math.random() > 0.975) drops[i] = 0;
+          drops[i]++;
+      });
   }
   setInterval(drawBinary, 80);
 
@@ -379,143 +648,14 @@
   const navbar = document.getElementById('navbar');
   window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', window.scrollY > 40));
 
-  // Tab switching
-  const tabs = document.querySelectorAll('.app-tab');
-  const panels = document.querySelectorAll('.app-panel');
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      const tabId = tab.getAttribute('data-tab');
-      tabs.forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      panels.forEach(p => p.classList.remove('active'));
-      document.querySelector(`.app-panel[data-panel="${tabId}"]`).classList.add('active');
-    });
+  // Scroll animations
+  const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.style.opacity = '1'; e.target.style.transform = 'translateY(0)'; } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.feature-card,.step,.stat-item').forEach(el => {
+      el.style.opacity = '0'; el.style.transform = 'translateY(24px)'; el.style.transition = 'opacity 0.6s ease,transform 0.6s ease';
+      observer.observe(el);
   });
-
-  // --- بيانات تجريبية ---
-  const legalDB = {
-    "إنهاء عقد العمل": { title: "المادة 74", text: "إذا أنهي عقد العمل من قبل صاحب العمل دون سبب مشروع، يستحق العامل تعويضاً لا يقل عن أجر خمسة عشر يوماً عن كل سنة من سنوات خدمته، بالإضافة إلى مكافأة نهاية الخدمة كاملة." },
-    "إجازة الأمومة": { title: "المادة 151", text: "للعاملة الحق في إجازة وضع لمدة عشرة أسابيع توزعها كيف تشاء، وتستحق أجراً كاملاً." },
-    "مكافأة نهاية الخدمة": { title: "المادة 84", text: "يستحق العامل مكافأة نهاية خدمة مقدارها أجر نصف شهر عن كل سنة من السنوات الخمس الأولى، وأجر شهر عن كل سنة من السنوات التالية." }
-  };
-  function searchLaw(query) {
-    let found = null;
-    for (let key in legalDB) { if (query.includes(key) || key.includes(query)) { found = legalDB[key]; break; } }
-    if (!found && (query.includes("إنهاء") || query.includes("عقد"))) found = legalDB["إنهاء عقد العمل"];
-    else if (!found && (query.includes("أمومة") || query.includes("وضع"))) found = legalDB["إجازة الأمومة"];
-    else if (!found && (query.includes("مكافأة") || query.includes("نهاية الخدمة"))) found = legalDB["مكافأة نهاية الخدمة"];
-    return found;
-  }
-
-  // بحث
-  const searchInput = document.getElementById('searchInput');
-  const searchBtn = document.getElementById('searchBtn');
-  const searchResult = document.getElementById('searchResult');
-  const searchExtra = document.getElementById('searchExtra');
-  const gotoExplain = document.getElementById('gotoExplain');
-  const closeExtra = document.getElementById('closeExtra');
-  searchBtn.addEventListener('click', () => {
-    const q = searchInput.value.trim();
-    if (!q) { searchResult.style.display = 'none'; searchExtra.style.display = 'none'; return; }
-    const res = searchLaw(q);
-    if (res) {
-      searchResult.innerHTML = `<div style="font-weight:700; color:#063A40; margin-bottom:12px;">📌 ${res.title}</div><div style="line-height:1.8;">${res.text}</div>`;
-      searchResult.style.display = 'block';
-      searchExtra.style.display = 'flex';
-    } else {
-      searchResult.innerHTML = `<div style="color:#063A40;">⚠️ لم نعثر على نتائج. حاول بكلمات أخرى مثل "إنهاء عقد" أو "إجازة أمومة".</div>`;
-      searchResult.style.display = 'block';
-      searchExtra.style.display = 'none';
-    }
-  });
-  gotoExplain.addEventListener('click', () => { tabs[2].click(); document.getElementById('explainDesc').value = searchInput.value; });
-  closeExtra.addEventListener('click', () => searchExtra.style.display = 'none');
-
-  // خطاب
-  const generateLetterBtn = document.getElementById('generateLetterBtn');
-  const letterResult = document.getElementById('letterResult');
-  const downloadLetterBtn = document.getElementById('downloadLetterBtn');
-  const letterExtra = document.getElementById('letterExtra');
-  const resetLetterBtn = document.getElementById('resetLetterBtn');
-  const closeLetterExtra = document.getElementById('closeLetterExtra');
-  let lastLetter = '';
-  function generateLetter() {
-    const type = document.getElementById('letterType').value;
-    const recipType = document.getElementById('recipientType').value;
-    const sender = document.getElementById('senderName').value || "الموكل";
-    const phone = document.getElementById('senderPhone').value || "_____";
-    const recipient = document.getElementById('recipientName').value || "السيد/السيدة المعني";
-    const details = document.getElementById('letterDetails').value || "تفاصيل الموضوع";
-    const date = new Date().toLocaleDateString('ar-SA');
-    let letter = `التاريخ: ${date}\n\n${type === 'شكوى' ? 'شكوى' : type === 'طلب' ? 'طلب' : type === 'استفسار' ? 'استفسار' : 'خطاب رسمي'}\n\nالمستلم: ${recipient}\n\nمن: ${sender}\nالجوال: ${phone}\n\nالموضوع: ${type} بشأن: ${details}\n\nالسلام عليكم ورحمة الله وبركاته،\n\nأفيدكم بأنه ... (نص الخطاب)\n\nوتفضلوا بقبول فائق الاحترام،\n${sender}`;
-    letterResult.innerText = letter;
-    letterResult.style.display = 'block';
-    downloadLetterBtn.style.display = 'block';
-    letterExtra.style.display = 'flex';
-    lastLetter = letter;
-  }
-  generateLetterBtn.addEventListener('click', generateLetter);
-  downloadLetterBtn.addEventListener('click', () => {
-    const blob = new Blob([lastLetter], { type: 'application/msword' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = 'خطاب_رسمي.doc';
-    link.click();
-    URL.revokeObjectURL(link.href);
-  });
-  resetLetterBtn.addEventListener('click', () => { letterResult.style.display = 'none'; downloadLetterBtn.style.display = 'none'; letterExtra.style.display = 'none'; });
-  closeLetterExtra.addEventListener('click', () => letterExtra.style.display = 'none');
-
-  // شرح
-  let method = 'desc';
-  const methodDesc = document.getElementById('methodDesc');
-  const methodNum = document.getElementById('methodNum');
-  const descDiv = document.getElementById('descDiv');
-  const numDiv = document.getElementById('numDiv');
-  const explainBtn = document.getElementById('explainBtn');
-  const explainResultDiv = document.getElementById('explainResult');
-  const explainChip = document.getElementById('explainChip');
-  const explainArt = document.getElementById('explainArt');
-  const explainAI = document.getElementById('explainAI');
-  const explainExtraDiv = document.getElementById('explainExtra');
-  const gotoSearchBtn = document.getElementById('gotoSearch');
-  const closeExplainExtra = document.getElementById('closeExplainExtra');
-
-  methodDesc.addEventListener('click', () => { method = 'desc'; methodDesc.style.borderColor = '#063A40'; methodDesc.style.background = 'rgba(6,58,64,0.06)'; methodNum.style.borderColor = 'rgba(175,237,214,0.4)'; methodNum.style.background = 'rgba(175,237,214,0.08)'; descDiv.style.display = 'block'; numDiv.style.display = 'none'; });
-  methodNum.addEventListener('click', () => { method = 'num'; methodNum.style.borderColor = '#063A40'; methodNum.style.background = 'rgba(6,58,64,0.06)'; methodDesc.style.borderColor = 'rgba(175,237,214,0.4)'; methodDesc.style.background = 'rgba(175,237,214,0.08)'; descDiv.style.display = 'none'; numDiv.style.display = 'block'; });
-
-  explainBtn.addEventListener('click', () => {
-    let art = null;
-    if (method === 'desc') {
-      const q = document.getElementById('explainDesc').value.trim();
-      art = searchLaw(q);
-    } else {
-      const num = document.getElementById('explainNum').value;
-      if (num === "74") art = legalDB["إنهاء عقد العمل"];
-      else if (num === "151") art = legalDB["إجازة الأمومة"];
-      else if (num === "84") art = legalDB["مكافأة نهاية الخدمة"];
-      else art = null;
-    }
-    if (art) {
-      explainChip.innerText = art.title;
-      explainArt.innerText = art.text;
-      explainAI.innerText = "بموجب هذه المادة، يحق للعامل الحصول على تعويضات مالية ومكافأة نهاية الخدمة في حال انتهاء العقد دون سبب مشروع. يُنصح بالتوثيق الرسمي والاحتفاظ بجميع المستندات.";
-      explainResultDiv.style.display = 'block';
-      explainExtraDiv.style.display = 'flex';
-    } else {
-      explainChip.innerText = "لم نعثر على المادة";
-      explainArt.innerText = "يرجى التأكد من رقم المادة أو وصفها بشكل أدق.";
-      explainAI.innerText = "حاول البحث عن 'إنهاء عقد العمل' أو 'إجازة الأمومة' أو 'مكافأة نهاية الخدمة'.";
-      explainResultDiv.style.display = 'block';
-      explainExtraDiv.style.display = 'flex';
-    }
-  });
-  gotoSearchBtn.addEventListener('click', () => { tabs[0].click(); });
-  closeExplainExtra.addEventListener('click', () => explainExtraDiv.style.display = 'none');
-
-  // Animations on scroll
-  const observer = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) { e.target.style.opacity = '1'; e.target.style.transform = 'translateY(0)'; } }); }, { threshold: 0.1 });
-  document.querySelectorAll('.feature-card,.step,.stat-item').forEach(el => { el.style.opacity = '0'; el.style.transform = 'translateY(24px)'; el.style.transition = 'opacity 0.6s ease,transform 0.6s ease'; observer.observe(el); });
 </script>
 </body>
 </html>
