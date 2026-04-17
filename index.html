@@ -197,7 +197,7 @@
   <div class="container">
     <div class="hero-inner">
       <div class="hero-content">
-        <div class="hero-eyebrow">YOUR AI LEGAL ASSISTANT</div>
+        <div class="hero-eyebrow">مساعدك القانوني الذكي</div>
         <h1 class="hero-title">مساعدك القانوني<br><span>الذكي</span></h1>
         <p class="hero-subtitle">بيّن يحوّل <strong>كل ما هو معقد</strong> في القانون إلى إجابات واضحة ومباشرة. اسأل، افهم، وتصرّف بثقة.</p>
         <div class="hero-actions">
@@ -252,7 +252,7 @@
   <div class="container">
     <div class="app-card">
       <div class="app-tabs">
-        <button class="app-tab active" data-tab="0">البحث عن مادة</button>
+        <button class="app-tab active" data-tab="0">البحث عن مادة في النظام</button>
         <button class="app-tab" data-tab="1">كتابة خطاب رسمي</button>
         <button class="app-tab" data-tab="2">شرح مادة</button>
       </div>
@@ -275,8 +275,18 @@
           <div><h4>نموذج خطاب رسمي</h4><p>أدخل التفاصيل وسيقوم بيّن بصياغة خطاب قانوني رسمي</p></div>
         </div>
         <div class="grid-2">
-          <div><label class="app-label">نوع الخطاب</label><select id="letterType" class="app-select"><option>شكوى</option><option>طلب</option><option>استفسار</option><option>اعتراض</option><option>إشعار</option><option>استقالة</option></select></div>
-          <div><label class="app-label">نوع المستلم</label><select id="recipientType" class="app-select"><option>شخص</option><option>شركة</option><option>جهة حكومية</option></select></div>
+          <div><label class="app-label">نوع الخطاب</label>
+            <select id="letterType" class="app-select">
+              <option value="" disabled selected>اختر نوع الخطاب</option>
+              <option>شكوى</option><option>طلب</option><option>استفسار</option><option>اعتراض</option><option>إشعار</option><option>استقالة</option>
+            </select>
+          </div>
+          <div><label class="app-label">نوع المستلم</label>
+            <select id="recipientType" class="app-select">
+              <option value="" disabled selected>اختر نوع المستلم</option>
+              <option>شخص</option><option>شركة</option><option>جهة حكومية</option>
+            </select>
+          </div>
           <div><label class="app-label">الاسم</label><input type="text" id="applicantName" class="app-input" placeholder="اسمك الكامل"></div>
           <div><label class="app-label">رقم الجوال</label><input type="text" id="phoneNumber" class="app-input" placeholder="05XXXXXXXX"></div>
           <div style="grid-column:1/-1;"><label class="app-label">الجهة أو الشخص المعني</label><input type="text" id="concernedParty" class="app-input" placeholder="اسم الجهة أو الشخص المستلم"></div>
@@ -543,7 +553,8 @@
       try {
           const relevantArticles = retrieveRelevantArticles(searchInput);
           const systemPrompt = `أنت محلل قانوني متخصص في نظام العمل السعودي.
-تعليمات صارمة: ممنوع تقديم نفسك أو تحية. ابدأ مباشرة بالإجابة.
+تعليمات صارمة للغاية: ممنوع منعاً باتاً أن تقدم نفسك أو تذكر اسمك أو الشركة التي طورتك.
+ممنوع أي تحية أو مقدمة. ابدأ مباشرة بالإجابة.
 استخدم لغة عربية فصحى واضحة ورسمية. لا تستخدم أي رموز تنسيق مثل * أو # أو -.
 اذكر رقم المادة بالأرقام الإنجليزية فقط بين قوسين مثل: (المادة 98).
 رتب الإجابة باستخدام الكلمات: أولاً، ثانياً، ثالثاً.`;
@@ -573,9 +584,17 @@ ${JSON.stringify(relevantArticles, null, 2)}
       const letterDetails = document.getElementById('letterDetails').value.trim();
       const resultDiv = document.getElementById('letterResult');
       const downloadBtn = document.getElementById('downloadLetterBtn');
-      if (!applicantName || !phoneNumber || !concernedParty || !letterDetails) {
-          alert('الرجاء تعبئة جميع الحقول'); return;
+      
+      // التحقق من أن المستخدم اختار خيارات من القوائم
+      if (!letterType || !recipientType) {
+          alert('الرجاء اختيار نوع الخطاب ونوع المستلم');
+          return;
       }
+      if (!applicantName || !phoneNumber || !concernedParty || !letterDetails) {
+          alert('الرجاء تعبئة جميع الحقول');
+          return;
+      }
+      
       resultDiv.innerHTML = '<div class="loading"><div class="spinner"></div><p>جاري إنشاء الخطاب...</p></div>';
       resultDiv.style.display = 'block';
       downloadBtn.style.display = 'none';
@@ -642,12 +661,12 @@ ${JSON.stringify(relevantArticles, null, 2)}
           const article = lawDataset.find(item => item.id === articleNumber);
           if (!article) throw new Error('لم يتم العثور على المادة');
           const explainPrompt = `أنت محلل قانوني متخصص في نظام العمل السعودي.
+ممنوع تقديم نفسك أو تذكر اسمك أو الشركة.
 اشرح هذه المادة بلغة بسيطة للموظف العادي.
 المادة ${article.id}: "${article.text}"
 الموقف المطروح: "${contextInput}"
 اشرح كيف تنطبق هذه المادة على الموقف.
-لا تستخدم أي رموز تنسيق مثل * أو # أو -.
-لا تقدم نفسك، ابدأ مباشرة بالشرح.`;
+لا تستخدم أي رموز تنسيق مثل * أو # أو -.`;
           const explanation = await callAPI(explainPrompt, '');
           const formattedExplanation = convertArticleReferencesToLinks(explanation);
           const html = `
@@ -681,9 +700,9 @@ ${JSON.stringify(relevantArticles, null, 2)}
       resultDiv.style.display = 'block';
       try {
           const explainPrompt = `أنت محلل قانوني متخصص في نظام العمل السعودي.
+ممنوع تقديم نفسك أو تذكر اسمك أو الشركة.
 اشرح هذه المادة بلغة بسيطة للموظف العادي.
 المادة ${article.id}: "${article.text}"
-لا تقدم نفسك، ابدأ مباشرة بالشرح.
 لا تستخدم أي رموز تنسيق مثل * أو # أو -.`;
           const explanation = await callAPI(explainPrompt, '');
           const formattedExplanation = convertArticleReferencesToLinks(explanation);
