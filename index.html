@@ -6,6 +6,7 @@
   <title>بيّن — مساعدك القانوني الذكي</title>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    /* كل الأنماط السابقة كما هي، لم تتغير */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'IBM Plex Sans Arabic', sans-serif;
@@ -209,7 +210,7 @@
   <div class="container"><div class="stats-grid">
     <div class="stat-item"><span class="stat-number">245</span><span class="stat-label">مادة من نظام العمل</span></div>
     <div class="stat-item"><span class="stat-number">24/7</span><span class="stat-label">متاح في أي وقت</span></div>
-    <div class="stat-item"><span class="stat-number">98%</span><span class="stat-label">دقة في الإجابات</span></div>
+    <div class="stat-item"><span class="stat-number">98%</span><span class="stat-label">دقة الإجابات</span></div>
     <div class="stat-item"><span class="stat-number">&lt;10ث</span><span class="stat-label">متوسط وقت الرد</span></div>
   </div></div>
 </div>
@@ -255,8 +256,8 @@
         </div>
         <div id="searchResult" style="display:none;" class="app-result"></div>
         <div id="searchExtra" style="display:none; margin-top:24px; padding:16px 20px; background:rgba(6,58,64,0.04); border-radius:14px; display:flex; justify-content:space-between; flex-wrap:wrap;">
-          <span style="color:#063A40; font-weight:700;">هل تريد مساعدة إضافية؟</span>
-          <div><button id="gotoExplain" style="background:#063A40; color:#AFEDD6; border:none; border-radius:100px; padding:8px 24px; margin-left:10px; cursor:pointer;">نعم، شرح المادة</button><button id="closeExtra" style="background:transparent; border:1px solid #063A40; border-radius:100px; padding:8px 24px; color:#063A40; cursor:pointer;">لا، شكراً</button></div>
+          <span style="color:#063A40; font-weight:700;">هل تريد مساعدة أخرى؟</span>
+          <div><button id="gotoExplain" style="background:#063A40; color:#AFEDD6; border:none; border-radius:100px; padding:8px 24px; margin-left:10px; cursor:pointer;">نعم</button><button id="closeExtra" style="background:transparent; border:1px solid #063A40; border-radius:100px; padding:8px 24px; color:#063A40; cursor:pointer;">لا</button></div>
         </div>
       </div>
 
@@ -276,7 +277,7 @@
         <button id="downloadLetterBtn" style="display:none; width:100%; margin-top:16px; background:transparent; border:2px solid #063A40; color:#063A40; border-radius:12px; padding:12px; font-weight:700; cursor:pointer;">⬇️ تحميل الخطاب (Word)</button>
         <div id="letterExtra" style="display:none; margin-top:24px; padding:16px 20px; background:rgba(6,58,64,0.04); border-radius:14px; display:flex; justify-content:space-between; flex-wrap:wrap;">
           <span style="color:#063A40; font-weight:700;">هل تريد تعديل الخطاب؟</span>
-          <div><button id="resetLetterBtn" style="background:#063A40; color:#AFEDD6; border:none; border-radius:100px; padding:8px 24px; margin-left:10px; cursor:pointer;">نعم، أعد الكتابة</button><button id="closeLetterExtra" style="background:transparent; border:1px solid #063A40; border-radius:100px; padding:8px 24px; color:#063A40; cursor:pointer;">لا، حسناً</button></div>
+          <div><button id="resetLetterBtn" style="background:#063A40; color:#AFEDD6; border:none; border-radius:100px; padding:8px 24px; margin-left:10px; cursor:pointer;">نعم</button><button id="closeLetterExtra" style="background:transparent; border:1px solid #063A40; border-radius:100px; padding:8px 24px; color:#063A40; cursor:pointer;">لا</button></div>
         </div>
       </div>
 
@@ -292,8 +293,8 @@
         <button id="explainBtn" class="app-btn">📖 شرح المادة</button>
         <div id="explainResult" style="display:none; margin-top:24px;"></div>
         <div id="explainExtra" style="display:none; margin-top:24px; padding:16px 20px; background:rgba(6,58,64,0.04); border-radius:14px; display:flex; justify-content:space-between; flex-wrap:wrap;">
-          <span style="color:#063A40; font-weight:700;">هل تريد البحث عن مادة أخرى؟</span>
-          <div><button id="gotoSearch" style="background:#063A40; color:#AFEDD6; border:none; border-radius:100px; padding:8px 24px; margin-left:10px; cursor:pointer;">نعم، بحث إضافي</button><button id="closeExplainExtra" style="background:transparent; border:1px solid #063A40; border-radius:100px; padding:8px 24px; color:#063A40; cursor:pointer;">لا، شكراً</button></div>
+          <span style="color:#063A40; font-weight:700;">هل تريد مساعدة أخرى؟</span>
+          <div><button id="gotoSearch" style="background:#063A40; color:#AFEDD6; border:none; border-radius:100px; padding:8px 24px; margin-left:10px; cursor:pointer;">نعم</button><button id="closeExplainExtra" style="background:transparent; border:1px solid #063A40; border-radius:100px; padding:8px 24px; color:#063A40; cursor:pointer;">لا</button></div>
         </div>
       </div>
     </div>
@@ -392,7 +393,7 @@
   }
 
   // ========================================
-  // 1. البحث في الأنظمة
+  // 1. البحث في الأنظمة (مع RAG)
   // ========================================
   async function searchLaw() {
       const searchInput = document.getElementById('searchInput').value.trim();
@@ -567,6 +568,252 @@ ${JSON.stringify(relevantArticles, null, 2)}
   }
 
   // ========================================
+  // أسئلة المتابعة (Help others)
+  // ========================================
+  // دالة عامة لفتح حقل إدخال مفتوح
+  function showOpenFollowUp(container) {
+      const questionDiv = container.querySelector('.followup-question');
+      const inputDiv = container.querySelector('.followup-input');
+      if (questionDiv) questionDiv.style.display = 'none';
+      if (inputDiv) inputDiv.style.display = 'flex';
+  }
+
+  async function sendOpenFollowUp(btn, type, previousAnswer) {
+      const container = btn.closest('.followup-container');
+      const textarea = container.querySelector('.followup-textarea');
+      const resultDiv = container.querySelector('.followup-result');
+      const userRequest = textarea.value.trim();
+      if (!userRequest) {
+          alert('الرجاء كتابة طلبك');
+          return;
+      }
+      btn.disabled = true;
+      btn.textContent = 'جاري المعالجة...';
+      resultDiv.innerHTML = '<div class="loading"><div class="spinner"></div><p>جاري المعالجة...</p></div>';
+      try {
+          let systemPrompt = '';
+          let userPrompt = '';
+          if (type === 'letter') {
+              systemPrompt = `أنت متخصص في تعديل الخطابات الرسمية السعودية.
+بناءً على طلب المستخدم، قم بتعديل الخطاب الحالي.
+أعد كتابة الخطاب كاملاً مع تطبيق التعديل المطلوب فقط.
+لا تقدم نفسك، ابدأ مباشرة بالخطاب المعدل.`;
+              userPrompt = `الخطاب الحالي:
+"${previousAnswer}"
+
+طلب التعديل: ${userRequest}
+
+أعد كتابة الخطاب كاملاً مع تطبيق هذا التعديل.`;
+          } else {
+              systemPrompt = `أنت مساعد قانوني متخصص في نظام العمل السعودي.
+السياق السابق: ${previousAnswer.substring(0, 500)}
+بناءً على طلب المستخدم، قدم مساعدة إضافية (مثل شرح أكثر، تبسيط، أمثلة، إلخ).
+لا تقدم نفسك، ابدأ مباشرة بالإجابة.`;
+              userPrompt = `الطلب الإضافي: ${userRequest}`;
+          }
+          const newAnswer = await callAPI(systemPrompt, userPrompt);
+          resultDiv.innerHTML = type === 'letter'
+              ? `<div style="background:#fff;padding:20px;border-radius:8px;margin-top:15px;border:1px solid #E5E7EB;line-height:2;">${convertArticleReferencesToLinks(newAnswer)}</div>`
+              : `<div style="background:#f0f7ff;padding:15px;border-radius:8px;margin-top:15px;border-right:4px solid #006C35;line-height:1.8;">${convertArticleReferencesToLinks(newAnswer)}</div>`;
+          // تحديث السياق
+          if (type === 'search') sessionSearchPrev = newAnswer;
+          else if (type === 'letter') sessionLetterPrev = newAnswer;
+          else sessionExplainPrev = newAnswer;
+          // إعادة عرض سؤال المتابعة مرة أخرى
+          showFollowUpForResult(resultDiv, type, newAnswer);
+      } catch (error) {
+          resultDiv.innerHTML = '❌ عذراً، حدث خطأ. الرجاء المحاولة مرة أخرى.';
+      } finally {
+          btn.disabled = false;
+          btn.textContent = 'إرسال';
+      }
+  }
+
+  // إضافة أزرار المتابعة المفتوحة بعد كل نتيجة
+  function showFollowUpForResult(container, type, currentAnswer) {
+      const followUpDiv = document.createElement('div');
+      followUpDiv.className = 'followup-container';
+      followUpDiv.innerHTML = `
+          <div class="followup-question">
+              <span>هل تريد مساعدة أخرى؟</span>
+              <div class="followup-buttons">
+                  <button class="followup-btn yes" onclick="showOpenFollowUp(this.closest('.followup-container'))">نعم</button>
+                  <button class="followup-btn no" onclick="this.closest('.followup-container').remove()">لا</button>
+              </div>
+          </div>
+          <div class="followup-input" style="display:none;">
+              <textarea class="followup-textarea" rows="3" placeholder="مثال: اشرح لي أكثر، أبسط لي المادة، أعطني مثال، إلخ..."></textarea>
+              <button class="app-btn followup-send" onclick="sendOpenFollowUp(this, '${type}', \`${currentAnswer.replace(/`/g, '\\`')}\`)">إرسال</button>
+          </div>
+          <div class="followup-result"></div>
+      `;
+      container.appendChild(followUpDiv);
+  }
+
+  // متغيرات لحفظ السياق لكل تبويب
+  let sessionSearchPrev = '';
+  let sessionLetterPrev = '';
+  let sessionExplainPrev = '';
+
+  // تعديل أزرار المتابعة في الأماكن الأصلية (بعد البحث، الخطاب، الشرح)
+  function attachFollowUpToResult(resultDiv, type, answer) {
+      // إزالة أي followup قديم
+      const old = resultDiv.querySelector('.followup-container');
+      if (old) old.remove();
+      showFollowUpForResult(resultDiv, type, answer);
+  }
+
+  // تعديل دوال النتائج لتشمل المتابعة
+  // سنقوم بتعديل الـ searchLaw, generateLetter, explainByContext, explainArticle
+  // لاستدعاء attachFollowUpToResult بعد عرض الإجابة.
+
+  // إعادة تعريف الدوال مع إضافة المتابعة
+  const originalSearchLaw = searchLaw;
+  const originalGenerateLetter = generateLetter;
+  const originalExplainByContext = explainByContext;
+  const originalExplainArticle = explainArticle;
+
+  // تعديل searchLaw
+  window.searchLaw = async function() {
+      const searchInput = document.getElementById('searchInput').value.trim();
+      const resultDiv = document.getElementById('searchResult');
+      const extraDiv = document.getElementById('searchExtra');
+      if (!searchInput) { alert('الرجاء كتابة سؤال'); return; }
+      resultDiv.innerHTML = '<div class="loading"><div class="spinner"></div><p>جاري البحث...</p></div>';
+      resultDiv.style.display = 'block';
+      extraDiv.style.display = 'none';
+      try {
+          const relevantArticles = retrieveRelevantArticles(searchInput);
+          const systemPrompt = `أنت محلل قانوني متخصص في نظام العمل السعودي.
+تعليمات صارمة: ممنوع تقديم نفسك أو تحية، ابدأ مباشرة بـ "أولاً:" أو بالجواب مباشرة.
+استخدم لغة عربية فصحى واضحة. لا تستخدم رموز تنسيق.
+اذكر رقم المادة بالأرقام الإنجليزية فقط بين قوسين مثل: (المادة 98).
+رتب الإجابة: أولاً، ثانياً، ثالثاً.`;
+          const userPrompt = `المواد القانونية الأكثر صلة بالسؤال:
+${JSON.stringify(relevantArticles, null, 2)}
+سؤال الموظف: ${searchInput}
+الرجاء الإجابة بشكل واضح ومباشر مع ذكر المادة المرجعية.`;
+          const answer = await callAPI(systemPrompt, userPrompt);
+          resultDiv.innerHTML = convertArticleReferencesToLinks(answer);
+          sessionSearchPrev = answer;
+          attachFollowUpToResult(resultDiv, 'search', answer);
+          extraDiv.style.display = 'none'; // نزيل السؤال القديم ونستخدم الجديد
+      } catch (error) {
+          resultDiv.innerHTML = '❌ عذراً، حدث خطأ. الرجاء المحاولة مرة أخرى.';
+      }
+  };
+
+  // تعديل generateLetter
+  window.generateLetter = async function() {
+      const letterType = document.getElementById('letterType').value;
+      const recipientType = document.getElementById('recipientType').value;
+      const applicantName = document.getElementById('applicantName').value.trim();
+      const phoneNumber = document.getElementById('phoneNumber').value.trim();
+      const concernedParty = document.getElementById('concernedParty').value.trim();
+      const letterDetails = document.getElementById('letterDetails').value.trim();
+      const resultDiv = document.getElementById('letterResult');
+      const downloadBtn = document.getElementById('downloadLetterBtn');
+      const extraDiv = document.getElementById('letterExtra');
+      if (!applicantName || !phoneNumber || !concernedParty || !letterDetails) {
+          alert('الرجاء تعبئة جميع الحقول'); return;
+      }
+      resultDiv.innerHTML = '<div class="loading"><div class="spinner"></div><p>جاري إنشاء الخطاب...</p></div>';
+      resultDiv.style.display = 'block';
+      downloadBtn.style.display = 'none';
+      extraDiv.style.display = 'none';
+      try {
+          const relevantArticles = retrieveRelevantArticles(`${letterType} ${letterDetails}`, 5);
+          const today = new Date();
+          const hijriDate = new Intl.DateTimeFormat('ar-SA-u-ca-islamic', { day: 'numeric', month: 'long', year: 'numeric' }).format(today);
+          const gregorianDate = new Intl.DateTimeFormat('ar-SA', { day: 'numeric', month: 'numeric', year: 'numeric' }).format(today);
+          const systemPrompt = `أنت متخصص في كتابة الخطابات الرسمية السعودية.
+معلومات الخطاب: نوع المستلم: ${recipientType}, الجهة: "${concernedParty}", نوع الخطاب: ${letterType}
+قواعد إلزامية: ممنوع تقديم نفسك، ابدأ بالتاريخ مباشرة، لا تستخدم رموز تنسيق.
+اذكر المواد بالأرقام الإنجليزية فقط مثل: (المادة 98).
+طول الخطاب: 150-200 كلمة فقط.`;
+          const userPrompt = `اكتب خطاباً رسمياً:
+التاريخ: ${hijriDate} الموافق ${gregorianDate}
+المستلم: ${recipientType} - ${concernedParty}
+المرسل: ${applicantName}, جوال: ${phoneNumber}
+الموضوع: ${letterType}
+التفاصيل: ${letterDetails}
+المواد القانونية المناسبة: ${JSON.stringify(relevantArticles, null, 2)}
+اكتب الخطاب بشكل رسمي ومهني.`;
+          const letter = await callAPI(systemPrompt, userPrompt);
+          resultDiv.innerHTML = convertArticleReferencesToLinks(letter);
+          sessionLetterPrev = letter;
+          attachFollowUpToResult(resultDiv, 'letter', letter);
+          downloadBtn.style.display = 'block';
+          extraDiv.style.display = 'none';
+      } catch (error) {
+          resultDiv.innerHTML = '❌ عذراً، حدث خطأ. الرجاء المحاولة مرة أخرى.';
+      }
+  };
+
+  // تعديل explainByContext
+  window.explainByContext = async function() {
+      const contextInput = document.getElementById('contextInput').value.trim();
+      const resultDiv = document.getElementById('explainResult');
+      if (!contextInput) { alert('الرجاء كتابة وصف الموقف'); return; }
+      resultDiv.innerHTML = '<div class="loading"><div class="spinner"></div><p>جاري البحث والشرح...</p></div>';
+      resultDiv.style.display = 'block';
+      try {
+          const relevantArticles = retrieveRelevantArticles(contextInput);
+          const identifyPrompt = `أنت محلل قانوني. حدد المادة الأنسب من القائمة التالية بناءً على وصف الموقف.
+المواد المرشحة: ${JSON.stringify(relevantArticles, null, 2)}
+وصف الموقف: "${contextInput}"
+المطلوب: اذكر رقم المادة الأنسب فقط كرقم، بدون أي شرح.`;
+          const articleNumResponse = await callAPI(identifyPrompt, '');
+          const articleNumber = parseInt(articleNumResponse.trim());
+          const article = lawDataset.find(item => item.id === articleNumber);
+          if (!article) throw new Error('لم يتم العثور على المادة');
+          const explainPrompt = `أنت محلل قانوني متخصص في نظام العمل السعودي.
+اشرح هذه المادة بلغة بسيطة للموظف العادي.
+المادة ${article.id}: "${article.text}"
+الموقف المطروح: "${contextInput}"
+اشرح كيف تنطبق هذه المادة على الموقف.`;
+          const explanation = await callAPI(explainPrompt, '');
+          const html = `
+              <div style="background:#f0f7ff;padding:15px;border-radius:8px;margin-bottom:20px;border-right:4px solid #667eea;"><strong>🎯 المادة المناسبة:</strong> (المادة ${article.id})</div>
+              <div style="background:#fff9e6;padding:15px;border-radius:8px;margin-bottom:20px;border-right:4px solid #D4AF37;"><strong>📋 نص المادة:</strong><br><br>${article.text}</div>
+              <div style="line-height:1.8;">${convertArticleReferencesToLinks(explanation)}</div>
+          `;
+          resultDiv.innerHTML = html;
+          sessionExplainPrev = explanation;
+          attachFollowUpToResult(resultDiv, 'explain', explanation);
+      } catch (error) {
+          resultDiv.innerHTML = '❌ عذراً، لم نتمكن من العثور على مادة مناسبة. حاول إعادة صياغة السؤال.';
+      }
+  };
+
+  window.explainArticle = async function() {
+      const articleNumber = parseInt(document.getElementById('articleNumber').value);
+      const resultDiv = document.getElementById('explainResult');
+      if (!articleNumber || articleNumber < 1) { alert('الرجاء إدخال رقم مادة صحيح'); return; }
+      const article = lawDataset.find(item => item.id === articleNumber);
+      if (!article) { alert('المادة غير موجودة'); return; }
+      resultDiv.innerHTML = '<div class="loading"><div class="spinner"></div><p>جاري شرح المادة...</p></div>';
+      resultDiv.style.display = 'block';
+      try {
+          const explainPrompt = `أنت محلل قانوني متخصص في نظام العمل السعودي.
+اشرح هذه المادة بلغة بسيطة للموظف العادي.
+المادة ${article.id}: "${article.text}"
+لا تقدم نفسك، ابدأ مباشرة بالشرح.`;
+          const explanation = await callAPI(explainPrompt, '');
+          const html = `
+              <div style="background:#f0f7ff;padding:15px;border-radius:8px;margin-bottom:20px;border-right:4px solid #667eea;"><strong>📌 المادة المطلوبة:</strong> (المادة ${article.id})</div>
+              <div style="background:#fff9e6;padding:15px;border-radius:8px;margin-bottom:20px;border-right:4px solid #D4AF37;"><strong>📋 نص المادة:</strong><br><br>${article.text}</div>
+              <div style="line-height:1.8;">${convertArticleReferencesToLinks(explanation)}</div>
+          `;
+          resultDiv.innerHTML = html;
+          sessionExplainPrev = explanation;
+          attachFollowUpToResult(resultDiv, 'explain', explanation);
+      } catch (error) {
+          resultDiv.innerHTML = '❌ عذراً، حدث خطأ. الرجاء المحاولة مرة أخرى.';
+      }
+  };
+
+  // ========================================
   // UI Interactions
   // ========================================
   let method = 'desc';
@@ -603,6 +850,7 @@ ${JSON.stringify(relevantArticles, null, 2)}
   });
   document.getElementById('closeExtra').addEventListener('click', () => document.getElementById('searchExtra').style.display = 'none');
   document.getElementById('resetLetterBtn').addEventListener('click', () => {
+      document.getElementById('letterResult').innerHTML = '';
       document.getElementById('letterResult').style.display = 'none';
       document.getElementById('downloadLetterBtn').style.display = 'none';
       document.getElementById('letterExtra').style.display = 'none';
