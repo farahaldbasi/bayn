@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>بَيْن — مساعدك القانوني الذكي</title>
+  <title>بيّن — مساعدك القانوني الذكي</title>
   <style>
     /* ========================================
        Variables & Reset — هوية بَيْن
@@ -1053,11 +1053,19 @@ ${JSON.stringify(relevantArticles, null, 2)}
             const formattedLetter = letter
                 .replace(/التاريخ:/g, '\n\nالتاريخ:')
                 .replace(/تحية طيبة وبعد،/g, '\n\nتحية طيبة وبعد،\n')
-                .replace(/الموضوع:/g, '\nالموضوع:')
+                .replace(/الموضوع:/g, '\n\nالموضوع:')
+                .replace(/الفقرة الافتتاحية:/g, '\n\n')
+                .replace(/الفقرة الأولى:/g, '\n\n')
+                .replace(/الفقرة الثانية:/g, '\n\n')
+                .replace(/الخاتمة:/g, '\n\n')
                 .replace(/وتفضلوا بقبول فائق الاحترام والتقدير،/g, '\n\nوتفضلوا بقبول فائق الاحترام والتقدير،\n')
-                .replace(/مقدم الطلب:/g, '\nمقدم الطلب:')
+                .replace(/مقدم الطلب:/g, '\n\nمقدم الطلب:')
                 .replace(/رقم الجوال:/g, '\nرقم الجوال:')
-                .replace(/التوقيع:/g, '\nالتوقيع:');
+                .replace(/التوقيع:/g, '\nالتوقيع:')
+                .replace(/التاريخ:/g, '\n\nالتاريخ:')
+                .replace(/الموضوع:/g, '\n\nالموضوع:')
+                .replace(/تحية طيبة وبعد،/g, '\n\nتحية طيبة وبعد،\n');
+            
             resultDiv.innerHTML = convertArticleReferencesToLinks(formattedLetter);
             downloadSection.style.display = 'block';
             sessionContext.letter.previousContent = formattedLetter;
@@ -1408,7 +1416,7 @@ ${JSON.stringify(relevantArticles, null, 2)}
             </div>
             <div style="background: #f0f7ff; padding: 1.5rem; border-radius: 0.75rem; border-right: 4px solid #AFEDD6;">
                 <strong>💡 شرح المادة:</strong><br><br>
-                سيتم جلب الشرح من المساعد القانوني...
+                <div class="loading" style="justify-content: center;"><div class="spinner"></div><p>جاري تحميل الشرح...</p></div>
             </div>
         `;
         modal.classList.add('active');
@@ -1430,6 +1438,16 @@ ${JSON.stringify(relevantArticles, null, 2)}
                 `;
             } catch (e) {
                 console.error(e);
+                modalContent.innerHTML = `
+                    <div class="article-display-box" style="margin-bottom: 1rem;">
+                        <strong>📋 نص المادة:</strong><br><br>
+                        ${article.text}
+                    </div>
+                    <div style="background: #f0f7ff; padding: 1.5rem; border-radius: 0.75rem; border-right: 4px solid #AFEDD6;">
+                        <strong>💡 شرح المادة:</strong><br><br>
+                        عذراً، حدث خطأ أثناء جلب الشرح. يرجى المحاولة مرة أخرى.
+                    </div>
+                `;
             }
         })();
     }
